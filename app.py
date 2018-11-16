@@ -29,6 +29,20 @@ sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                                 
                         );"""
 
+sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
+                                    WID integer PRIMARY KEY ,
+                                    availability_of_timing time NOT NULL,
+                                    location varchar(25) NOT NULL
+                           
+                        );"""
+
+sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
+                                    company_id integer PRIMARY KEY,
+                                    address varchar(25) NOT NULL,
+                                    phone_number varchar(25),
+                                    name varchar(25)
+                                     
+                        );"""
 
 
 
