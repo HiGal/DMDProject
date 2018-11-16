@@ -16,6 +16,22 @@ sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
                                 FOREIGN KEY (project_id) REFERENCES projects (id)
                             );"""
 
+sql_create_charging_station_table = """CREATE TABLE IF NOT EXISTS charging_station(
+                                  UID integer PRIMARY KEY,
+                                  amount_of_available_slots integer NOT NULL,
+                                  time_of_charging time NOT NULL, 
+                                  price double
+                            );"""
+
+sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
+                                part_id integer PRIMARY KEY, 
+                                type_of_detail varchar(25) NOT NULL
+                                
+                        );"""
+
+
+
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -40,6 +56,8 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
+#        c.execute(sql_create_charging_station_table)
+
     except sqlite3.DatabaseError as e:
         print(e)
 
