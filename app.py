@@ -1,5 +1,7 @@
 from flask import Flask
 import sqlite3
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -28,6 +30,11 @@ sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                                 type_of_detail varchar(25) NOT NULL
 
                         );"""
+sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
+                                plug_id integer PRIMARY KEY ,
+                                shape_plug varchar(20) not null  ,
+                                size_plug int(10) not null 
+                            );"""
 
 sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     WID integer UNIQUE PRIMARY KEY ,
@@ -35,6 +42,15 @@ sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     location varchar(25) NOT NULL
 
                         );"""
+# Так вообще можно делать?
+sql_create_have_charging_relation = """CREATE TABLE IF NOT EXISTS have_charging(
+                                            UID integer NOT NULL,
+                                            plug_id integer NOT NULL,
+                                            FOREIGN KEY (UID)  references charging_station(UID),
+                                            FOREIGN KEY (plug_id)  references charging_plugs(plug_id),
+                                            PRIMARY KEY (UID, plug_id)
+                                );"""
+
 
 sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
                                     company_id integer UNIQUE PRIMARY KEY,
@@ -87,6 +103,7 @@ sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
                         foreign key (car_id) references models(model_id)
                     );"""
 
+
 sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         model_id integer unique PRIMARY KEY ,
                         name varchar(20) not null,
@@ -96,11 +113,13 @@ sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         foreign key (model_id) references charging_plugs(plug_id)
                     );"""
 
-sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
-                                plug_id integer unique PRIMARY KEY ,
-                                shape_plug varchar(20) not null  ,
-                                size_plug int(10) not null 
-                            );"""
+
+sql_create_fit_table = """CREATE TABLE IF NOT EXISTS fit(
+                                part_id integer PRIMARY KEY,
+                                model_id integer PRIMARY KEY,
+                                FOREIGN KEY (part_id) references parts(part_id),
+                                FOREIGN KEY (model_id) references models(model_id)
+                );"""
 
 
 def create_connection(db_file):
@@ -111,13 +130,12 @@ def create_connection(db_file):
     """
     try:
         conn = sqlite3.connect(db_file)
-        print("succ")
+        logging.info("Successfully connected to database")
         return conn
     except sqlite3.DatabaseError as e:
         print(e)
 
     return None
-
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
@@ -128,25 +146,32 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
-    #        c.execute(sql_create_charging_station_table)
-
+        logging.info("Successfully created table in database")
     except sqlite3.DatabaseError as e:
         print(e)
 
 
 def close_connection(conn):
     conn.close()
+    logging.info("Successfully closed connection to database")
     return None
+
+
+@app.before_first_request
+def init_db():
+    logging.info("Try to connect to database")
+    conn = create_connection(db_file)
+    logging.info("Try to initialise tables in database")
+    create_table(conn, sql_create_tasks_table)
+    conn.commit()
+    logging.info("Try to close connection to database")
+    close_connection(conn)
 
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return'Hello World!'
 
 
 if __name__ == '__main__':
-    conn = create_connection(db_file)
-    print(conn)
-    create_table(conn, 'sql_create_tasks_table')
-    close_connection(conn)
     app.run()
