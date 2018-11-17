@@ -1,5 +1,10 @@
+import sys
+from logging.handlers import RotatingFileHandler
+
 from flask import Flask
 import sqlite3
+import logging
+logging.basicConfig(level=logging.DEBUG)
 
 app = Flask(__name__)
 
@@ -24,7 +29,7 @@ def create_connection(db_file):
     """
     try:
         conn = sqlite3.connect(db_file)
-        print("succ")
+        logging.info("Successfully connected to database")
         return conn
     except sqlite3.DatabaseError as e:
         print(e)
@@ -40,22 +45,31 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
+        logging.info("Successfully created table in database")
     except sqlite3.DatabaseError as e:
         print(e)
 
 def close_connection(conn):
     conn.close()
+    logging.info("Successfully closed connection to database")
     return None
+
+@app.before_first_request
+def init_db():
+    logging.info("Try to connect to database")
+    conn = create_connection(db_file)
+    logging.info("Try to initialise tables in database")
+    create_table(conn, sql_create_tasks_table)
+    conn.commit()
+    logging.info("Try to close connection to database")
+    close_connection(conn)
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return'Hello World!'
 
 
 
 if __name__ == '__main__':
-    conn = create_connection(db_file)
-    print(conn)
-    create_table(conn, sql_create_tasks_table)
-    close_connection(conn)
     app.run()
+
