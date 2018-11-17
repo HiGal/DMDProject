@@ -7,7 +7,7 @@ app = Flask(__name__)
 db_file = 'carsharing.sqlite'
 
 sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
-                                id integer PRIMARY KEY,
+                                id integer UNIQUE PRIMARY KEY,
                                 name text NOT NULL,
                                 priority integer,
                                 status_id integer NOT NULL,
@@ -49,7 +49,7 @@ sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
                         );"""
 
 sql_create_customers_table = """CREATE TABLE IF NOT EXISTS customers (
-                                  username  varchar(20) PRIMARY KEY ,
+                                  username  varchar(20) UNIQUE PRIMARY KEY ,
                                   email  varchar(20) not null ,
                                   cardnumber    varchar(20) not null,
                                   fullname   varchar(50) not null,
@@ -64,7 +64,7 @@ sql_create_customers_table = """CREATE TABLE IF NOT EXISTS customers (
 # cost and duration?
 # st_point, pick location same?
 sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
-                        order_id integer PRIMARY KEY,
+                        order_id integer UNIQUE PRIMARY KEY,
                         date text not null ,
                         time text not null ,
                         date_closed text not null,
@@ -73,7 +73,6 @@ sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
                         cost integer,
                         st_point varchar(50) not null ,
                         destination varchar(50) not null ,
-                        pick_location varchar(50) not null ,
                         car_location varchar(50) not null, 
                         
                         foreign key (order_id) references customers(username)
@@ -81,15 +80,15 @@ sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
                     );"""
 
 sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
-                        car_id integer primary key ,
+                        car_id integer unique primary key ,
                         gps_location varchar(25) not null ,
                         year varchar(4),
                         reg_num varchar(11) not null ,
                         charge int(1) not null ,
                         available int(1) not null ,
                         
-                        foreign key (car_id) references orders(order_id)
-    
+                        foreign key (car_id) references orders(order_id),
+                        foreign key (car_id) references models(model_id)
                     );"""
 
 sql_create_charge_car_table = """CREATE TABLE IF NOT EXISTS charge_car(
@@ -118,14 +117,12 @@ sql_create_repair_car = """CREATE TABLE IF NOT EXISTS repair_car(
                                 FOREIGN KEY (car_id) references cars(car_id)
                     );"""
 
-
 sql_create_models = """CREATE TABLE IF NOT EXISTS models(
-                        model_id integer PRIMARY KEY ,
+                        model_id integer unique PRIMARY KEY ,
                         name varchar(20) not null,
                         type varchar(30) not null ,
                         service_class varchar(30) not null ,
                         
-                        foreign key (model_id) references cars(car_id),
                         foreign key (model_id) references charging_plugs(plug_id)
                     );"""
 
@@ -175,13 +172,12 @@ def create_connection(db_file):
     """
     try:
         conn = sqlite3.connect(db_file)
-        print("succ")
+        logging.info("Successfully connected to database")
         return conn
     except sqlite3.DatabaseError as e:
         print(e)
 
     return None
-
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
@@ -192,25 +188,32 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
-    #        c.execute(sql_create_charging_station_table)
-
+        logging.info("Successfully created table in database")
     except sqlite3.DatabaseError as e:
         print(e)
 
 
 def close_connection(conn):
     conn.close()
+    logging.info("Successfully closed connection to database")
     return None
+
+
+@app.before_first_request
+def init_db():
+    logging.info("Try to connect to database")
+    conn = create_connection(db_file)
+    logging.info("Try to initialise tables in database")
+    create_table(conn, sql_create_tasks_table)
+    conn.commit()
+    logging.info("Try to close connection to database")
+    close_connection(conn)
 
 
 @app.route('/')
 def hello_world():
-    return 'Hello World!'
+    return'Hello World!'
 
 
 if __name__ == '__main__':
-    conn = create_connection(db_file)
-    print(conn)
-    create_table(conn,'sql_create_tasks_table')
-    close_connection(conn)
     app.run()
