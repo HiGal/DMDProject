@@ -1,5 +1,6 @@
 from flask import Flask
 import sqlite3
+import os
 
 app = Flask(__name__)
 
@@ -26,14 +27,14 @@ sql_create_charging_station_table = """CREATE TABLE IF NOT EXISTS charging_stati
 sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                                 part_id integer PRIMARY KEY, 
                                 type_of_detail varchar(25) NOT NULL
-                                
+
                         );"""
 
 sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     WID integer PRIMARY KEY ,
                                     availability_of_timing time NOT NULL,
                                     location varchar(25) NOT NULL
-                           
+
                         );"""
 
 sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
@@ -41,8 +42,62 @@ sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
                                     address varchar(25) NOT NULL,
                                     phone_number varchar(25),
                                     name varchar(25)
-                                     
+
                         );"""
+
+sql_create_customers_table = """CREATE TABLE IF NOT EXISTS customers (
+                                  username  varchar(20) PRIMARY KEY ,
+                                  email  varchar(20) not null ,
+                                  cardnumber    varchar(20) not null,
+                                  fullname   varchar(50) not null,
+                                  phone_number varchar(15),
+                                  zip integer not null ,
+                                  city varchar(20) not null ,
+                                  country varchar(50) not null 
+
+                                  
+                        );"""
+
+# cost and duration?
+# st_point, pick location same?
+sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
+                        order_id integer PRIMARY KEY,
+                        date text not null ,
+                        time text not null ,
+                        date_closed text not null,
+                        duration integer,
+                        status varchar(10) not null ,
+                        cost integer,
+                        st_point varchar(50) not null ,
+                        destination varchar(50) not null ,
+                        pick_location varchar(50) not null ,
+                        car_location varchar(50) not null, 
+                        
+                        foreign key (order_id) references customers(username)
+                        
+                    );"""
+
+sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
+                        car_id integer primary key ,
+                        gps_location varchar(25),
+                        year varchar(4),
+                        reg_num varchar(11),
+                        charge int(1),
+                        available int(1),
+                        
+                        foreign key (car_id) references orders(order_id)
+    
+                    );"""
+
+sql_create_models = """CREATE TABLE IF NOT EXISTS models(
+                        model_id integer PRIMARY KEY ,
+                        name varchar(20),
+                        type varchar(30),
+                        service_class varchar(30),
+                        
+                        foreign key (model_id) references cars(car_id)
+                    );"""
+
 
 
 
@@ -61,6 +116,7 @@ def create_connection(db_file):
 
     return None
 
+
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
@@ -70,24 +126,25 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
-#        c.execute(sql_create_charging_station_table)
+    #        c.execute(sql_create_charging_station_table)
 
     except sqlite3.DatabaseError as e:
         print(e)
 
+
 def close_connection(conn):
     conn.close()
     return None
+
 
 @app.route('/')
 def hello_world():
     return 'Hello World!'
 
 
-
 if __name__ == '__main__':
     conn = create_connection(db_file)
     print(conn)
-    create_table(conn, sql_create_tasks_table)
+    create_table(conn,'sql_create_tasks_table')
     close_connection(conn)
     app.run()
