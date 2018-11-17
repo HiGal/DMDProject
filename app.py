@@ -31,8 +31,7 @@ sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
                                 size_plug int(10) not null 
                             );"""
 
-#Так вообще можно делать?
-sql_create_have_charging_relation = """CREATE TABLE IF NOT EXISTS have_charging(
+sql_create_have_plugs = """CREATE TABLE IF NOT EXISTS have_plugs(
                                             UID integer NOT NULL,
                                             plug_id integer NOT NULL,
                                             FOREIGN KEY (UID)  references charging_station(UID),
@@ -135,6 +134,12 @@ sql_create_part_order_table = """CREATE TABLE IF NOT EXISTS part_order(
                                     amount integer,
                                     cost double,
                                     order_id integer PRIMARY KEY 
+                                    part_id integer,
+                                    WID integer,
+                                    company_id integer,
+                                    FOREIGN KEY (part_id) references parts(part_id),
+                                    FOREIGN KEY (WID) references workshop(WID),
+                                    FOREIGN KEY (company_id) references provider(company_id)
                         );"""
 
 sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
@@ -144,7 +149,12 @@ sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                         );"""
 
 sql_create_have_parts_table = """CREATE TABLE IF NOT EXISTS have_parts(
-                                    
+                                    amount integer,
+                                    amount_week_ago integer,
+                                    WID integer PRIMARY KEY,
+                                    part_id integer PRIMARY KEY, 
+                                    FOREIGN KEY (WID) references workshop(WID),
+                                    FOREIGN KEY (part_id) references parts(part_id)
                         );"""
 
 sql_create_fit_table = """CREATE TABLE IF NOT EXISTS fit(
