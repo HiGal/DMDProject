@@ -1,3 +1,5 @@
+import logging
+
 from flask import Flask
 import sqlite3
 import os
@@ -18,7 +20,7 @@ sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
                             );"""
 
 sql_create_charging_station_table = """CREATE TABLE IF NOT EXISTS charging_station(
-                                            UID integer PRIMARY KEY,
+                                            UID integer UNIQUE PRIMARY KEY,
                                             amount_of_available_slots integer NOT NULL,
                                             time_of_charging time NOT NULL, 
                                             price double
@@ -109,7 +111,7 @@ sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
 
 sql_create_repair_car = """CREATE TABLE IF NOT EXISTS repair_car(
                                 WID integer,
-                                car_id integer, 
+                                car_id integer unique, 
                                 report_id integer PRIMARY KEY,
                                 date date,
                                 progress_status varchar(10),
@@ -118,7 +120,7 @@ sql_create_repair_car = """CREATE TABLE IF NOT EXISTS repair_car(
                     );"""
 
 sql_create_models = """CREATE TABLE IF NOT EXISTS models(
-                        model_id integer unique PRIMARY KEY ,
+                        model_id integer PRIMARY KEY ,
                         name varchar(20) not null,
                         type varchar(30) not null ,
                         service_class varchar(30) not null ,
@@ -130,7 +132,7 @@ sql_create_part_order_table = """CREATE TABLE IF NOT EXISTS part_order(
                                     date date,
                                     amount integer,
                                     cost double,
-                                    order_id integer PRIMARY KEY 
+                                    order_id integer PRIMARY KEY ,
                                     part_id integer,
                                     WID integer,
                                     company_id integer,
@@ -141,11 +143,11 @@ sql_create_part_order_table = """CREATE TABLE IF NOT EXISTS part_order(
 
 sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                                 part_id integer PRIMARY KEY, 
-                                type_of_detail varchar(25) NOT NULL
-                                cost double,
+                                type_of_detail varchar(25) NOT NULL,
+                                cost double
                         );"""
 
-sql_create_have_parts_table = """CREATE TABLE IF NOT EXISTS have_parts(
+sql_create_workshop_have_parts_table = """CREATE TABLE IF NOT EXISTS workshop_have_parts(
                                     amount integer,
                                     amount_week_ago integer,
                                     WID integer PRIMARY KEY,
@@ -161,7 +163,12 @@ sql_create_fit_table = """CREATE TABLE IF NOT EXISTS fit(
                                 FOREIGN KEY (model_id) references models(model_id)
                 );"""
 
-
+sql_create_providers_have_parts_table = """CREATE TABLE IF NOT EXISTS providers_have_parts(
+                                                company_id integer PRIMARY KEY,
+                                                part_id integer PRIMARY KEY,
+                                                FOREIGN KEY (company_id) references provider(company_id),
+                                                FOREIGN KEY (part_id) references parts(part_id)
+                                );"""
 
 
 def create_connection(db_file):
