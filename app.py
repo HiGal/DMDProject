@@ -79,11 +79,11 @@ sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
 
 sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
                         car_id integer primary key ,
-                        gps_location varchar(25),
+                        gps_location varchar(25) not null ,
                         year varchar(4),
-                        reg_num varchar(11),
-                        charge int(1),
-                        available int(1),
+                        reg_num varchar(11) not null ,
+                        charge int(1) not null ,
+                        available int(1) not null ,
                         
                         foreign key (car_id) references orders(order_id)
     
@@ -91,9 +91,9 @@ sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
 
 sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         model_id integer PRIMARY KEY ,
-                        name varchar(20),
-                        type varchar(30),
-                        service_class varchar(30),
+                        name varchar(20) not null,
+                        type varchar(30) not null ,
+                        service_class varchar(30) not null ,
                         
                         foreign key (model_id) references cars(car_id),
                         foreign key (model_id) references charging_plugs(plug_id)
@@ -101,8 +101,8 @@ sql_create_models = """CREATE TABLE IF NOT EXISTS models(
 
 sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
                                 plug_id integer PRIMARY KEY ,
-                                shape_plug varchar(20),
-                                size_plug int(10)
+                                shape_plug varchar(20) not null  ,
+                                size_plug int(10) not null 
                             );"""
 
 
