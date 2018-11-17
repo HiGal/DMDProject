@@ -93,6 +93,15 @@ sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
     
                     );"""
 
+sql_create_charge_car_table = """CREATE TABLE IF NOT EXISTS charge_car(
+                                    cost double, 
+                                    date date,
+                                    car_id integer PRIMARY KEY,
+                                    UID integer PRIMARY KEY,
+                                    FOREIGN KEY (car_id) references cars(car_id),
+                                    FOREIGN KEY (UID) references charging_station(UID)
+                        );"""
+
 # Availability of timing( What the type?)
 sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     WID integer PRIMARY KEY ,
