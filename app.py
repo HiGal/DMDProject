@@ -32,24 +32,13 @@ sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
 
 #Так вообще можно делать?
 sql_create_have_charging_relation = """CREATE TABLE IF NOT EXISTS have_charging(
-                                            FOREIGN KEY UID integer references charging_station(UID),
-                                            FOREIGN KEY plug_if integer references charging_plugs(plug_id),
+                                            UID integer NOT NULL,
+                                            plug_id integer NOT NULL,
+                                            FOREIGN KEY (UID)  references charging_station(UID),
+                                            FOREIGN KEY (plug_id)  references charging_plugs(plug_id),
                                             PRIMARY KEY (UID, plug_id)
                                 );"""
 
-sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
-                                part_id integer PRIMARY KEY, 
-                                type_of_detail varchar(25) NOT NULL
-
-                        );"""
-
-# Availability of timing( What the type?)
-sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
-                                    WID integer PRIMARY KEY ,
-                                    availability_of_timing time NOT NULL,
-                                    location varchar(25) NOT NULL
-
-                        );"""
 
 sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
                                     company_id integer PRIMARY KEY,
@@ -103,6 +92,16 @@ sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
     
                     );"""
 
+# Availability of timing( What the type?)
+sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
+                                    WID integer PRIMARY KEY ,
+                                    availability_of_timing time NOT NULL,
+                                    location varchar(25) NOT NULL
+
+                        );"""
+
+
+
 sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         model_id integer PRIMARY KEY ,
                         name varchar(20) not null,
@@ -113,6 +112,18 @@ sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         foreign key (model_id) references charging_plugs(plug_id)
                     );"""
 
+sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
+                                part_id integer PRIMARY KEY, 
+                                type_of_detail varchar(25) NOT NULL
+
+                        );"""
+
+sql_create_fit_table = """CREATE TABLE IF NOT EXISTS fit(
+                                part_id integer PRIMARY KEY,
+                                model_id integer PRIMARY KEY,
+                                FOREIGN KEY (part_id) references parts(part_id),
+                                FOREIGN KEY (model_id) references models(model_id)
+                );"""
 
 
 def create_connection(db_file):
