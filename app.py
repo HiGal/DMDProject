@@ -95,10 +95,15 @@ sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         type varchar(30),
                         service_class varchar(30),
                         
-                        foreign key (model_id) references cars(car_id)
+                        foreign key (model_id) references cars(car_id),
+                        foreign key (model_id) references charging_plugs(plug_id)
                     );"""
 
-
+sql_create_charging_plugs = """CREATE TABLE IF NOT EXISTS charging_plugs(
+                                plug_id integer PRIMARY KEY ,
+                                shape_plug varchar(20),
+                                size_plug int(10)
+                            );"""
 
 
 def create_connection(db_file):
