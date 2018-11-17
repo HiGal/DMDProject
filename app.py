@@ -98,7 +98,6 @@ sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     WID integer PRIMARY KEY ,
                                     availability_of_timing time NOT NULL,
                                     location varchar(25) NOT NULL
-
                         );"""
 
 sql_create_repair_car = """CREATE TABLE IF NOT EXISTS repair_car(
@@ -106,7 +105,7 @@ sql_create_repair_car = """CREATE TABLE IF NOT EXISTS repair_car(
                                 car_id integer, 
                                 report_id integer PRIMARY KEY,
                                 date date,
-                                prograss_status varchar(10),
+                                progress_status varchar(10),
                                 FOREIGN KEY (WID) references workshop(WID),
                                 FOREIGN KEY (car_id) references cars(car_id)
                     );"""
@@ -132,7 +131,7 @@ sql_create_part_order_table = """CREATE TABLE IF NOT EXISTS part_order(
 sql_create_parts_table = """CREATE TABLE IF NOT EXISTS parts(
                                 part_id integer PRIMARY KEY, 
                                 type_of_detail varchar(25) NOT NULL
-
+                                cost double,
                         );"""
 
 sql_create_have_parts_table = """CREATE TABLE IF NOT EXISTS have_parts(
