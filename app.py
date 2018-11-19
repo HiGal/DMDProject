@@ -8,17 +8,13 @@ from faker import Faker
 app = Flask(__name__)
 
 db_file = 'carsharing.sqlite'
-obj = Faker()
+datagen = Faker()
 
 sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
                                 id integer UNIQUE PRIMARY KEY,
-                                name text NOT NULL,
+                                name varchar(50) NOT NULL,
                                 priority integer,
-                                status_id integer NOT NULL,
-                                project_id integer NOT NULL,
-                                begin_date text NOT NULL,
-                                end_date text NOT NULL,
-                                FOREIGN KEY (project_id) REFERENCES projects (id)
+                                end_date date NOT NULL
                             );"""
 
 sql_create_charging_station_table = """CREATE TABLE IF NOT EXISTS charging_station(
@@ -189,6 +185,52 @@ def create_connection(db_file):
     return None
 
 
+def insert_fake_data(conn):
+    cursor = conn.cursor()
+    try:
+        for i in range(10):
+            name = str(datagen.name())
+            num = str(datagen.random_number(digits=3))
+            date = str(datagen.date())
+            sql = ''' INSERT INTO tasks(name,priority,end_date)
+                          VALUES(?,?,?) '''
+            task = (name, num, date)
+            cursor.execute(sql, task)
+            conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return None
+
+
+def modify_fake_data(conn):
+    cursor = conn.cursor()
+    try:
+        sql = '''UPDATE tasks
+                SET name = 'AAAAAAAAAAAAA'
+                WHERE
+                    priority = 5000
+                '''
+        cursor.execute(sql)
+        return 0
+    except Exception:
+        logging.info("Error while updating occurs")
+    return None
+
+
+def select_fake_data(conn, cond):
+    cursor = conn.cursor()
+    try:
+        sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 15600 and 5005"
+        cursor.execute(sql)
+        for row in cursor:
+            print(row)
+        return 0
+    except Exception:
+        logging.info("Error while selecting occurs")
+    return None
+
+
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
@@ -214,7 +256,13 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(db_file)
     logging.info("Try to initialise tables in database")
-    create_table(conn, sql_create_tasks_table)
+    # create_table(conn, sql_create_tasks_table)
+    # conn.commit()
+    # insert_fake_data(conn)
+    # conn.commit()
+    modify_fake_data(conn)
+    conn.commit()
+    select_fake_data(conn, "priority")
     conn.commit()
     logging.info("Try to close connection to database")
     close_connection(conn)
