@@ -1,12 +1,14 @@
-import logging
-
 from flask import Flask
 import sqlite3
-import os
+import logging
+
+logging.basicConfig(level=logging.DEBUG)
+from faker import Faker
 
 app = Flask(__name__)
 
 db_file = 'carsharing.sqlite'
+obj = Faker()
 
 sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
                                 id integer UNIQUE PRIMARY KEY,
@@ -40,7 +42,6 @@ sql_create_have_plugs = """CREATE TABLE IF NOT EXISTS have_plugs(
                                             FOREIGN KEY (plug_id)  references charging_plugs(plug_id),
                                             PRIMARY KEY (UID, plug_id)
                                 );"""
-
 
 sql_create_provider_table = """CREATE TABLE IF NOT EXISTS provider(
                                     company_id integer PRIMARY KEY,
@@ -125,6 +126,7 @@ sql_create_models = """CREATE TABLE IF NOT EXISTS models(
                         type varchar(30) not null ,
                         service_class varchar(30) not null ,
                         
+                        foreign key (model_id) references cars(car_id),
                         foreign key (model_id) references charging_plugs(plug_id)
                     );"""
 
@@ -186,6 +188,7 @@ def create_connection(db_file):
 
     return None
 
+
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
@@ -219,7 +222,7 @@ def init_db():
 
 @app.route('/')
 def hello_world():
-    return'Hello World!'
+    return 'Hello World!'
 
 
 if __name__ == '__main__':
