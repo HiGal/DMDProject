@@ -250,7 +250,7 @@ class TestSelectFake(Resource):
         cond = request.get_json(silent=True)
         conn = create_connection(db_file)
         response = select_fake_data(conn, cond['condition'])
-        conn.close()
+        close_connection(conn)
         return jsonify(response)
 
 
@@ -260,7 +260,7 @@ class ModifyFake(Resource):
     def get(self):
         conn = create_connection(db_file)
         response = modify_fake_data(conn)
-        conn.close()
+        close_connection()
         return jsonify(response)
 
 
@@ -270,7 +270,7 @@ class InsertFakeData(Resource):
     def get(self):
         conn = create_connection(db_file)
         response = insert_fake_data(conn)
-        conn.close()
+        close_connection(conn)
         return jsonify(response)
 
 ########################################################################
