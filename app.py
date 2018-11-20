@@ -9,10 +9,8 @@ from faker import Faker
 app = Flask(__name__)
 # define api
 api = Api(app)
-
 app.config["SWAGGER_UI_JSONEDITOR"] = True
-
-db_file = 'carsharing.sqlite'
+DB_FILE = 'carsharing.sqlite'
 datagen = Faker()
 
 sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
@@ -263,7 +261,7 @@ class TestSelectFake(Resource):
     @api.expect(test)
     def post(self):
         cond = request.get_json(silent=True)
-        conn = create_connection(db_file)
+        conn = create_connection(DB_FILE)
         response = select_fake_data(conn, cond['condition'])
         close_connection(conn)
         return jsonify(response)
@@ -273,9 +271,9 @@ class TestSelectFake(Resource):
 class ModifyFake(Resource):
 
     def get(self):
-        conn = create_connection(db_file)
+        conn = create_connection(DB_FILE)
         response = modify_fake_data(conn)
-        close_connection()
+        close_connection(conn)
         return jsonify(response)
 
 
@@ -283,7 +281,7 @@ class ModifyFake(Resource):
 class InsertFakeData(Resource):
 
     def get(self):
-        conn = create_connection(db_file)
+        conn = create_connection(DB_FILE)
         response = insert_fake_data(conn)
         close_connection(conn)
         return jsonify(response)
@@ -301,6 +299,7 @@ def create_table(conn, create_table_sql):
     try:
         c = conn.cursor()
         c.execute(create_table_sql)
+        conn.commit()
         logging.info("Successfully created table in database")
     except sqlite3.DatabaseError as e:
         print(e)
@@ -315,10 +314,11 @@ def close_connection(conn):
 @app.before_first_request
 def init_db():
     logging.info("Try to connect to database")
-    conn = create_connection(db_file)
+    conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
     for sql_to_create in list_tables_to_create:
         create_table(conn, sql_to_create)
+
     # create_table(conn, sql_create_tasks_table)
     # conn.commit()
     # insert_fake_data(conn)
