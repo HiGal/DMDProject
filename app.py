@@ -85,6 +85,7 @@ sql_create_cars = """CREATE TABLE IF NOT EXISTS cars(
                         car_id integer unique primary key ,
                         gps_location varchar(25) not null ,
                         year varchar(4),
+                        colour varchar(20) not null,
                         reg_num varchar(11) not null ,
                         charge int(1) not null ,
                         available int(1) not null ,
