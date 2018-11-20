@@ -1,11 +1,16 @@
-from flask import Flask
+from flask import Flask, jsonify, request
 import sqlite3
 import logging
+from flask_restplus import Api, Resource, fields
 
 logging.basicConfig(level=logging.DEBUG)
 from faker import Faker
 
 app = Flask(__name__)
+# define api
+api = Api(app)
+
+app.config["SWAGGER_UI_JSONEDITOR"] = True
 
 db_file = 'carsharing.sqlite'
 datagen = Faker()
@@ -197,38 +202,79 @@ def insert_fake_data(conn):
             task = (name, num, date)
             cursor.execute(sql, task)
             conn.commit()
-        return 0
+        return "Successfull"
     except Exception:
         logging.info("Error while inserting occurs")
-    return None
+    return "Error while inserting occurs"
 
 
 def modify_fake_data(conn):
     cursor = conn.cursor()
     try:
-        sql = '''UPDATE tasks
-                SET name = 'AAAAAAAAAAAAA'
-                WHERE
-                    priority = 5000
-                '''
+        sql = '''UPDATE tasks SET name = 'AAAAAAAAAAAAA' WHERE priority < 10000'''
         cursor.execute(sql)
-        return 0
+        conn.commit()
+        return "Successfully modified"
     except Exception:
         logging.info("Error while updating occurs")
-    return None
+    return "Error while updating occurs"
 
 
 def select_fake_data(conn, cond):
     cursor = conn.cursor()
+    diction = {}
     try:
-        sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 15600 and 5005"
+        sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 5005 and 15600"
         cursor.execute(sql)
-        for row in cursor:
-            print(row)
-        return 0
-    except Exception:
+        i = 0
+        for row in cursor.fetchall():
+            diction[i] = row[0]
+            i += 1
+        return diction
+    except Exception as e:
+        print(e)
         logging.info("Error while selecting occurs")
-    return None
+    return "Error while updating occurs"
+
+
+# Example of using flask_restplus api
+#######################################################################
+test = api.model('Test', {'condition': fields.String("Condition...")})
+
+
+@api.route("/select_fake_data")
+class TestSelectFake(Resource):
+
+    @api.expect(test)
+    def post(self):
+        cond = request.get_json(silent=True)
+        conn = create_connection(db_file)
+        response = select_fake_data(conn, cond['condition'])
+        conn.close()
+        return jsonify(response)
+
+
+@api.route("/modify")
+class ModifyFake(Resource):
+
+    def get(self):
+        conn = create_connection(db_file)
+        response = modify_fake_data(conn)
+        conn.close()
+        return jsonify(response)
+
+
+@api.route("/insert")
+class InsertFakeData(Resource):
+
+    def get(self):
+        conn = create_connection(db_file)
+        response = insert_fake_data(conn)
+        conn.close()
+        return jsonify(response)
+
+########################################################################
+
 
 
 def create_table(conn, create_table_sql):
@@ -251,21 +297,21 @@ def close_connection(conn):
     return None
 
 
-@app.before_first_request
-def init_db():
-    logging.info("Try to connect to database")
-    conn = create_connection(db_file)
-    logging.info("Try to initialise tables in database")
-    # create_table(conn, sql_create_tasks_table)
-    # conn.commit()
-    # insert_fake_data(conn)
-    # conn.commit()
-    modify_fake_data(conn)
-    conn.commit()
-    select_fake_data(conn, "priority")
-    conn.commit()
-    logging.info("Try to close connection to database")
-    close_connection(conn)
+# @app.before_first_request
+# def init_db():
+#     logging.info("Try to connect to database")
+#     conn = create_connection(db_file)
+#     logging.info("Try to initialise tables in database")
+#     # create_table(conn, sql_create_tasks_table)
+#     # conn.commit()
+#     # insert_fake_data(conn)
+#     # conn.commit()
+#     # modify_fake_data(conn)
+#     # conn.commit()
+#     # select_fake_data(conn, "priority")
+#     conn.commit()
+#     logging.info("Try to close connection to database")
+#     close_connection(conn)
 
 
 @app.route('/')
