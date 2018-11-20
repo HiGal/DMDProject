@@ -60,8 +60,8 @@ sql_create_customers_table = """CREATE TABLE IF NOT EXISTS customers (
                                   
                         );"""
 
-# cost and duration?
-# st_point, pick location same?
+#TODO cost and duration?
+#TODO st_point, pick location same?
 sql_create_orders = """CREATE TABLE IF NOT EXISTS orders (
                         order_id integer UNIQUE PRIMARY KEY,
                         date text not null ,
@@ -99,7 +99,7 @@ sql_create_charge_car_table = """CREATE TABLE IF NOT EXISTS charge_car(
                                     FOREIGN KEY (UID) references charging_station(UID)
                         );"""
 
-# Availability of timing( What the type?)
+#TODO Availability of timing( What the type?)
 sql_create_workshop_table = """CREATE TABLE IF NOT EXISTS workshop(
                                     WID integer PRIMARY KEY ,
                                     availability_of_timing time NOT NULL,
@@ -167,7 +167,22 @@ sql_create_providers_have_parts_table = """CREATE TABLE IF NOT EXISTS providers_
                                                 FOREIGN KEY (company_id) references provider(company_id),
                                                 FOREIGN KEY (part_id) references parts(part_id)
                                 );"""
-
+list_tables_to_create=[sql_create_charging_station_table,
+                       sql_create_have_plugs,
+                       sql_create_provider_table,
+                       sql_create_customers_table,
+                       sql_create_orders,
+                       sql_create_cars,
+                       sql_create_charge_car_table,
+                       sql_create_workshop_table,
+                       sql_create_repair_car,
+                       sql_create_models,
+                       sql_create_part_order_table,
+                       sql_create_parts_table,
+                       sql_create_workshop_have_parts_table,
+                       sql_create_fit_table,
+                       sql_create_fit_table,
+                       sql_create_providers_have_parts_table]
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -256,14 +271,16 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(db_file)
     logging.info("Try to initialise tables in database")
+    for sql_to_create in list_tables_to_create:
+        create_table(conn, sql_to_create)
     # create_table(conn, sql_create_tasks_table)
     # conn.commit()
     # insert_fake_data(conn)
     # conn.commit()
-    modify_fake_data(conn)
-    conn.commit()
-    select_fake_data(conn, "priority")
-    conn.commit()
+    # modify_fake_data(conn)
+    # conn.commit()
+    # select_fake_data(conn, "priority")
+    # conn.commit()
     logging.info("Try to close connection to database")
     close_connection(conn)
 
