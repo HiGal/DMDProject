@@ -1,13 +1,13 @@
 from flask import Flask, jsonify, request
-import sqlite3
-import logging
 from flask_restplus import Api, Resource, fields
 import json
-
-logging.basicConfig(level=logging.DEBUG)
 from faker import Faker
+from api import *
 
+api = Flask(__name__)
+rest_api = Api(api)
 
+<<<<<<< HEAD
 datagen = Faker()
 
 
@@ -205,76 +205,62 @@ def create_connection(db_file):
         print(e)
 
     return None
+=======
+DB_FILE = 'carsharing.sqlite'
+>>>>>>> 6f78a69826346c1f0d8bf7b3b6c1cf383be839e6
+
+test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-def insert_fake_data(conn):
-    cursor = conn.cursor()
-    try:
-        for i in range(10):
-            name = str(datagen.name())
-            num = str(datagen.random_number(digits=3))
-            date = str(datagen.date())
-            sql = ''' INSERT INTO tasks(name,priority,end_date)
-                          VALUES(?,?,?) '''
-            task = (name, num, date)
-            cursor.execute(sql, task)
-            conn.commit()
-        return "Successfull"
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return "Error while inserting occurs"
+# Example
+# ____________________________________________________________#
+@rest_api.route("/select_fake_data")
+class TestSelectFake(Resource):
+
+    @rest_api.expect(test)
+    def post(self):
+        cond = request.get_json(silent=True)
+        conn = create_connection(DB_FILE)
+        response = select_fake_data(conn, cond['condition'])
+        close_connection(conn)
+        return jsonify(response)
 
 
-def modify_fake_data(conn):
-    cursor = conn.cursor()
-    try:
-        sql = '''UPDATE tasks SET name = 'AAAAAAAAAAAAA' WHERE priority < 10000'''
-        cursor.execute(sql)
-        conn.commit()
-        return "Successfully modified"
-    except Exception:
-        logging.info("Error while updating occurs")
-    return "Error while updating occurs"
+@rest_api.route("/modify")
+class ModifyFake(Resource):
+
+    def get(self):
+        conn = create_connection(DB_FILE)
+        response = modify_fake_data(conn)
+        close_connection(conn)
+        return jsonify(response)
 
 
-def select_fake_data(conn, cond):
-    cursor = conn.cursor()
-    diction = {}
-    try:
-        sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 5005 and 15600"
-        cursor.execute(sql)
-        i = 0
-        for row in cursor.fetchall():
-            diction[i] = row[0]
-            i += 1
-        return diction
-    except Exception as e:
-        print(e)
-        logging.info("Error while selecting occurs")
-    return "Error while updating occurs"
+@rest_api.route("/insert")
+class InsertFakeData(Resource):
 
-def create_table(conn, create_table_sql):
-    """ create a table from the create_table_sql statement
-    :param conn: Connection object
-    :param create_table_sql: a CREATE TABLE statement
-    :return:
-    """
-    try:
-        c = conn.cursor()
-        c.execute(create_table_sql)
-        conn.commit()
-        logging.info("Successfully created table in database")
-    except sqlite3.DatabaseError as e:
-        print(e)
+    def get(self):
+        conn = create_connection(DB_FILE)
+        response = insert_fake_data(conn)
+        close_connection(conn)
+        return jsonify(response)
 
 
-def close_connection(conn):
-    conn.close()
-    logging.info("Successfully closed connection to database")
-    return None
+# ______________________________________________________________#
+
+@api.before_first_request
+def init_db():
+    logging.info("Try to connect to database")
+    conn = create_connection(DB_FILE)
+    logging.info("Try to initialise tables in database")
+    json_data = open("sql_to_create.json").read()
+    list_tables_to_create = json.loads(json_data)
+    for sql_to_create in list_tables_to_create.keys():
+        print(sql_to_create)
+        create_table(conn, list_tables_to_create[sql_to_create])
+    logging.info("Try to close connection to database")
+    close_connection(conn)
 
 
-
-
-
-
+if __name__ == '__main__':
+    api.run()
