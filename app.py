@@ -1,7 +1,8 @@
 from geopy.geocoders import Nominatim
+from flask import Flask, jsonify, request
+from flask_restplus import Api, Resource, fields
 from faker import Faker
 from api import *
-import factory
 import random
 import datetime
 
