@@ -7,7 +7,7 @@ from api import *
 api = Flask(__name__)
 rest_api = Api(api)
 
-datagen = Faker()
+fake_data_generator = Faker()
 
 
 # sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
@@ -212,36 +212,36 @@ test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 # Example
 # ____________________________________________________________#
-@rest_api.route("/select_fake_data")
-class TestSelectFake(Resource):
-
-    @rest_api.expect(test)
-    def post(self):
-        cond = request.get_json(silent=True)
-        conn = create_connection(DB_FILE)
-        response = select_fake_data(conn, cond['condition'])
-        close_connection(conn)
-        return jsonify(response)
-
-
-@rest_api.route("/modify")
-class ModifyFake(Resource):
-
-    def get(self):
-        conn = create_connection(DB_FILE)
-        response = modify_fake_data(conn)
-        close_connection(conn)
-        return jsonify(response)
-
-
-@rest_api.route("/insert")
-class InsertFakeData(Resource):
-
-    def get(self):
-        conn = create_connection(DB_FILE)
-        response = insert_fake_data(conn)
-        close_connection(conn)
-        return jsonify(response)
+# @rest_api.route("/select_fake_data")
+# class TestSelectFake(Resource):
+#
+#     @rest_api.expect(test)
+#     def post(self):
+#         cond = request.get_json(silent=True)
+#         conn = create_connection(DB_FILE)
+#         response = select_fake_data(conn, cond['condition'])
+#         close_connection(conn)
+#         return jsonify(response)
+#
+#
+# @rest_api.route("/modify")
+# class ModifyFake(Resource):
+#
+#     def get(self):
+#         conn = create_connection(DB_FILE)
+#         response = modify_fake_data(conn)
+#         close_connection(conn)
+#         return jsonify(response)
+#
+#
+# @rest_api.route("/insert")
+# class InsertFakeData(Resource):
+#
+#     def get(self):
+#         conn = create_connection(DB_FILE)
+#         response = insert_fake_data(conn)
+#         close_connection(conn)
+#         return jsonify(response)
 
 
 # ______________________________________________________________#
@@ -254,6 +254,8 @@ def init_db():
     create_table(conn, "tables_to_create.sql")
     logging.info("Try to close connection to database")
     close_connection(conn)
+
+def fill_db_with_data():
 
 
 if __name__ == '__main__':

@@ -5,10 +5,6 @@ from flask_restplus import Api, Resource, fields
 import json
 
 logging.basicConfig(level=logging.DEBUG)
-from faker import Faker
-
-
-fake_data_generator = Faker()
 
 def create_connection(db_file):
     """ create a database connection to the SQLite database
@@ -30,52 +26,6 @@ def close_connection(conn):
     logging.info("Successfully closed connection to database")
     return None
 
-def insert_fake_data(conn):
-    cursor = conn.cursor()
-    try:
-        for i in range(10):
-            name = str(fake_data_generator.name())
-            num = str(fake_data_generator.random_number(digits=3))
-            date = str(fake_data_generator.date())
-            sql = ''' INSERT INTO tasks(name,priority,end_date)
-                          VALUES(?,?,?) '''
-            task = (name, num, date)
-            cursor.execute(sql, task)
-            conn.commit()
-        return "Successful"
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return "Error while inserting occurs"
-
-
-def modify_fake_data(conn):
-    cursor = conn.cursor()
-    try:
-        sql = '''UPDATE tasks SET name = 'AAAAAAAAAAAAA' WHERE priority < 10000'''
-        cursor.execute(sql)
-        conn.commit()
-        return "Successfully modified"
-    except Exception:
-        logging.info("Error while updating occurs")
-    return "Error while updating occurs"
-
-
-def select_fake_data(conn, cond):
-    cursor = conn.cursor()
-    diction = {}
-    try:
-        sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 5005 and 15600"
-        cursor.execute(sql)
-        i = 0
-        for row in cursor.fetchall():
-            diction[i] = row[0]
-            i += 1
-        return diction
-    except Exception as e:
-        print(e)
-        logging.info("Error while selecting occurs")
-    return "Error while updating occurs"
-
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
     :param conn: Connection object
@@ -92,3 +42,50 @@ def create_table(conn, create_table_sql):
 
     except sqlite3.DatabaseError as e:
         print(e)
+
+def insert_into_
+# def insert_fake_data(conn):
+#     cursor = conn.cursor()
+#     try:
+#         for i in range(10):
+#             name = str(fake_data_generator.name())
+#             num = str(fake_data_generator.random_number(digits=3))
+#             date = str(fake_data_generator.date())
+#             sql = ''' INSERT INTO tasks(name,priority,end_date)
+#                           VALUES(?,?,?) '''
+#             task = (name, num, date)
+#             cursor.execute(sql, task)
+#             conn.commit()
+#         return "Successful"
+#     except Exception:
+#         logging.info("Error while inserting occurs")
+#     return "Error while inserting occurs"
+#
+#
+# def modify_fake_data(conn):
+#     cursor = conn.cursor()
+#     try:
+#         sql = '''UPDATE tasks SET name = 'AAAAAAAAAAAAA' WHERE priority < 10000'''
+#         cursor.execute(sql)
+#         conn.commit()
+#         return "Successfully modified"
+#     except Exception:
+#         logging.info("Error while updating occurs")
+#     return "Error while updating occurs"
+#
+#
+# def select_fake_data(conn, cond):
+#     cursor = conn.cursor()
+#     diction = {}
+#     try:
+#         sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 5005 and 15600"
+#         cursor.execute(sql)
+#         i = 0
+#         for row in cursor.fetchall():
+#             diction[i] = row[0]
+#             i += 1
+#         return diction
+#     except Exception as e:
+#         print(e)
+#         logging.info("Error while selecting occurs")
+#     return "Error while updating occurs"
