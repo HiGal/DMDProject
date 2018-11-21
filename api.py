@@ -57,16 +57,14 @@ def insert_into_customers(conn,task):
         conn.commit()
         return 0
     except Exception:
-        logging.info("Error while inserting occurs")
+        logging.info("Error while inserting into customers occurs")
     return -1
 
-def insert_into_orders(conn, order_id, date, time, date_closed, duration, status,
-  cost, st_point, destination, car_location, customer_username):
-    task = (order_id, date, time, date_closed, duration, status,
-  cost, st_point, destination, car_location, customer_username)
+def insert_into_orders(conn, task):
+
     cursor = conn.cursor()
     try:
-        sql = ''' INSERT INTO orders(order_id, date, time, date_closed, duration, status,
+        sql = ''' INSERT INTO orders(date, time, date_closed, duration, status,
   cost, st_point, destination, car_location, username) VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
         cursor.execute(sql, task)
         conn.commit()

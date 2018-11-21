@@ -5,9 +5,12 @@ from faker import Faker
 from api import *
 import factory
 import random
+import datetime
+
 fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
+
 
 # sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
 #                                 id integer UNIQUE PRIMARY KEY,
@@ -204,6 +207,7 @@ def create_connection(db_file):
 
     return None
 
+
 DB_FILE = 'carsharing.sqlite'
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
@@ -250,24 +254,40 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
-    create_table(conn, "tables_to_create.sql")
+    # create_table(conn, "tables_to_create.sql")
+    fill_db_with_data(conn)
     logging.info("Try to close connection to database")
     close_connection(conn)
 
-def fill_db_with_data(conn):
-    insert_into_customers(conn)
-    for i in range(5):
-        task = (factory.Faker('words', nb_words=1),
-                factory.Faker('email'),
-                random.randint(1000000000000000, 9999999999999999),
-                fake.name(),
-                random.randint(10000000000, 99999999999),
-                random.randint(1000000, 999999),
-                fake.address()
-                )
-        insert_into_customers(conn, task)
 
+def fill_db_with_data(conn):
+    for i in range(5):
+        address = str(fake.address()).replace('\n', '')
+        name = fake.name()
+        username = str(name).replace(' ', '').lower()
+        email = username + "@gmail.com"
+        task = (username,
+                email,
+                random.randint(1000000000000000, 9999999999999999),
+                name,
+                random.randint(10000000000, 99999999999),
+                random.randint(100000, 999999),
+                address
+                )
+        print(task)
+        insert_into_customers(conn, task)
+    date = datetime.date.today()
+    for i in range(10):
+        address = str(fake.address()).replace('\n', '')
+        name = fake.name()
+        username = str(name).replace(' ', '').lower()
+        email = username + "@gmail.com"
+        task = (date, time, date_closed, duration, status,
+                cost, st_point, destination, car_location, customer_username)
+        print(task)
+        insert_into_customers(conn, task)
     pass
+
 
 if __name__ == '__main__':
     api.run()
