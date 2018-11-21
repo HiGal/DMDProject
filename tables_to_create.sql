@@ -13,12 +13,15 @@ CREATE TABLE IF NOT EXISTS charging_plugs (
 );
 
 CREATE TABLE IF NOT EXISTS stations_have_plugs (
-  charge_have_plugs_id integer NOT NULL,
+  station_have_plugs_id integer NOT NULL,
   UID                  integer NOT NULL,
   plug_id              integer NOT NULL,
   FOREIGN KEY (UID) references charging_station (UID),
   FOREIGN KEY (plug_id) references charging_plugs (plug_id),
-  PRIMARY KEY (charge_have_plugs_id)
+  PRIMARY KEY (station_have_plugs_id)
+
+
+
 );
 
 CREATE TABLE IF NOT EXISTS provider (
@@ -35,13 +38,12 @@ CREATE TABLE IF NOT EXISTS customers (
   fullname     varchar(50) not null,
   phone_number varchar(15),
   zip          integer     not null,
-  city         varchar(20) not null,
-  country      varchar(50) not null
+  address varchar(50) not null
 
 
 );
-/*TODO cost and duration?
-TODO st_point, pick location same?*/
+/* TODO cost and duration?
+ TODO st_point, pick location same?*/
 
 CREATE TABLE IF NOT EXISTS orders (
   order_id     integer PRIMARY KEY,
