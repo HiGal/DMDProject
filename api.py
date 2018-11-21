@@ -75,13 +75,22 @@ def insert_into_orders(conn, order_id, date, time, date_closed, duration, status
         logging.info("Error while inserting occurs")
     return -1
 
-def insert_into_cars(conn, car_id, GPS_location, reg_num, color, year, charge, available):
-    cursor = conn.cursor()
+def insert_into_cars(conn, GPS_location, reg_num, color, year, charge, available):
 
-    sql = '''INSERT INTO cars(car_id, gps_location, year, colour, reg_num, charge, available) VALUES (?,?,?,?,?,?,?)'''
-    task = (car_id, GPS_location, year, color, reg_num, charge, available)
-    cursor.execute(sql, task)
-    pass
+    task = (GPS_location, year, color, reg_num, charge, available)
+    cursor = conn.cursor()
+    try:
+        sql = '''INSERT INTO cars(gps_location, year, colour, reg_num, charge, available) VALUES (?,?,?,?,?,?)'''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
+
+def insert_into_models(conn, name, type, serviece_class):
+    task = ()
+
 
 
 # def insert_fake_data(conn):

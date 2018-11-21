@@ -13,12 +13,15 @@ CREATE TABLE IF NOT EXISTS charging_plugs (
 );
 
 CREATE TABLE IF NOT EXISTS stations_have_plugs (
-  charge_have_plugs_id integer NOT NULL,
+  station_have_plugs_id integer NOT NULL,
   UID                  integer NOT NULL,
   plug_id              integer NOT NULL,
   FOREIGN KEY (UID) references charging_station (UID),
   FOREIGN KEY (plug_id) references charging_plugs (plug_id),
-  PRIMARY KEY (charge_have_plugs_id)
+  PRIMARY KEY (station_have_plugs_id)
+
+
+
 );
 
 CREATE TABLE IF NOT EXISTS provider (
@@ -35,13 +38,12 @@ CREATE TABLE IF NOT EXISTS customers (
   fullname     varchar(50) not null,
   phone_number varchar(15),
   zip          integer     not null,
-  city         varchar(20) not null,
-  country      varchar(50) not null
+  address varchar(50) not null
 
 
 );
-/*TODO cost and duration?
-TODO st_point, pick location same?*/
+/* TODO cost and duration?
+ TODO st_point, pick location same?*/
 
 CREATE TABLE IF NOT EXISTS orders (
   order_id     integer PRIMARY KEY,
@@ -55,9 +57,11 @@ CREATE TABLE IF NOT EXISTS orders (
   destination  varchar(50) not null,
   car_location varchar(50) not null,
   username     varchar(50) not null,
-  foreign key (username) references customers (username)
-  ON UPDATE cascade
-  ON DELETE set null
+  car_id       integer     not null,
+  foreign key (username) references customers (username),
+  foreign key (car_id) references cars (car_id)
+    ON UPDATE cascade
+    ON DELETE cascade
 );
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
@@ -70,6 +74,8 @@ CREATE TABLE IF NOT EXISTS cars (
   available    int(1)      not null,
   model_id     int         not null,
   foreign key (model_id) references models (model_id)
+    ON UPDATE cascade
+    ON DELETE set default
 );
 
 CREATE TABLE IF NOT EXISTS charge_car_history (
@@ -101,11 +107,11 @@ CREATE TABLE IF NOT EXISTS repair_car (
 
 CREATE TABLE IF NOT EXISTS models (
   model_id      integer PRIMARY KEY,
+  plug_id       integer,
   name          varchar(20) not null,
   type          varchar(30) not null,
   service_class varchar(30) not null,
-  foreign key (model_id) references cars (car_id),
-  foreign key (model_id) references charging_plugs (plug_id)
+  foreign key (plug_id) references charging_plugs (plug_id)
 );
 CREATE TABLE IF NOT EXISTS part_order (
   date       date,
@@ -122,6 +128,7 @@ CREATE TABLE IF NOT EXISTS part_order (
 
 CREATE TABLE IF NOT EXISTS parts (
   part_id         integer PRIMARY KEY,
+  WID             integer,
   type_of_detail  varchar(25),
   cost            double,
   amount          integer,
