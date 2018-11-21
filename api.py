@@ -1,6 +1,7 @@
 from flask import Flask, jsonify, request
 import sqlite3
 import logging
+import re
 from flask_restplus import Api, Resource, fields
 import json
 
@@ -49,14 +50,19 @@ def create_table(conn, create_table_sql):
 
 def insert_into_customers(conn,username, email, cardnumber, fullname, phone_number,
   zip, city, country):
-    cursor = conn.cursor()
-
-    sql = ''' INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
-  zip, city, country) VALUES(?,?,?,?,?,?,?,?) '''
     task = (username, email, cardnumber, fullname, phone_number,
-  zip, city, country)
-    cursor.execute(sql, task)
-    pass
+            zip, city, country)
+    cursor = conn.cursor()
+    try:
+        sql = ''' INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
+                zip, city, country) VALUES(?,?,?,?,?,?,?,?) '''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
+
 
 # def insert_fake_data(conn):
 #     cursor = conn.cursor()
