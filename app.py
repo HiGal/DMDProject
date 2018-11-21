@@ -280,16 +280,16 @@ def fill_db_with_data(conn):
         users.append(task)
         print(task)
         #insert_into_customers(conn, task)
+    geolocator = Nominatim(user_agent="dmd_project")
     for i in range(10):
         date = datetime.date.today()
         status = "closed"
         timestamp = datetime.datetime.now().strftime("%H:%M:%S")
-        geolocator = Nominatim(user_agent="specify_your_app_name_here")
-        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         start = str(location.latitude) + " " + str(location.longitude)
-        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         finish = str(location.latitude) + " " + str(location.longitude)
-        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         car_loc = str(location.latitude) + " " + str(location.longitude)
         task = (date, timestamp, timestamp, status,
                 random.randint(1000, 9999),
