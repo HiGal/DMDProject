@@ -126,6 +126,7 @@ CREATE TABLE IF NOT EXISTS part_order (
 
 CREATE TABLE IF NOT EXISTS parts (
   part_id         integer PRIMARY KEY,
+  WID             integer,
   type_of_detail  varchar(25),
   cost            double,
   amount          integer,
