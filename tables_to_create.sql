@@ -1,7 +1,7 @@
 CREATE TABLE IF NOT EXISTS charging_station (
-  UID                       integer UNIQUE PRIMARY KEY,
-  amount_of_available_slots integer                  NOT NULL,
-  time_of_charging          time                     NOT NULL,
+  UID                       integer PRIMARY KEY,
+  amount_of_available_slots integer     NOT NULL,
+  time_of_charging          time        NOT NULL,
   price                     double,
   GPS_location              varchar(25) NOT NULL
 );
@@ -12,7 +12,7 @@ CREATE TABLE IF NOT EXISTS charging_plugs (
   size_plug  int(10)     not null
 );
 
-CREATE TABLE IF NOT EXISTS charging_have_plugs (
+CREATE TABLE IF NOT EXISTS stations_have_plugs (
   charge_have_plugs_id integer NOT NULL,
   UID                  integer NOT NULL,
   plug_id              integer NOT NULL,
@@ -29,7 +29,7 @@ CREATE TABLE IF NOT EXISTS provider (
 
 );
 CREATE TABLE IF NOT EXISTS customers (
-  username     varchar(20) UNIQUE PRIMARY KEY,
+  username     varchar(20) PRIMARY KEY,
   email        varchar(20) not null,
   cardnumber   varchar(20) not null,
   fullname     varchar(50) not null,
@@ -44,7 +44,7 @@ CREATE TABLE IF NOT EXISTS customers (
 TODO st_point, pick location same?*/
 
 CREATE TABLE IF NOT EXISTS orders (
-  order_id     integer UNIQUE PRIMARY KEY,
+  order_id     integer PRIMARY KEY,
   date         text        not null,
   time         text        not null,
   date_closed  text        not null,
@@ -72,7 +72,7 @@ CREATE TABLE IF NOT EXISTS cars (
   foreign key (car_id) references models (model_id)
 );
 
-CREATE TABLE IF NOT EXISTS charge_car (
+CREATE TABLE IF NOT EXISTS charge_car_history (
   charge_car_id integer PRIMARY KEY,
   cost          double,
   date          date,
