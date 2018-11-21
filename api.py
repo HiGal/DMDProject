@@ -1,9 +1,5 @@
-from flask import Flask, jsonify, request
 import sqlite3
 import logging
-import re
-from flask_restplus import Api, Resource, fields
-import json
 
 logging.basicConfig(level=logging.DEBUG)
 
