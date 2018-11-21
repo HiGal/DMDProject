@@ -55,9 +55,11 @@ CREATE TABLE IF NOT EXISTS orders (
   destination  varchar(50) not null,
   car_location varchar(50) not null,
   username     varchar(50) not null,
-  foreign key (username) references customers (username)
-  ON UPDATE cascade
-  ON DELETE cascade
+  car_id       integer     not null,
+  foreign key (username) references customers (username),
+  foreign key (car_id) references cars (car_id)
+    ON UPDATE cascade
+    ON DELETE cascade
 );
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
@@ -70,6 +72,8 @@ CREATE TABLE IF NOT EXISTS cars (
   available    int(1)      not null,
   model_id     int         not null,
   foreign key (model_id) references models (model_id)
+    ON UPDATE cascade
+    ON DELETE set default
 );
 
 CREATE TABLE IF NOT EXISTS charge_car_history (
@@ -101,11 +105,11 @@ CREATE TABLE IF NOT EXISTS repair_car (
 
 CREATE TABLE IF NOT EXISTS models (
   model_id      integer PRIMARY KEY,
+  plug_id       integer,
   name          varchar(20) not null,
   type          varchar(30) not null,
   service_class varchar(30) not null,
-  foreign key (model_id) references cars (car_id),
-  foreign key (model_id) references charging_plugs (plug_id)
+  foreign key (plug_id) references charging_plugs (plug_id)
 );
 CREATE TABLE IF NOT EXISTS part_order (
   date       date,
