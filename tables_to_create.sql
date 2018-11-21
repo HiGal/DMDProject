@@ -57,7 +57,7 @@ CREATE TABLE IF NOT EXISTS orders (
   username     varchar(50) not null,
   foreign key (username) references customers (username)
   ON UPDATE cascade
-  ON DELETE cascade
+  ON DELETE set null
 );
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (

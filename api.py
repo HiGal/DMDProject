@@ -48,14 +48,11 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_into_customers(conn,username, email, cardnumber, fullname, phone_number,
-  zip, city, country):
-    task = (username, email, cardnumber, fullname, phone_number,
-            zip, city, country)
+def insert_into_customers(conn,task):
     cursor = conn.cursor()
     try:
-        sql = ''' INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
-                zip, city, country) VALUES(?,?,?,?,?,?,?,?) '''
+        sql = '''INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
+                zip, address) VALUES(?,?,?,?,?,?,?)'''
         cursor.execute(sql, task)
         conn.commit()
         return 0
@@ -70,7 +67,7 @@ def insert_into_orders(conn, order_id, date, time, date_closed, duration, status
     cursor = conn.cursor()
     try:
         sql = ''' INSERT INTO orders(order_id, date, time, date_closed, duration, status,
-  cost, st_point, destination, car_location, customer_username) VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
+  cost, st_point, destination, car_location, username) VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
         cursor.execute(sql, task)
         conn.commit()
         return 0
@@ -91,9 +88,9 @@ def insert_into_cars(conn, car_id, GPS_location, reg_num, color, year, charge, a
 #     cursor = conn.cursor()
 #     try:
 #         for i in range(10):
-#             name = str(fake_data_generator.name())
-#             num = str(fake_data_generator.random_number(digits=3))
-#             date = str(fake_data_generator.date())
+#             name = str(fake_data.name())
+#             num = str(fake_data.random_number(digits=3))
+#             date = str(fake_data.date())
 #             sql = ''' INSERT INTO tasks(name,priority,end_date)
 #                           VALUES(?,?,?) '''
 #             task = (name, num, date)

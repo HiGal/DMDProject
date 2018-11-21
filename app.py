@@ -3,12 +3,11 @@ from flask_restplus import Api, Resource, fields
 import json
 from faker import Faker
 from api import *
-
+import factory
+import random
+fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
-
-fake_data_generator = Faker()
-
 
 # sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
 #                                 id integer UNIQUE PRIMARY KEY,
@@ -255,7 +254,19 @@ def init_db():
     logging.info("Try to close connection to database")
     close_connection(conn)
 
-def fill_db_with_data():
+def fill_db_with_data(conn):
+    insert_into_customers(conn)
+    for i in range(5):
+        task = (factory.Faker('words', nb_words=1),
+                factory.Faker('email'),
+                random.randint(1000000000000000, 9999999999999999),
+                fake.name(),
+                random.randint(10000000000, 99999999999),
+                random.randint(1000000, 999999),
+                fake.address()
+                )
+        insert_into_customers(conn, task)
+
     pass
 
 if __name__ == '__main__':
