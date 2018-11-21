@@ -263,7 +263,18 @@ def init_db():
 
 def fill_db_with_data(conn):
     users = []
+    plugs = []
     cars = []
+    #create parameters for plugs
+    for i in range(5):
+
+        shape_of_plugs = random.randint(100, 999)
+        size_of_plug = random. randint(100, 999)
+        task = (shape_of_plugs, size_of_plug)
+        plugs.append(task)
+        print(task)
+        # insert_into_plugs(conn, task)
+
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         name = fake.name()
@@ -297,6 +308,7 @@ def fill_db_with_data(conn):
         print(task)
         #insert_into_customers(conn, task)
     pass
+
 
 
 if __name__ == '__main__':
