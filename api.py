@@ -64,6 +64,15 @@ def insert_into_customers(conn,username, email, cardnumber, fullname, phone_numb
     return -1
 
 
+def insert_into_cars(conn, car_id, GPS_location, reg_num, color, year, charge, available):
+    cursor = conn.cursor()
+
+    sql = '''INSERT INTO cars(car_id, gps_location, year, colour, reg_num, charge, available) VALUES (?,?,?,?,?,?,?)'''
+    task = (car_id, GPS_location, year, color, reg_num, charge, available)
+    cursor.execute(sql, task)
+    pass
+
+
 # def insert_fake_data(conn):
 #     cursor = conn.cursor()
 #     try:
