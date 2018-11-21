@@ -45,18 +45,19 @@ TODO st_point, pick location same?*/
 
 CREATE TABLE IF NOT EXISTS orders (
   order_id     integer PRIMARY KEY,
-  date         text        not null,
-  time         text        not null,
-  date_closed  text        not null,
+  date         date        not null,
+  time         date        not null,
+  date_closed  date        not null,
   duration     integer,
   status       varchar(10) not null,
   cost         integer,
   st_point     varchar(50) not null,
   destination  varchar(50) not null,
   car_location varchar(50) not null,
-
-  foreign key (order_id) references customers (username)
-
+  username     varchar(50) not null,
+  foreign key (username) references customers (username)
+  ON UPDATE cascade
+  ON DELETE cascade
 );
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
@@ -88,9 +89,9 @@ CREATE TABLE IF NOT EXISTS workshop (
 );
 
 CREATE TABLE IF NOT EXISTS repair_car (
+  report_id       integer PRIMARY KEY,
   WID             integer,
   car_id          integer unique,
-  report_id       integer PRIMARY KEY,
   date            date,
   progress_status varchar(10),
   FOREIGN KEY (WID) references workshop (WID),
