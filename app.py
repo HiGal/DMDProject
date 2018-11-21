@@ -7,7 +7,6 @@ from api import *
 api = Flask(__name__)
 rest_api = Api(api)
 
-<<<<<<< HEAD
 datagen = Faker()
 
 
@@ -205,9 +204,8 @@ def create_connection(db_file):
         print(e)
 
     return None
-=======
+
 DB_FILE = 'carsharing.sqlite'
->>>>>>> 6f78a69826346c1f0d8bf7b3b6c1cf383be839e6
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
@@ -253,11 +251,7 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
-    json_data = open("sql_to_create.json").read()
-    list_tables_to_create = json.loads(json_data)
-    for sql_to_create in list_tables_to_create.keys():
-        print(sql_to_create)
-        create_table(conn, list_tables_to_create[sql_to_create])
+    create_table(conn, "tables_to_create.sql")
     logging.info("Try to close connection to database")
     close_connection(conn)
 
