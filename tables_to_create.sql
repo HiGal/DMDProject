@@ -16,11 +16,9 @@ CREATE TABLE IF NOT EXISTS stations_have_plugs (
   station_have_plugs_id integer NOT NULL,
   UID                  integer NOT NULL,
   plug_id              integer NOT NULL,
-  FOREIGN KEY (UID) references charging_station (UID),
-  FOREIGN KEY (plug_id) references charging_plugs (plug_id),
+  FOREIGN KEY (UID) references charging_station (UID) ON UPDATE  cascade ON DELETE cascade ,
+  FOREIGN KEY (plug_id) references charging_plugs (plug_id) ON UPDATE cascade ON DELETE cascade ,
   PRIMARY KEY (station_have_plugs_id)
-
-
 
 );
 
@@ -58,10 +56,8 @@ CREATE TABLE IF NOT EXISTS orders (
   car_location varchar(50) not null,
   username     varchar(50) not null,
   car_id       integer     not null,
-  foreign key (username) references customers (username),
-  foreign key (car_id) references cars (car_id)
-    ON UPDATE cascade
-    ON DELETE cascade
+  foreign key (username) references customers (username) ON UPDATE cascade ON DELETE cascade ,
+  foreign key (car_id) references cars (car_id) ON UPDATE cascade ON DELETE cascade
 );
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
@@ -73,9 +69,7 @@ CREATE TABLE IF NOT EXISTS cars (
   charge       int(1)      not null,
   available    int(1)      not null,
   model_id     int         not null,
-  foreign key (model_id) references models (model_id)
-    ON UPDATE cascade
-    ON DELETE set default
+  foreign key (model_id) references models (model_id) ON UPDATE cascade ON DELETE set default
 );
 
 CREATE TABLE IF NOT EXISTS charge_car_history (
@@ -84,8 +78,8 @@ CREATE TABLE IF NOT EXISTS charge_car_history (
   date          date,
   car_id        integer,
   UID           integer,
-  FOREIGN KEY (car_id) references cars (car_id),
-  FOREIGN KEY (UID) references charging_station (UID)
+  FOREIGN KEY (car_id) references cars (car_id) ON UPDATE cascade,
+  FOREIGN KEY (UID) references charging_station (UID) ON UPDATE cascade ON DELETE cascade
 );
 /*TODO Availability of timing( What the type?)*/
 CREATE TABLE IF NOT EXISTS workshop (
@@ -100,8 +94,8 @@ CREATE TABLE IF NOT EXISTS repair_car (
   car_id          integer unique,
   date            date,
   progress_status varchar(10),
-  FOREIGN KEY (WID) references workshop (WID),
-  FOREIGN KEY (car_id) references cars (car_id)
+  FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade ,
+  FOREIGN KEY (car_id) references cars (car_id) ON UPDATE cascade ON DELETE cascade
 );
 /*TODO: Model_id refers(ссылается) to the car_id???*/
 
@@ -111,7 +105,7 @@ CREATE TABLE IF NOT EXISTS models (
   name          varchar(20) not null,
   type          varchar(30) not null,
   service_class varchar(30) not null,
-  foreign key (plug_id) references charging_plugs (plug_id)
+  foreign key (plug_id) references charging_plugs (plug_id) ON UPDATE cascade
 );
 CREATE TABLE IF NOT EXISTS part_order (
   date       date,
@@ -121,9 +115,9 @@ CREATE TABLE IF NOT EXISTS part_order (
   part_id    integer,
   WID        integer,
   company_id integer,
-  FOREIGN KEY (part_id) references parts (part_id),
-  FOREIGN KEY (WID) references workshop (WID),
-  FOREIGN KEY (company_id) references provider (company_id)
+  FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade ,
+  FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade ,
+  FOREIGN KEY (company_id) references provider (company_id) ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS parts (
@@ -133,21 +127,21 @@ CREATE TABLE IF NOT EXISTS parts (
   cost            double,
   amount          integer,
   amount_week_ago integer,
-  FOREIGN KEY (WID) references workshop (WID)
+  FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS fit (
   fit_id   integer PRIMARY KEY,
   part_id  integer,
   model_id integer,
-  FOREIGN KEY (part_id) references parts (part_id),
-  FOREIGN KEY (model_id) references models (model_id)
+  FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade ,
+  FOREIGN KEY (model_id) references models (model_id) ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS providers_have_parts (
   providers_have_parts_id integer PRIMARY KEY,
   company_id              integer,
   part_id                 integer,
-  FOREIGN KEY (company_id) references provider (company_id),
-  FOREIGN KEY (part_id) references parts (part_id)
+  FOREIGN KEY (company_id) references provider (company_id) ON UPDATE cascade ON DELETE cascade,
+  FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade
 );
