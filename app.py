@@ -1,3 +1,4 @@
+from geopy.geocoders import Nominatim
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
 import json
@@ -261,6 +262,8 @@ def init_db():
 
 
 def fill_db_with_data(conn):
+    users = []
+    cars = []
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         name = fake.name()
@@ -274,18 +277,25 @@ def fill_db_with_data(conn):
                 random.randint(100000, 999999),
                 address
                 )
+        users.append(task)
         print(task)
-        insert_into_customers(conn, task)
-    date = datetime.date.today()
+        #insert_into_customers(conn, task)
     for i in range(10):
-        address = str(fake.address()).replace('\n', '')
-        name = fake.name()
-        username = str(name).replace(' ', '').lower()
-        email = username + "@gmail.com"
-        task = (date, time, date_closed, duration, status,
-                cost, st_point, destination, car_location, customer_username)
+        date = datetime.date.today()
+        status = "closed"
+        timestamp = datetime.datetime.now().strftime("%H:%M:%S")
+        geolocator = Nominatim(user_agent="specify_your_app_name_here")
+        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        start = str(location.latitude) + " " + str(location.longitude)
+        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        finish = str(location.latitude) + " " + str(location.longitude)
+        location = geolocator.geocode(str(fake.address()).replace('\n', ''))
+        car_loc = str(location.latitude) + " " + str(location.longitude)
+        task = (date, timestamp, timestamp, status,
+                random.randint(1000, 9999),
+                start, finish, car_loc, users[i // len(users)][0], 1)
         print(task)
-        insert_into_customers(conn, task)
+        #insert_into_customers(conn, task)
     pass
 
 

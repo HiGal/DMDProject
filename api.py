@@ -48,7 +48,7 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_into_customers(conn,task):
+def insert_into_customers(conn, task):
     cursor = conn.cursor()
     try:
         sql = '''INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
@@ -60,12 +60,12 @@ def insert_into_customers(conn,task):
         logging.info("Error while inserting into customers occurs")
     return -1
 
-def insert_into_orders(conn, task):
 
+def insert_into_orders(conn, task):
     cursor = conn.cursor()
     try:
-        sql = ''' INSERT INTO orders(date, time, date_closed, duration, status,
-  cost, st_point, destination, car_location, username) VALUES(?,?,?,?,?,?,?,?,?,?,?) '''
+        sql = ''' INSERT INTO orders(date, time, date_closed, status,
+  cost, st_point, destination, car_location, username,car_id ) VALUES(?,?,?,?,?,?,?,?,?,?) '''
         cursor.execute(sql, task)
         conn.commit()
         return 0
@@ -73,8 +73,8 @@ def insert_into_orders(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
-def insert_into_cars(conn, GPS_location, reg_num, color, year, charge, available):
 
+def insert_into_cars(conn, GPS_location, reg_num, color, year, charge, available):
     task = (GPS_location, year, color, reg_num, charge, available)
     cursor = conn.cursor()
     try:

@@ -46,9 +46,8 @@ CREATE TABLE IF NOT EXISTS customers (
 CREATE TABLE IF NOT EXISTS orders (
   order_id     integer PRIMARY KEY,
   date         date        not null,
-  time         date        not null,
-  date_closed  date        not null,
-  duration     integer,
+  time         time        not null,
+  date_closed  time        not null,
   status       varchar(10) not null,
   cost         integer,
   st_point     varchar(50) not null,
