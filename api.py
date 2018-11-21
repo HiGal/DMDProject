@@ -8,7 +8,7 @@ logging.basicConfig(level=logging.DEBUG)
 from faker import Faker
 
 
-datagen = Faker()
+fake_data_generator = Faker()
 
 
 sql_create_tasks_table = """CREATE TABLE IF NOT EXISTS tasks(
@@ -201,9 +201,9 @@ def insert_fake_data(conn):
     cursor = conn.cursor()
     try:
         for i in range(10):
-            name = str(datagen.name())
-            num = str(datagen.random_number(digits=3))
-            date = str(datagen.date())
+            name = str(fake_data_generator.name())
+            num = str(fake_data_generator.random_number(digits=3))
+            date = str(fake_data_generator.date())
             sql = ''' INSERT INTO tasks(name,priority,end_date)
                           VALUES(?,?,?) '''
             task = (name, num, date)
