@@ -256,7 +256,7 @@ def init_db():
     close_connection(conn)
 
 def fill_db_with_data():
-
+    pass
 
 if __name__ == '__main__':
     api.run()

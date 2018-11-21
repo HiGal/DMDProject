@@ -1,16 +1,9 @@
-CREATE TABLE IF NOT EXISTS tasks (
-  id       integer UNIQUE PRIMARY KEY,
-  name     varchar(50) NOT NULL,
-  priority integer,
-  end_date date        NOT NULL
-);
-
 CREATE TABLE IF NOT EXISTS charging_station (
   UID                       integer UNIQUE PRIMARY KEY,
   amount_of_available_slots integer                  NOT NULL,
   time_of_charging          time                     NOT NULL,
-  price                     double
-                            GPS_location varchar(25) NOT NULL
+  price                     double,
+  GPS_location              varchar(25) NOT NULL
 );
 
 CREATE TABLE IF NOT EXISTS charging_plugs (

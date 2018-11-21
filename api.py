@@ -6,6 +6,7 @@ import json
 
 logging.basicConfig(level=logging.DEBUG)
 
+
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
@@ -21,10 +22,12 @@ def create_connection(db_file):
 
     return None
 
+
 def close_connection(conn):
     conn.close()
     logging.info("Successfully closed connection to database")
     return None
+
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
@@ -43,7 +46,18 @@ def create_table(conn, create_table_sql):
     except sqlite3.DatabaseError as e:
         print(e)
 
-def insert_into_
+
+def insert_into_customers(conn,username, email, cardnumber, fullname, phone_number,
+  zip, city, country):
+    cursor = conn.cursor()
+
+    sql = ''' INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
+  zip, city, country) VALUES(?,?,?,?,?,?,?,?) '''
+    task = (username, email, cardnumber, fullname, phone_number,
+  zip, city, country)
+    cursor.execute(sql, task)
+    pass
+
 # def insert_fake_data(conn):
 #     cursor = conn.cursor()
 #     try:
