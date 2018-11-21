@@ -58,7 +58,7 @@ CREATE TABLE IF NOT EXISTS orders (
   foreign key (order_id) references customers (username)
 
 );
-
+/*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
   car_id       integer primary key,
   gps_location varchar(25) not null,
@@ -67,9 +67,8 @@ CREATE TABLE IF NOT EXISTS cars (
   reg_num      varchar(11) not null,
   charge       int(1)      not null,
   available    int(1)      not null,
-
-  foreign key (car_id) references orders (order_id),
-  foreign key (car_id) references models (model_id)
+  model_id     int         not null,
+  foreign key (model_id) references models (model_id)
 );
 
 CREATE TABLE IF NOT EXISTS charge_car_history (
