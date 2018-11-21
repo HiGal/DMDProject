@@ -86,11 +86,6 @@ def insert_into_cars(conn, GPS_location, reg_num, color, year, charge, available
         logging.info("Error while inserting occurs")
     return -1
 
-def insert_into_models(conn, name, type, serviece_class):
-    task = ()
-
-
-
 # def insert_fake_data(conn):
 #     cursor = conn.cursor()
 #     try:
