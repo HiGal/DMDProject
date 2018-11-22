@@ -1,8 +1,6 @@
 CREATE TABLE IF NOT EXISTS charging_station (
   UID                       integer PRIMARY KEY,
-  amount_of_available_slots integer     NOT NULL,
   time_of_charging          time        NOT NULL,
-  price                     double,
   GPS_location              varchar(25) NOT NULL
 );
 
@@ -16,6 +14,7 @@ CREATE TABLE IF NOT EXISTS stations_have_plugs (
   station_have_plugs_id integer NOT NULL,
   UID                  integer NOT NULL,
   plug_id              integer NOT NULL,
+  amount_of_available_slots integer     NOT NULL,
   FOREIGN KEY (UID) references charging_station (UID) ON UPDATE  cascade ON DELETE cascade ,
   FOREIGN KEY (plug_id) references charging_plugs (plug_id) ON UPDATE cascade ON DELETE cascade ,
   PRIMARY KEY (station_have_plugs_id)
