@@ -13,6 +13,8 @@ fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
 
+api.config.SWAGGER_UI_OPERATION_ID = True
+api.config.SWAGGER_UI_REQUEST_DURATION = True
 DB_FILE = 'carsharing.sqlite'
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
@@ -40,21 +42,16 @@ def close_connection(conn):
 
 
 
-@api.before_first_request
-def init_db():
-    logging.info("Try to connect to database")
-    conn = create_connection(DB_FILE)
-    logging.info("Try to initialise tables in database")
-    # create_table(conn, "tables_to_create.sql")
-    fill_db_with_data(conn)
-    logging.info("Try to close connection to database")
-    close_connection(conn)
+# @api.before_first_request
+# def init_db():
+#     logging.info("Try to connect to database")
+#     conn = create_connection(DB_FILE)
+#     logging.info("Try to initialise tables in database")
+#     # create_table(conn, "tables_to_create.sql")
+#     fill_db_with_data(conn)
+#     logging.info("Try to close connection to database")
+#     close_connection(conn)
 
-
-
-
-if __name__ == '__main__':
-    api.run()
 
 
 
@@ -63,13 +60,18 @@ if __name__ == '__main__':
 # @rest_api.route("/select_fake_data")
 # class TestSelectFake(Resource):
 #
+#     @rest_api.doc(id="put something")
+#     @rest_api.doc()
 #     @rest_api.expect(test)
 #     def post(self):
 #         cond = request.get_json(silent=True)
 #         conn = create_connection(DB_FILE)
-#         response = select_fake_data(conn, cond['condition'])
 #         close_connection(conn)
-#         return jsonify(response)
+#         return jsonify("fa")
+#
+#
+# if __name__ == '__main__':
+#     api.run()
 #
 #
 # @rest_api.route("/modify")
