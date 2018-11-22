@@ -60,7 +60,7 @@ def insert_into_plugs(conn, task):
 def insert_into_charging_stations(conn, task):
     cursor = conn.cursor()
     try:
-        sql = '''INSERT INTO charging_station(time_of_charging, price, GPS_location) VALUES (?,?,?,?)'''
+        sql = '''INSERT INTO charging_station(time_of_charging, GPS_location) VALUES (?,?)'''
         cursor.execute(sql, task)
         conn.commit()
         return 0

@@ -83,11 +83,9 @@ def fill_charging_stations(conn):
     geolocator = Nominatim(user_agent="m_project")
     # create parameters of models
     for i in range(5):
-        time_of_charging = random.randint(5, 15)
-        price = random.randint(200, 1200)
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         GPS = str(location.latitude) + " " + str(location.longitude)
-        task = (time_of_charging, price, GPS)
+        task = (random.randint(5, 15), GPS)
         stations.append(i + 1)
         print(task)
         if insert_into_charging_stations(conn, task) == -1:

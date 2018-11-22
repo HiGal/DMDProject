@@ -1,7 +1,6 @@
 CREATE TABLE IF NOT EXISTS charging_station (
   UID                       integer PRIMARY KEY,
   time_of_charging          time        NOT NULL,
-  price                     double,
   GPS_location              varchar(25) NOT NULL
 );
 
