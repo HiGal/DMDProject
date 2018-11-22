@@ -1,31 +1,55 @@
+from geopy.geocoders import Nominatim
+from flask import Flask, jsonify, request
+from flask_restplus import Api, Resource, fields
+from faker import Faker
+from api import *
+import random
+import datetime
 import sqlite3
 import logging
-
-logging.basicConfig(level=logging.DEBUG)
-
-
-#TODO Code duplication !
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    try:
-        conn = sqlite3.connect(db_file)
-        logging.info("Successfully connected to database")
-        return conn
-    except sqlite3.DatabaseError as e:
-        print(e)
-
-    return None
+fake = Faker()
+api = Flask(__name__)
+rest_api = Api(api)
 
 
-def close_connection(conn):
-    conn.close()
-    logging.info("Successfully closed connection to database")
-    return None
+test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
+
+# Example
+# ____________________________________________________________#
+# @rest_api.route("/select_fake_data")
+# class TestSelectFake(Resource):
+#
+#     @rest_api.expect(test)
+#     def post(self):
+#         cond = request.get_json(silent=True)
+#         conn = create_connection(DB_FILE)
+#         response = select_fake_data(conn, cond['condition'])
+#         close_connection(conn)
+#         return jsonify(response)
+#
+#
+# @rest_api.route("/modify")
+# class ModifyFake(Resource):
+#
+#     def get(self):
+#         conn = create_connection(DB_FILE)
+#         response = modify_fake_data(conn)
+#         close_connection(conn)
+#         return jsonify(response)
+#
+#
+# @rest_api.route("/insert")
+# class InsertFakeData(Resource):
+#
+#     def get(self):
+#         conn = create_connection(DB_FILE)
+#         response = insert_fake_data(conn)
+#         close_connection(conn)
+#         return jsonify(response)
+
+
+# ______________________________________________________________#
 
 def create_table(conn, create_table_sql):
     """ create a table from the create_table_sql statement
@@ -70,7 +94,6 @@ def insert_into_orders(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
-
 def insert_into_plugs(conn, task):
     cursor = conn.cursor()
     try:
@@ -105,48 +128,5 @@ def insert_into_cars(conn, GPS_location, reg_num, color, year, charge, available
         logging.info("Error while inserting occurs")
     return -1
 
-# def insert_fake_data(conn):
-#     cursor = conn.cursor()
-#     try:
-#         for i in range(10):
-#             name = str(fake_data.name())
-#             num = str(fake_data.random_number(digits=3))
-#             date = str(fake_data.date())
-#             sql = ''' INSERT INTO tasks(name,priority,end_date)
-#                           VALUES(?,?,?) '''
-#             task = (name, num, date)
-#             cursor.execute(sql, task)
-#             conn.commit()
-#         return "Successful"
-#     except Exception:
-#         logging.info("Error while inserting occurs")
-#     return "Error while inserting occurs"
-#
-#
-# def modify_fake_data(conn):
-#     cursor = conn.cursor()
-#     try:
-#         sql = '''UPDATE tasks SET name = 'AAAAAAAAAAAAA' WHERE priority < 10000'''
-#         cursor.execute(sql)
-#         conn.commit()
-#         return "Successfully modified"
-#     except Exception:
-#         logging.info("Error while updating occurs")
-#     return "Error while updating occurs"
-#
-#
-# def select_fake_data(conn, cond):
-#     cursor = conn.cursor()
-#     diction = {}
-#     try:
-#         sql = "SELECT name FROM tasks WHERE " + cond + " BETWEEN 5005 and 15600"
-#         cursor.execute(sql)
-#         i = 0
-#         for row in cursor.fetchall():
-#             diction[i] = row[0]
-#             i += 1
-#         return diction
-#     except Exception as e:
-#         print(e)
-#         logging.info("Error while selecting occurs")
-#     return "Error while updating occurs"
+if __name__ == '__main__':
+    api.run()
