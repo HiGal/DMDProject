@@ -104,9 +104,8 @@ def fill_stations_have_plugs(conn):
         task = (stations[random.randint(0,len(stations)-1)],
                 plugs[random.randint(0,len(plugs)-1)],
                 amount_of_available_slots)
-        stations.append(i + 1)
         print(task)
-        if insert_into_charging_stations(conn, task) == -1:
+        if insert_into_stations_have_plugs(conn,task) == -1:
             return -1
     return 0
 
@@ -115,7 +114,7 @@ def fill_charge_car_history(conn):
         date = datetime.date(2018, 10, j)
         for i in  range(5):
             cost = random.uniform(100, 999)
-            task = (cost, date, cars[random.randint(0, len(cars) - 1)][0], 1)
+            task = (cost, date, cars[random.randint(0, len(cars) - 1)], 1)
             print(task)
             if insert_into_car_history(conn, task) == -1:
                 return -1
@@ -162,8 +161,7 @@ def fill_db_with_data(conn):
     fill_stations_have_plugs(conn)
     fill_models_table(conn)
     fill_cars_table(conn)
-    #history
+    fill_charge_car_history(conn)
     fill_customer_table(conn)
     fill_orders_table(conn)
-    fill_charge_car_history(conn)
     pass
