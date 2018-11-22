@@ -5,6 +5,7 @@ import ssl
 from geopy.geocoders import Nominatim
 import geopy.geocoders
 import datetime
+from db_management import *
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
 
@@ -28,25 +29,35 @@ def fill_db_with_data(conn):
         shape_of_plugs = random.randint(100, 999)
         size_of_plug = random.randint(100, 999)
         task = (shape_of_plugs, size_of_plug)
-        plugs.append(task)
+        plugs.append(i)
         print(task)
         # insert_into_plugs(conn, task)
+
     #create parameters of models
     for i in range(5):
         type = type_car[random.randint(0,len(type_car) - 1)]
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
-        task = (plugs[i // len(plugs)][0], name, type, service_of_class)
-        models.append(task)
+        task = (plugs[i // len(plugs)], name, type, service_of_class)
+        models.append(i)
         print(task)
+        #insert_into_models(conn, task)
 
+    #fill car table
     for i in range(10):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         gps_location = str(location.latitude) + " " + str(location.longitude)
         year = random.randint(1985,2012)
         regnum = reg_name[i//len(reg_name)] + str(random.randint(1000, 9999))
-        task = (gps_location,year,colors[i//len(colors)],regnum,
-                random.randint(10,99),"available",model_id)
+        task = (gps_location,
+                year,
+                colors[i//len(colors)],
+                regnum,
+                random.randint(10,99),
+                "available",
+                models[i // len(models)])
+        print(task)
+        # insert_into_cars(conn, task)
 
     # fill customer table
     for i in range(5):
