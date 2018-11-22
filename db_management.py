@@ -78,3 +78,14 @@ def insert_into_cars(conn, task):
     except Exception:
         logging.info("Error while inserting occurs")
     return -1
+
+def insert_into_car_history(conn, task):
+    cursor = conn.cursor()
+    try:
+        sql = '''INSERT INTO charge_car_history(cost, date, car_id, UID) VALUES (?,?,?,?)'''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
