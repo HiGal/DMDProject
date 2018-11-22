@@ -96,7 +96,7 @@ def fill_cars_table(conn):
     for i in range(10):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         gps_location = str(location.latitude) + " " + str(location.longitude)
-        year = random.randint(1985, 2012)
+        year = random.randint(1990, 2012)
         regnum = reg_name[i // len(reg_name)] + str(random.randint(1000, 9999))
         task = (gps_location,
                 year,
