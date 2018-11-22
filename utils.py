@@ -66,11 +66,6 @@ def fill_orders_table(conn):
         insert_into_orders(conn, task)
 
 
-def fill_db_with_data(conn):
-    fill_customer_table(conn)
-    fill_orders_table(conn)
-    pass
-
 def fill_plugs_table(conn):
     # create parameters for plugs
     for i in range(5):
@@ -80,7 +75,6 @@ def fill_plugs_table(conn):
         plugs.append(i)
         print(task)
         #insert_into_plugs(conn, task)
-
 
 def fill_models_table(conn):
     # create parameters of models
@@ -114,3 +108,11 @@ def fill_cars_table(conn):
         print(task)
         insert_into_cars(conn, task)
 
+
+def fill_db_with_data(conn):
+    fill_plugs_table(conn)
+    fill_models_table(conn)
+    fill_cars_table(conn)
+    fill_customer_table(conn)
+    fill_orders_table(conn)
+    pass
