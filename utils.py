@@ -76,7 +76,6 @@ def fill_plugs_table(conn):
         plugs.append(i+1)
         print(task)
         insert_into_plugs(conn, task)
-        insert_into_plugs(conn, task)
 
 def fill_charging_stations(conn):
     pass
