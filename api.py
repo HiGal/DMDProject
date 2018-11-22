@@ -42,16 +42,21 @@ def close_connection(conn):
 
 
 
-# @api.before_first_request
-# def init_db():
-#     logging.info("Try to connect to database")
-#     conn = create_connection(DB_FILE)
-#     logging.info("Try to initialise tables in database")
-#     # create_table(conn, "tables_to_create.sql")
-#     fill_db_with_data(conn)
-#     logging.info("Try to close connection to database")
-#     close_connection(conn)
+@api.before_first_request
+def init_db():
+    logging.info("Try to connect to database")
+    conn = create_connection(DB_FILE)
+    logging.info("Try to initialise tables in database")
+    # create_table(conn, "tables_to_create.sql")
+    # fill_db_with_data(conn)
+    logging.info("Try to close connection to database")
+    close_connection(conn)
 
+
+
+
+if __name__ == '__main__':
+    api.run()
 
 
 
@@ -66,12 +71,9 @@ def close_connection(conn):
 #     def post(self):
 #         cond = request.get_json(silent=True)
 #         conn = create_connection(DB_FILE)
+#         response = select_fake_data(conn, cond['condition'])
 #         close_connection(conn)
-#         return jsonify("fa")
-#
-#
-# if __name__ == '__main__':
-#     api.run()
+#         return jsonify(response)
 #
 #
 # @rest_api.route("/modify")
