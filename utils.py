@@ -6,6 +6,7 @@ from geopy.geocoders import Nominatim
 import geopy.geocoders
 import datetime
 from db_management import *
+
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
 
@@ -17,7 +18,7 @@ def fill_db_with_data(conn):
     users = []
     plugs = []
     cars = []
-    models =[]
+    models = []
     colors = ["red", "yellow", "green", "blue", "black", "white"]
     reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
     type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
@@ -31,34 +32,34 @@ def fill_db_with_data(conn):
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i)
         print(task)
-        # insert_into_plugs(conn, task)
+        insert_into_plugs(conn, task)
 
-    #create parameters of models
+    # create parameters of models
     for i in range(5):
-        type = type_car[random.randint(0,len(type_car) - 1)]
+        type = type_car[random.randint(0, len(type_car) - 1)]
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
-        task = (plugs[i // len(plugs)], name, type, service_of_class)
+        task = (plugs[random.randint(0, len(plugs) - 1)], name, type, service_of_class)
         models.append(i)
         print(task)
-        #insert_into_models(conn, task)
+        insert_into_models(conn, task)
 
-    #fill car table
+    # fill car table
     for i in range(10):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
         gps_location = str(location.latitude) + " " + str(location.longitude)
-        year = random.randint(1985,2012)
-        regnum = reg_name[i//len(reg_name)] + str(random.randint(1000, 9999))
+        year = random.randint(1985, 2012)
+        regnum = reg_name[i // len(reg_name)] + str(random.randint(1000, 9999))
         task = (gps_location,
                 year,
-                colors[i//len(colors)],
+                colors[i // len(colors)],
                 regnum,
-                random.randint(10,99),
+                random.randint(10, 99),
                 "available",
-                models[i // len(models)])
+                models[random.randint(0, len(models) - 1)])
         cars.append(i)
         print(task)
-        # insert_into_cars(conn, task)
+        insert_into_cars(conn, task)
 
     # fill customer table
     for i in range(5):
@@ -76,8 +77,9 @@ def fill_db_with_data(conn):
                 )
         users.append(task)
         print(task)
-        # insert_into_customers(conn, task)
+        insert_into_customers(conn, task)
 
+    geolocator = Nominatim(user_agent="d_project")
     for i in range(10):
         date = datetime.date.today()
         status = "closed"
@@ -93,7 +95,8 @@ def fill_db_with_data(conn):
         car_loc = str(location.latitude) + " " + str(location.longitude)
         task = (date, timestart, timefinish, status,
                 random.randint(1000, 9999),
-                start, finish, car_loc, users[i // len(users)][0], users[i // len(cars)])
+                start, finish, car_loc, users[random.randint(0, len(users) - 1)][0], cars[i // len(cars)])
         print(task)
-        # insert_into_orders(conn, task)
-    pass
+        insert_into_orders(conn, task)
+
+        pass
