@@ -113,8 +113,8 @@ def fill_charge_car_history(conn):
     for j in range(1,30):
         date = datetime.date(2018, 10, j)
         for i in  range(5):
-            cost = random.uniform(100, 999)
-            task = (cost, date, cars[random.randint(0, len(cars) - 1)], 1)
+            cost = random.randint(100, 1200)
+            task = (cost, date, cars[random.randint(0, len(cars) - 1)], stations[random.randint(0, len(stations) - 1)])
             print(task)
             if insert_into_car_history(conn, task) == -1:
                 return -1
