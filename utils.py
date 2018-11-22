@@ -99,7 +99,7 @@ def fill_charging_stations(conn):
     return 0
 
 def fill_stations_have_plugs(conn):
-    for i in range(5):
+    for i in range(30):
         amount_of_available_slots = random.randint(3, 10)
         task = (stations[random.randint(0,len(stations)-1)],
                 plugs[random.randint(0,len(plugs)-1)],
