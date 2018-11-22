@@ -5,7 +5,6 @@ import ssl
 from geopy.geocoders import Nominatim
 import geopy.geocoders
 import datetime
-
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
 
@@ -32,12 +31,14 @@ def fill_db_with_data(conn):
         plugs.append(task)
         print(task)
         # insert_into_plugs(conn, task)
-    #
+    #create parameters of models
     for i in range(5):
-        type = type_car[random.randint(0, len(type_car) - 1)]
+        type = type_car[random.randint(0,len(type_car) - 1)]
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
-        task = (plugs[i // len(plugs)],)
+        task = (plugs[i // len(plugs)][0], name, type, service_of_class)
+        models.append(task)
+        print(task)
 
     for i in range(10):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
@@ -65,7 +66,6 @@ def fill_db_with_data(conn):
         print(task)
         # insert_into_customers(conn, task)
 
-    # fill order table
     for i in range(10):
         date = datetime.date.today()
         status = "closed"
