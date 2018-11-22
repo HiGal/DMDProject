@@ -45,25 +45,26 @@ def fill_customer_table(conn):
 
 def fill_orders_table(conn):
     geolocator = Nominatim(user_agent="d_project")
-    for i in range(10):
-        date = datetime.date.today()
-        status = "closed"
-        a = random.randint(12, 21)
-        b = random.randint(10, 52)
-        timestart = str(a) + ":" + str(b)
-        timefinish = str(a + 1) + ":" + str(b + 5)
-        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-        start = str(location.latitude) + " " + str(location.longitude)
-        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-        finish = str(location.latitude) + " " + str(location.longitude)
-        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-        car_loc = str(location.latitude) + " " + str(location.longitude)
-        task = (date, timestart, timefinish, status,
-                random.randint(1000, 9999),
-                start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
-                cars[random.randint(0, len(cars) - 1)])
-        print(task)
-        insert_into_orders(conn, task)
+    for j in range(1,30):
+        date = datetime.date(2018, 10, j)
+        for i in range(3):
+            status = "closed"
+            a = random.randint(12, 21)
+            b = random.randint(10, 52)
+            timestart = str(a) + ":" + str(b)
+            timefinish = str(a + 1) + ":" + str(b + 5)
+            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
+            start = str(location.latitude) + " " + str(location.longitude)
+            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
+            finish = str(location.latitude) + " " + str(location.longitude)
+            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
+            car_loc = str(location.latitude) + " " + str(location.longitude)
+            task = (date, timestart, timefinish, status,
+                    random.randint(1000, 9999),
+                    start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
+                    cars[random.randint(0, len(cars) - 1)])
+            print(task)
+            insert_into_orders(conn, task)
 
 
 def fill_plugs_table(conn):
@@ -74,7 +75,7 @@ def fill_plugs_table(conn):
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i)
         print(task)
-        #insert_into_plugs(conn, task)
+        insert_into_plugs(conn, task)
 
 def fill_models_table(conn):
     # create parameters of models
@@ -85,7 +86,7 @@ def fill_models_table(conn):
         task = (plugs[random.randint(0, len(plugs) - 1)], name, type, service_of_class)
         models.append(i)
         print(task)
-    #   insert_into_models(conn, task)
+        insert_into_models(conn, task)
 
 
 def fill_cars_table(conn):
