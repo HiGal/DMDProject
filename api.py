@@ -1,11 +1,15 @@
 import logging
 import sqlite3
+from db_management import create_connection, close_connection
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
 from utils import *
 import certifi
 import ssl
 import geopy.geocoders
+
+DB_FILE = 'carsharing.sqlite'
+
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
 
@@ -15,34 +19,11 @@ rest_api = Api(api)
 
 api.config.SWAGGER_UI_OPERATION_ID = True
 api.config.SWAGGER_UI_REQUEST_DURATION = True
-DB_FILE = 'carsharing.sqlite'
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
-def create_connection(db_file):
-    """ create a database connection to the SQLite database
-        specified by db_file
-    :param db_file: database file
-    :return: Connection object or None
-    """
-    try:
-        conn = sqlite3.connect(db_file)
-        logging.info("Successfully connected to database")
-        return conn
-    except sqlite3.DatabaseError as e:
-        print(e)
 
-    return None
-
-def close_connection(conn):
-    conn.close()
-    logging.info("Successfully closed connection to database")
-    return None
-
-
-
-
-@api.before_first_request
+#@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -53,12 +34,32 @@ def init_db():
     close_connection(conn)
 
 
+find_car_model = rest_api.model('Find a Car', {
+    'colour': fields.String('enter colour'),
+    'username': fields.String('enter username'),
+    'reg_num': fields.String('enter registration number or it part')
+})
+
+
+@rest_api.route('/find_car')
+class FindCar(Resource):
+
+    @rest_api.expect(find_car_model)
+    def post(self):
+        data = request.get_json()
+        response = find_car(data)
+        search_res = {}
+        i = 0
+        for answer in response:
+            search_res[i] = {'car_id': answer[0],
+                             'colour': answer[1],
+                             'registration_number': answer[2]}
+            i += 1
+        return jsonify(search_res)
 
 
 if __name__ == '__main__':
     api.run()
-
-
 
 # Example
 # ____________________________________________________________#
@@ -97,4 +98,3 @@ if __name__ == '__main__':
 
 
 # ______________________________________________________________#
-
