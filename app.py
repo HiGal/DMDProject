@@ -10,6 +10,7 @@ fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
 
+#TODO Code duplication !
 def create_connection(db_file):
     """ create a database connection to the SQLite database
         specified by db_file
