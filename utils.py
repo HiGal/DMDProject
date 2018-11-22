@@ -15,9 +15,10 @@ def fill_db_with_data(conn):
     users = []
     plugs = []
     cars = []
-    type_car = {"Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"}
-    service_class_car = {"comfort", "economy", "business "}
-    name_car = {"Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"}
+    models = []
+    type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
+    service_class_car = ["comfort", "economy", "business "]
+    name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"]
     # create parameters for plugs
     for i in range(5):
         shape_of_plugs = random.randint(100, 999)
@@ -26,28 +27,14 @@ def fill_db_with_data(conn):
         plugs.append(task)
         print(task)
         # insert_into_plugs(conn, task)
+    #create parameters of models
     for i in range(5):
         type = type_car[random.randint(0,len(type_car) - 1)]
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
-        task = (plugs[i // len(plugs)], )
-    for i in range(5):
-        address = str(fake.address()).replace('\n', '')
-        name = fake.name()
-        username = str(name).replace(' ', '').lower()
-        email = username + "@gmail.com"
-        task = (username,
-                email,
-                random.randint(1000000000000000, 9999999999999999),
-                name,
-                random.randint(10000000000, 99999999999),
-                random.randint(100000, 999999),
-                address
-                )
-        users.append(task)
+        task = (plugs[i // len(plugs)][0], name, type, service_of_class)
+        models.append(task)
         print(task)
-        # insert_into_customers(conn, task)
-
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         name = fake.name()
