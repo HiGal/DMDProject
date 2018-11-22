@@ -73,9 +73,12 @@ def fill_plugs_table(conn):
         shape_of_plugs = random.randint(100, 999)
         size_of_plug = random.randint(100, 999)
         task = (shape_of_plugs, size_of_plug)
-        plugs.append(i)
+        plugs.append(i+1)
         print(task)
         insert_into_plugs(conn, task)
+
+def fill_charging_stations(conn):
+    pass
 
 def fill_models_table(conn):
     # create parameters of models
@@ -84,7 +87,7 @@ def fill_models_table(conn):
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
         task = (plugs[random.randint(0, len(plugs) - 1)], name, type, service_of_class)
-        models.append(i)
+        models.append(i+1)
         print(task)
         insert_into_models(conn, task)
 
@@ -105,7 +108,7 @@ def fill_cars_table(conn):
                 random.randint(10, 99),
                 "available",
                 models[random.randint(0, len(models) - 1)])
-        cars.append(i)
+        cars.append(i+1)
         print(task)
         insert_into_cars(conn, task)
 
