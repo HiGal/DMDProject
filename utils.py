@@ -56,6 +56,7 @@ def fill_db_with_data(conn):
                 random.randint(10,99),
                 "available",
                 models[i // len(models)])
+        cars.append(i)
         print(task)
         # insert_into_cars(conn, task)
 
@@ -92,7 +93,7 @@ def fill_db_with_data(conn):
         car_loc = str(location.latitude) + " " + str(location.longitude)
         task = (date, timestart, timefinish, status,
                 random.randint(1000, 9999),
-                start, finish, car_loc, users[i // len(users)][0], users[i // len(cars)][0])
+                start, finish, car_loc, users[i // len(users)][0], users[i // len(cars)])
         print(task)
         # insert_into_orders(conn, task)
     pass
