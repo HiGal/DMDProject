@@ -60,7 +60,7 @@ def insert_into_plugs(conn, task):
 def insert_into_models(conn, task):
     cursor = conn.cursor()
     try:
-        sql = '''INSERT INTO models(model_id, plug_id, name, type, service_class) VALUES (?,?,?,?,? )'''
+        sql = '''INSERT INTO models(plug_id, name, type, service_class) VALUES (?,?,?,? )'''
         cursor.execute(sql, task)
         conn.commit()
         return 0
