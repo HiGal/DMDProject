@@ -41,7 +41,9 @@ def fill_customer_table(conn):
                 )
         users.append(task)
         print(task)
-        insert_into_customers(conn, task)
+        if insert_into_customers(conn, task) == -1:
+            return -1
+    return 0
 
 
 def fill_orders_table(conn):
@@ -65,7 +67,9 @@ def fill_orders_table(conn):
                     start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
                     cars[random.randint(0, len(cars) - 1)])
             print(task)
-            insert_into_orders(conn, task)
+            if insert_into_orders(conn, task) == -1:
+                return -1
+    return 0
 
 
 def fill_plugs_table(conn):
@@ -76,7 +80,9 @@ def fill_plugs_table(conn):
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i + 1)
         print(task)
-        insert_into_plugs(conn, task)
+        if insert_into_plugs(conn, task) == -1:
+            return -1
+    return 0
 
 
 def fill_charging_stations(conn):
@@ -104,6 +110,17 @@ def fill_stations_have_plugs(conn):
             return -1
     return 0
 
+def fill_charge_car_history(conn):
+    for j in range(1,30):
+        date = datetime.date(2018, 10, j)
+        for i in  range(5):
+            cost = random.uniform(100, 999)
+            task = (cost, date, cars[random.randint(0, len(cars) - 1)][0], 1)
+            print(task)
+            if insert_into_car_history(conn, task) == -1:
+                return -1
+    return 0
+
 def fill_models_table(conn):
     # create parameters of models
     for i in range(5):
@@ -113,7 +130,9 @@ def fill_models_table(conn):
         task = (plugs[random.randint(0, len(plugs) - 1)], name, type, service_of_class)
         models.append(i + 1)
         print(task)
-        insert_into_models(conn, task)
+        if insert_into_models(conn, task) == -1:
+            return -1
+    return 0
 
 
 def fill_cars_table(conn):
@@ -133,8 +152,9 @@ def fill_cars_table(conn):
                 models[random.randint(0, len(models) - 1)])
         cars.append(i + 1)
         print(task)
-        insert_into_cars(conn, task)
-
+        if insert_into_cars(conn, task) == -1:
+            return -1
+    return 0
 
 def fill_db_with_data(conn):
     fill_plugs_table(conn)
@@ -145,4 +165,5 @@ def fill_db_with_data(conn):
     #history
     fill_customer_table(conn)
     fill_orders_table(conn)
+    fill_charge_car_history(conn)
     pass
