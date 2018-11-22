@@ -22,8 +22,8 @@ type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
 service_class_car = ["comfort", "economy", "business "]
 name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"]
 
-def fill_db_with_data(conn):
 
+def fill_customer_table(conn):
     # fill customer table
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
@@ -42,6 +42,8 @@ def fill_db_with_data(conn):
         print(task)
         insert_into_customers(conn, task)
 
+
+def fill_orders_table(conn):
     geolocator = Nominatim(user_agent="d_project")
     for i in range(10):
         date = datetime.date.today()
@@ -58,11 +60,16 @@ def fill_db_with_data(conn):
         car_loc = str(location.latitude) + " " + str(location.longitude)
         task = (date, timestart, timefinish, status,
                 random.randint(1000, 9999),
-                start, finish, car_loc, users[random.randint(0, len(users) - 1)][0], cars[i // len(cars)])
+                start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
+                cars[random.randint(0, len(cars) - 1)])
         print(task)
         insert_into_orders(conn, task)
 
-        pass
+
+def fill_db_with_data(conn):
+    fill_customer_table(conn)
+    fill_orders_table(conn)
+    pass
 
 def fill_plugs_table(conn):
     # create parameters for plugs
