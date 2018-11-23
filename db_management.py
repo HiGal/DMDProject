@@ -47,89 +47,16 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_into_customers(conn, task):
+def insert_into_table(conn, task, param, number):
     cursor = conn.cursor()
     try:
-        sql = '''INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
-                zip, address) VALUES(?,?,?,?,?,?,?)'''
+        sql = "INSERT INTO " + param + " VALUES"+number
         cursor.execute(sql, task)
         conn.commit()
         return 0
     except Exception:
         logging.info("Error while inserting into customers occurs")
     return -1
-
-
-def insert_into_orders(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = ''' INSERT INTO orders(date, time, date_closed, status,
-  cost, st_point, destination, car_location, username,car_id ) VALUES(?,?,?,?,?,?,?,?,?,?) '''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
-
-def insert_into_plugs(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO charging_plugs(shape_plug, size_plug) VALUES (?,?)'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
-
-def insert_into_charging_stations(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO charging_station(time_of_charging, GPS_location) VALUES (?,?)'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
-def insert_into_stations_have_plugs(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO stations_have_plugs(UID, plug_id,amount_of_available_slots) VALUES (?,?,?)'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
-def insert_into_models(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO models(plug_id, name, type, service_class) VALUES (?,?,?,? )'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
-
-def insert_into_cars(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO cars(gps_location, year, colour, reg_num, charge, available, model_id) VALUES (?,?,?,?,?,?,?)'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1
-
 
 def find_car(data):
     conn = create_connection(DB_FILE)
@@ -138,8 +65,8 @@ def find_car(data):
     try:
         sql = '''SELECT cars.car_id,colour,reg_num 
         from cars,orders 
-        where cars.car_id=orders.car_id AND colour = '{}' AND username = '{}' AND reg_num LIKE '%{}%';'''\
-        .format(data['colour'], data['username'], data['reg_num'])
+        where cars.car_id=orders.car_id AND colour = '{}' AND username = '{}' AND reg_num LIKE '%{}%';''' \
+            .format(data['colour'], data['username'], data['reg_num'])
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
@@ -147,14 +74,3 @@ def find_car(data):
     except Exception:
         logging.info("Error while inserting occurs")
     return "Not such car"
-
-def insert_into_car_history(conn, task):
-    cursor = conn.cursor()
-    try:
-        sql = '''INSERT INTO charge_car_history(cost, date, car_id, UID) VALUES (?,?,?,?)'''
-        cursor.execute(sql, task)
-        conn.commit()
-        return 0
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return -1

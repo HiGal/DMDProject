@@ -23,7 +23,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-#@api.before_first_request
+@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -45,6 +45,7 @@ find_car_model = rest_api.model('Find a Car', {
 class FindCar(Resource):
 
     @rest_api.expect(find_car_model)
+    @rest_api.doc(id="First scenario")
     def post(self):
         data = request.get_json()
         response = find_car(data)

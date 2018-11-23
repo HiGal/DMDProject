@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS charge_car_history (
   charge_car_id integer PRIMARY KEY,
   cost          double,
   date          date,
+  start_time    time,
+  finish_time   time,
   car_id        integer,
   UID           integer,
   FOREIGN KEY (car_id) references cars (car_id) ON UPDATE cascade,
