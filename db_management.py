@@ -47,11 +47,10 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
-def insert_into_customers(conn, task):
+def insert_into_table(conn, task, param, number):
     cursor = conn.cursor()
     try:
-        sql = '''INSERT INTO customers(username, email, cardnumber, fullname, phone_number,
-                zip, address) VALUES(?,?,?,?,?,?,?)'''
+        sql = "INSERT INTO " + param + " VALUES"+number
         cursor.execute(sql, task)
         conn.commit()
         return 0

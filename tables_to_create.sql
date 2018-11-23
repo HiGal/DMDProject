@@ -74,6 +74,8 @@ CREATE TABLE IF NOT EXISTS charge_car_history (
   charge_car_id integer PRIMARY KEY,
   cost          double,
   date          date,
+  start_time    time,
+  finish_time   time,
   car_id        integer,
   UID           integer,
   FOREIGN KEY (car_id) references cars (car_id) ON UPDATE cascade,
@@ -120,12 +122,18 @@ CREATE TABLE IF NOT EXISTS part_order (
 
 CREATE TABLE IF NOT EXISTS parts (
   part_id         integer PRIMARY KEY,
-  WID             integer,
   type_of_detail  varchar(25),
   cost            double,
   amount          integer,
-  amount_week_ago integer,
-  FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade
+  amount_week_ago integer
+);
+
+CREATE TABLE IF NOT EXISTS workshop_have_parts(
+  workshop_have_parts_id integer PRIMARY KEY,
+  part_id integer,
+  WID integer,
+  FOREIGN KEY (part_id) references parts(part_id) ON UPDATE cascade ON DELETE cascade,
+  FOREIGN KEY (WID) references workshop(WID) ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS fit (
