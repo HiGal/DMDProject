@@ -96,6 +96,7 @@ def insert_into_charging_stations(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
+
 def insert_into_stations_have_plugs(conn, task):
     cursor = conn.cursor()
     try:
@@ -106,6 +107,7 @@ def insert_into_stations_have_plugs(conn, task):
     except Exception:
         logging.info("Error while inserting occurs")
     return -1
+
 
 def insert_into_models(conn, task):
     cursor = conn.cursor()
@@ -130,23 +132,6 @@ def insert_into_cars(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
-
-def find_car(data):
-    conn = create_connection(DB_FILE)
-    cursor = conn.cursor()
-
-    try:
-        sql = '''SELECT cars.car_id,colour,reg_num 
-        from cars,orders 
-        where cars.car_id=orders.car_id AND colour = '{}' AND username = '{}' AND reg_num LIKE '%{}%';'''\
-        .format(data['colour'], data['username'], data['reg_num'])
-        cursor.execute(sql)
-        response = cursor.fetchall()
-        close_connection(conn)
-        return response
-    except Exception:
-        logging.info("Error while inserting occurs")
-    return "Not such car"
 
 def insert_into_car_history(conn, task):
     cursor = conn.cursor()

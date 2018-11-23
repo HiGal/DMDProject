@@ -1,8 +1,6 @@
-import logging
-import sqlite3
-from db_management import create_connection, close_connection
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
+from scenarios import *
 from utils import *
 import certifi
 import ssl
@@ -40,11 +38,16 @@ find_car_model = rest_api.model('Find a Car', {
     'reg_num': fields.String('enter registration number or it part')
 })
 
+cars_load_model = rest_api.model('Statistic of cars load for given week', {
+    'date': fields.String("Enter a start date in format YYYY-MM-DD")
+})
+
 
 @rest_api.route('/find_car')
 class FindCar(Resource):
 
     @rest_api.expect(find_car_model)
+    @rest_api.doc("first scenario for finding a car")
     def post(self):
         data = request.get_json()
         response = find_car(data)
@@ -56,6 +59,17 @@ class FindCar(Resource):
                              'registration_number': answer[2]}
             i += 1
         return jsonify(search_res)
+
+
+@rest_api.route('/cars_load')
+class CarsLoad(Resource):
+
+    @rest_api.expect(cars_load_model)
+    @rest_api.doc("2nd scenario for getting statistic of load of car")
+    def post(self):
+        data = request.get_json(silent=True)
+        response = stat_of_busy_cars(data)
+        return jsonify(response)
 
 
 if __name__ == '__main__':
