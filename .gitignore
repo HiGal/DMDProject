@@ -1,3 +1,13 @@
+# IDE files
 .idea/
+
+# Python specific
 venv/
+__pycache__/
+*.py[cod]
+
+# MacOS specific
 .DS_Store
+
+# Database
+carsharing.sqlite
