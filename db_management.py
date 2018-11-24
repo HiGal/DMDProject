@@ -105,6 +105,17 @@ def insert_into_providers(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
+def insert_into_workshops(conn, task):
+    cursor = conn.cursor()
+    try:
+        sql = '''INSERT INTO workshop(availability_of_timing, location) VALUES (?,?)'''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
+
 def insert_into_charging_stations(conn, task):
     cursor = conn.cursor()
     try:

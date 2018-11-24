@@ -129,6 +129,23 @@ def fill_parts_table(conn):
             return -1
         return 0
 
+def fill_workshops_table(conn):
+    for i in range(5):
+        ## TODO: What is it?
+        availability_of_timing = datetime.timedelta
+
+        ##TODO: Working with Faker
+        location = 1
+
+        task = (availability_of_timing, location)
+        print(task)
+        param = "workshop(availability_of_timing, location)"
+        number = "(?,?)"
+
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
+
 def fill_charging_stations(conn):
     for i in range(5):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
