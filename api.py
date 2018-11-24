@@ -21,7 +21,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-#@api.before_first_request
+# @api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -41,6 +41,26 @@ find_car_model = rest_api.model('Find a Car', {
 cars_load_model = rest_api.model('Statistic of cars load for given week', {
     'date': fields.String("Enter a start date in format YYYY-MM-DD")
 })
+
+efficiency_ch_stations_model = rest_api.model('Efficiency of charging station utilization', {
+    'date': fields.String("Enter a date which you want to get statistic")
+})
+
+
+@rest_api.route('/stat_util')
+class EfficiencyUtilization(Resource):
+
+    @rest_api.expect(efficiency_ch_stations_model)
+    @rest_api.doc("Second scenario")
+    def post(self):
+        data = request.get_json()
+        response = efficiency_ch_stations(data)
+        answer = defaultdict(dict)
+        for data in response.keys():
+            for list_e in response[data]:
+                answer[data][list_e[0]] = list_e[1]
+
+        return jsonify(answer)
 
 
 @rest_api.route('/find_car')
