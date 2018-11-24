@@ -9,8 +9,8 @@ from db_management import *
 
 ctx = ssl.create_default_context(cafile=certifi.where())
 geopy.geocoders.options.default_ssl_context = ctx
-geolocator = Nominatim(user_agent="d_project")
 fake = Faker()
+geolocator = fake.providers.geo
 
 users = []
 plugs = []
@@ -23,9 +23,6 @@ reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
 service_class_car = ["comfort", "economy", "business "]
 name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"]
-
-name_company_providers = ["Letay", "500100", "Fair", "CarMobile", "5cmPerSecond"]
-
 
 def fill_customer_table(conn):
     # fill customer table
@@ -70,12 +67,9 @@ def fill_orders_table(conn):
             b1 = str(b + 5)
             timestart = a + ":" + str(b)
             timefinish = a1 + ":" + b1
-            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-            start = str(location.latitude) + " " + str(location.longitude)
-            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-            finish = str(location.latitude) + " " + str(location.longitude)
-            location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-            car_loc = str(location.latitude) + " " + str(location.longitude)
+            start = geolocator.local_latlng(country_code="US", coords_only=True)
+            finish = geolocator.local_latlng(country_code="US", coords_only=True)
+            car_loc = geolocator.local_latlng(country_code="US", coords_only=True)
             task = (date, timestart, timefinish, status,
                     random.randint(1000, 9999),
                     start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
@@ -106,7 +100,7 @@ def fill_providers_table(conn):
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         phone_number = random.randint(1000000000000000, 9999999999999999)
-        name_company = name_company_providers[random.randint(0, len(name_company_providers) - 1)]
+        name_company = fake.providers.company.company()
         task = (address, phone_number, name_company)
         print(task)
         param = "provider(address, phone_number, name_company)"
@@ -149,9 +143,9 @@ def fill_workshops_table(conn):
 
 def fill_charging_stations(conn):
     for i in range(5):
-        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-        GPS = str(location.latitude) + " " + str(location.longitude)
-        task = (random.randint(5, 15), GPS)
+        GPS = geolocator.local_latlng(country_code="US", coords_only=True)
+        task = (random.randint(5, 15),
+                GPS)
         stations.append(i + 1)
         #print(task)
         param = "charging_station(time_of_charging, GPS_location)"
@@ -210,7 +204,11 @@ def fill_charge_car_history(conn):
             station = stations[random.randint(0, len(stations) - 1)]
             stations_id.append(station)
             ##
-            task = (cost, date, timestart, timefinish, car_charging,
+            task = (cost,
+                    date,
+                    timestart,
+                    timefinish,
+                    car_charging,
                     station)
             print(task)
             param = "charge_car_history(cost, date, start_time, finish_time, car_id, UID)"
@@ -240,7 +238,10 @@ def fill_models_table(conn):
         type = type_car[random.randint(0, len(type_car) - 1)]
         service_of_class = service_class_car[random.randint(0, len(service_class_car) - 1)]
         name = name_car[random.randint(0, len(name_car) - 1)]
-        task = (plugs[random.randint(0, len(plugs) - 1)], name, type, service_of_class)
+        task = (plugs[random.randint(0, len(plugs) - 1)],
+                name,
+                type,
+                service_of_class)
         models.append(i + 1)
         #print(task)
         param = "models(plug_id, name, type, service_class) "
@@ -251,16 +252,13 @@ def fill_models_table(conn):
 
 
 def fill_cars_table(conn):
-    geolocator = Nominatim(user_agent="dmd_project")
     # fill car table
     for i in range(10):
-        location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
-        gps_location = str(location.latitude) + " " + str(location.longitude)
+        gps_location = geolocator.local_latlng(country_code="US", coords_only=True)
         year = random.randint(1990, 2012)
         regnum = reg_name[i // len(reg_name)] + str(random.randint(1000, 9999))
         task = (gps_location,
                 year,
-                colors[i // len(colors)],
                 regnum,
                 random.randint(10, 99),
                 "available",
