@@ -83,6 +83,27 @@ def insert_into_plugs(conn, task):
         logging.info("Error while inserting occurs")
     return -1
 
+def insert_into_parts(conn, task):
+    cursor = conn.cursor()
+    try:
+        sql = '''INSERT INTO parts(type_of_detail,cost, amount, amount_week_ago) VALUES (?,?,?,?)'''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
+
+def insert_into_providers(conn, task):
+    cursor = conn.cursor()
+    try:
+        sql = '''INSERT INTO provider(address, phone_number, name_company) VALUES (?,?,?)'''
+        cursor.execute(sql, task)
+        conn.commit()
+        return 0
+    except Exception:
+        logging.info("Error while inserting occurs")
+    return -1
 
 def insert_into_charging_stations(conn, task):
     cursor = conn.cursor()
