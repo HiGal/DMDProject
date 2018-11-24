@@ -17,7 +17,7 @@ plugs = []
 cars = []
 models = []
 stations = []
-
+parts = []
 colors = ["red", "yellow", "green", "blue", "black", "white"]
 reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
@@ -146,6 +146,7 @@ def fill_workshops_table(conn):
             return -1
     return 0
 
+
 def fill_charging_stations(conn):
     for i in range(5):
         location = geolocator.reverse(random.uniform(40.1, 41.1), random.uniform(-74.4, -73.8))
@@ -272,6 +273,17 @@ def fill_cars_table(conn):
             return -1
     return 0
 
+
+def fill_parts(conn):
+    for i in range(10):
+        task = ()
+        parts.append(i + 1)
+        print(task)
+        param = ""
+        number = ""
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
 
 
 def fill_db_with_data(conn):
