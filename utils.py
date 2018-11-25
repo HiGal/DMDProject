@@ -282,7 +282,6 @@ def fill_repair_car_table(conn):
             for i in range(10):
                 WID = workshops[random.randint(0, len(workshops) - 1)]
                 car_id = cars[random.randint(0, len(cars) - 1)]
-                progress_status_car = progress_status[random.randint(0, len(progress_status) - 1)]
                 task = (WID, car_id, date, "closed")
                 print(task)
                 param = "repair_car(WID, car_id, date, progress_status)"
