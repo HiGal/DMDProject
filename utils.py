@@ -248,6 +248,8 @@ def fill_parts(conn):
             return -1
     return 0
 
+def fill_repair_car_table(conn):
+    pass
 
 def fill_db_with_data(conn):
     fill_plugs_table(conn)
