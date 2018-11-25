@@ -63,26 +63,27 @@ def fill_customer_table(conn):
 
 
 def fill_orders_table(conn):
-    for j in range(1, 30):
-        date = datetime.date(2018, 10, j)
-        for i in range(3):
-            status = "closed"
-            timestart, timefinish = generate_time()
-            start = fake.local_latlng(country_code="US", coords_only=True)
-            finish = fake.local_latlng(country_code="US", coords_only=True)
-            car_loc = fake.local_latlng(country_code="US", coords_only=True)
-            task = (date, timestart, timefinish, status,
-                    random.randint(1000, 9999),
-                    start[0] + " " + start[1],
-                    finish[0] + " " + finish[1],
-                    car_loc[0] + " " + car_loc[1],
-                    users[random.randint(0, len(users) - 1)][0],
-                    cars[random.randint(0, len(cars) - 1)])
-            print(task)
-            param = "orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
-            number = "(?,?,?,?,?,?,?,?,?,?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                return -1
+    for k in range(8,11):
+        for j in range(1, 30):
+            date = datetime.date(2018, k, j)
+            for i in range(10):
+                status = "closed"
+                timestart, timefinish = generate_time()
+                start = fake.local_latlng(country_code="US", coords_only=True)
+                finish = fake.local_latlng(country_code="US", coords_only=True)
+                car_loc = fake.local_latlng(country_code="US", coords_only=True)
+                task = (date, timestart, timefinish, status,
+                        random.randint(1000, 9999),
+                        start[0] + " " + start[1],
+                        finish[0] + " " + finish[1],
+                        car_loc[0] + " " + car_loc[1],
+                        users[random.randint(0, len(users) - 1)][0],
+                        cars[random.randint(0, len(cars) - 1)])
+                print(task)
+                param = "orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
+                number = "(?,?,?,?,?,?,?,?,?,?)"
+                if insert_into_table(conn, task, param, number) == -1:
+                    return -1
     return 0
 
 
@@ -110,6 +111,7 @@ def fill_providers_table(conn):
         print(task)
         param = "provider(address, phone_number, name_company)"
         number = "(?,?,?)"
+        company.append(i + 1)
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
@@ -189,10 +191,10 @@ def fill_stations_have_plugs(conn):
 
 
 def fill_charge_car_history(conn):
-    for k in range(8,10):
+    for k in range(8,11):
         for j in range(1, 30):
             date = datetime.date(2018, k, j)
-            for i in range(5):
+            for i in range(20):
                 cost = random.randint(100, 1200)
                 timestart, timefinish = generate_time()
                 car_charging = cars[random.randint(0, len(cars) - 1)]
@@ -252,10 +254,10 @@ def fill_cars_table(conn):
     return 0
 
 def fill_part_order_history(conn):
-    for i in range(8,10):
+    for i in range(8,11):
         for j in range(1, 30):
             date = datetime.date(2018, i, j)
-            for k in range(0,5):
+            for k in range(10):
                 amount = random.randint(0,15)
                 cost = random.randint(100,650)
                 task = (date,
@@ -272,22 +274,23 @@ def fill_part_order_history(conn):
     return 0
 
 def fill_repair_car_table(conn):
-    for j in range(1, 30):
-        date = datetime.date(2018, 10, j)
-        for i in range(10):
-            WID = workshops[random.randint(0, len(workshops) - 1)]
-            car_id = cars[random.randint(0, len(cars) - 1)]
-            progress_status_car = progress_status[random.randint(0, len(progress_status) - 1)]
-            task = (WID, car_id, date, progress_status_car)
-            print(task)
-            param = "repair_car(WID, car_id, date, progress_status)"
-            number = "(?,?,?,?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                return -1
+    for k in range(8,11):
+        for j in range(1, 30):
+            date = datetime.date(2018, k, j)
+            for i in range(10):
+                WID = workshops[random.randint(0, len(workshops) - 1)]
+                car_id = cars[random.randint(0, len(cars) - 1)]
+                progress_status_car = progress_status[random.randint(0, len(progress_status) - 1)]
+                task = (WID, car_id, date, progress_status_car)
+                print(task)
+                param = "repair_car(WID, car_id, date, progress_status)"
+                number = "(?,?,?,?)"
+                if insert_into_table(conn, task, param, number) == -1:
+                    return -1
     return 0
 
 def fill_fit_table(conn):
-    for i in range(5):
+    for i in range(30):
         model_id = models[random.randint(0, len(models) - 1)]
         part_id = parts[random.randint(0, len(parts) - 1)]
         task = (part_id, model_id)

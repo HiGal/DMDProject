@@ -32,64 +32,64 @@ def init_db():
     close_connection(conn)
 
 
-find_car_model = rest_api.model('Find a Car', {
-    'colour': fields.String('enter colour'),
-    'username': fields.String('enter username'),
-    'reg_num': fields.String('enter registration number or it part')
-})
-
-cars_load_model = rest_api.model('Statistic of cars load for given week', {
-    'date': fields.String("Enter a start date in format YYYY-MM-DD")
-})
-
-efficiency_ch_stations_model = rest_api.model('Efficiency of charging station utilization', {
-    'date': fields.String("Enter a date which you want to get statistic")
-})
-
-
-@rest_api.route('/stat_util')
-class EfficiencyUtilization(Resource):
-
-    @rest_api.expect(efficiency_ch_stations_model)
-    @rest_api.doc("Second scenario")
-    def post(self):
-        data = request.get_json()
-        response = efficiency_ch_stations(data)
-        answer = defaultdict(dict)
-        for data in response.keys():
-            for list_e in response[data]:
-                answer[data][list_e[0]] = list_e[1]
-
-        return jsonify(answer)
-
-
-@rest_api.route('/find_car')
-class FindCar(Resource):
-
-    @rest_api.expect(find_car_model)
-    @rest_api.doc("first scenario for finding a car")
-    def post(self):
-        data = request.get_json()
-        response = find_car(data)
-        search_res = {}
-        i = 0
-        for answer in response:
-            search_res[i] = {'car_id': answer[0],
-                             'colour': answer[1],
-                             'registration_number': answer[2]}
-            i += 1
-        return jsonify(search_res)
-
-
-@rest_api.route('/cars_load')
-class CarsLoad(Resource):
-
-    @rest_api.expect(cars_load_model)
-    @rest_api.doc("2nd scenario for getting statistic of load of car")
-    def post(self):
-        data = request.get_json(silent=True)
-        response = stat_of_busy_cars(data)
-        return jsonify(response)
+# find_car_model = rest_api.model('Find a Car', {
+#     'colour': fields.String('enter colour'),
+#     'username': fields.String('enter username'),
+#     'reg_num': fields.String('enter registration number or it part')
+# })
+#
+# cars_load_model = rest_api.model('Statistic of cars load for given week', {
+#     'date': fields.String("Enter a start date in format YYYY-MM-DD")
+# })
+#
+# efficiency_ch_stations_model = rest_api.model('Efficiency of charging station utilization', {
+#     'date': fields.String("Enter a date which you want to get statistic")
+# })
+#
+#
+# @rest_api.route('/stat_util')
+# class EfficiencyUtilization(Resource):
+#
+#     @rest_api.expect(efficiency_ch_stations_model)
+#     @rest_api.doc("Second scenario")
+#     def post(self):
+#         data = request.get_json()
+#         response = efficiency_ch_stations(data)
+#         answer = defaultdict(dict)
+#         for data in response.keys():
+#             for list_e in response[data]:
+#                 answer[data][list_e[0]] = list_e[1]
+#
+#         return jsonify(answer)
+#
+#
+# @rest_api.route('/find_car')
+# class FindCar(Resource):
+#
+#     @rest_api.expect(find_car_model)
+#     @rest_api.doc("first scenario for finding a car")
+#     def post(self):
+#         data = request.get_json()
+#         response = find_car(data)
+#         search_res = {}
+#         i = 0
+#         for answer in response:
+#             search_res[i] = {'car_id': answer[0],
+#                              'colour': answer[1],
+#                              'registration_number': answer[2]}
+#             i += 1
+#         return jsonify(search_res)
+#
+#
+# @rest_api.route('/cars_load')
+# class CarsLoad(Resource):
+#
+#     @rest_api.expect(cars_load_model)
+#     @rest_api.doc("2nd scenario for getting statistic of load of car")
+#     def post(self):
+#         data = request.get_json(silent=True)
+#         response = stat_of_busy_cars(data)
+#         return jsonify(response)
 
 
 if __name__ == '__main__':
