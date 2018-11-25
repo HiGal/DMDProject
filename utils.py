@@ -143,13 +143,19 @@ def fill_workshops_table(conn):
     return 0
 
 
-def fill_workshops_have_part():
-    amount = random.randint(3, 10)
-    amount_week_ago = random.randint(1, 5)
-    task = (parts[random.randint(0, len(parts) - 1)],
-            ,
-            amount,
-            amount_week_ago)
+def fill_workshops_have_part(conn):
+    for i in range(25):
+        amount = random.randint(3, 10)
+        amount_week_ago = random.randint(1, 5)
+        task = (parts[random.randint(0, len(parts) - 1)],
+                workshops[random.randint(0, len(workshops) - 1)],
+                amount,
+                amount_week_ago)
+        param = "workshop_have_parts(availability_of_timing, location)"
+        number = "(?,?,?,?)"
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
 
 
 def fill_charging_stations(conn):
