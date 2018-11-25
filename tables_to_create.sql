@@ -115,7 +115,7 @@ CREATE TABLE IF NOT EXISTS part_order_history (
   cost       double,
   part_id    integer,
   WID        integer,
-  CID integer,
+  CID        integer,
   FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade ,
   FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade ,
   FOREIGN KEY (CID) references provider (CID) ON UPDATE cascade ON DELETE cascade
