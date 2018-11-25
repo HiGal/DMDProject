@@ -12,13 +12,14 @@ models = []
 stations = []
 parts = []
 workshops = []
-company =[]
+company = []
 colors = ["red", "yellow", "green", "blue", "black", "white"]
 reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
 service_class_car = ["comfort", "economy", "business "]
 name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"]
 progress_status = ["in progress", "opened", "closed"]
+
 
 def generate_time():
     a = random.randint(0, 22)
@@ -145,18 +146,19 @@ def fill_workshops_table(conn):
 
 
 def fill_workshops_have_part(conn):
-    for i in range(25):
-        amount = random.randint(3, 25)
-        amount_week_ago = random.randint(3, 25)
-        task = (parts[random.randint(0, len(parts) - 1)],
-                workshops[random.randint(0, len(workshops) - 1)],
-                amount,
-                amount_week_ago)
-        print(task)
-        param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
-        number = "(?,?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            return -1
+    for wshop in workshops:
+        for par in parts:
+            amount = random.randint(3, 25)
+            amount_week_ago = random.randint(3, 25)
+            task = (par,
+                    wshop,
+                    amount,
+                    amount_week_ago)
+            print(task)
+            param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
+            number = "(?,?,?,?)"
+            if insert_into_table(conn, task, param, number) == -1:
+                return -1
     return 0
 
 
@@ -175,21 +177,20 @@ def fill_charging_stations(conn):
 
 
 def fill_stations_have_plugs(conn):
-    for i in range(30):
-        amount_of_available_slots = random.randint(3, 10)
-        task = (stations[random.randint(0, len(stations) - 1)],
-                plugs[random.randint(0, len(plugs) - 1)],
-                amount_of_available_slots)
-        print(task)
-        param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
-        number = "(?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            return -1
+    for j in stations:
+        for i in plugs:
+            amount_of_available_slots = random.randint(3, 10)
+            task = (j, i, amount_of_available_slots)
+            print(task)
+            param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
+            number = "(?,?,?)"
+            if insert_into_table(conn, task, param, number) == -1:
+                return -1
     return 0
 
 
 def fill_charge_car_history(conn):
-    for k in range(8,10):
+    for k in range(8, 10):
         for j in range(1, 30):
             date = datetime.date(2018, k, j)
             for i in range(5):
@@ -251,25 +252,27 @@ def fill_cars_table(conn):
             return -1
     return 0
 
+
 def fill_part_order_history(conn):
-    for i in range(8,10):
+    for i in range(8, 10):
         for j in range(1, 30):
             date = datetime.date(2018, i, j)
-            for k in range(0,5):
-                amount = random.randint(0,15)
-                cost = random.randint(100,650)
+            for k in range(0, 5):
+                amount = random.randint(0, 15)
+                cost = random.randint(100, 650)
                 task = (date,
                         amount,
                         cost,
-                        parts[random.randint(0,len(parts)-1)],
-                        workshops[random.randint(0,len(workshops)-1)],
-                        company[random.randint(0, len(company)-1)])
+                        parts[random.randint(0, len(parts) - 1)],
+                        workshops[random.randint(0, len(workshops) - 1)],
+                        company[random.randint(0, len(company) - 1)])
                 print(task)
                 param = "part_order_history(date,amount,cost,part_id, WID, CID)"
                 number = "(?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
                     return -1
     return 0
+
 
 def fill_repair_car_table(conn):
     for j in range(1, 30):
@@ -286,6 +289,7 @@ def fill_repair_car_table(conn):
                 return -1
     return 0
 
+
 def fill_fit_table(conn):
     for i in range(5):
         model_id = models[random.randint(0, len(models) - 1)]
@@ -297,6 +301,17 @@ def fill_fit_table(conn):
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
+
+def fill_providers_have_parts(conn):
+    for pro in company:
+        for par in parts:
+            task = (pro, par)
+            param = "providers_have_parts(part_id, model_id)"
+            number = "(?, ?)"
+            if insert_into_table(conn, task, param, number) == -1:
+                return -1
+    return 0
+
 
 
 def fill_db_with_data(conn):
