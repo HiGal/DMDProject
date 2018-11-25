@@ -13,8 +13,9 @@ def find_car(data):
     try:
         sql = '''SELECT cars.car_id,colour,reg_num 
         from cars,orders 
-        where cars.car_id=orders.car_id AND colour = '{}' AND username = '{}' AND reg_num LIKE '%{}%';''' \
-            .format(data['colour'], data['username'], data['reg_num'])
+        where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
+        AND username = '{}' AND reg_num LIKE '%{}%';''' \
+            .format(data['date'],data['colour'], data['username'], data['reg_num'])
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
@@ -48,6 +49,7 @@ def stat_of_busy_cars(data):
                           AND date='{}' AND date <= date_end
                        '''.format(date, date)
         cursor.execute(sql_cnt_cars)
+
         cnt = cursor.fetchall()[0][0] * 7
         morning_load = len(cursor.execute(morning_load).fetchall()) / cnt * 100
         afternoon_load = len(cursor.execute(afternoon_load).fetchall()) / cnt * 100
