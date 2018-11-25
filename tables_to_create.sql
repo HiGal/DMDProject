@@ -22,7 +22,7 @@ CREATE TABLE IF NOT EXISTS stations_have_plugs (
 );
 
 CREATE TABLE IF NOT EXISTS provider (
-  company_id   integer PRIMARY KEY,
+  CID   integer PRIMARY KEY,
   address      varchar(25) NOT NULL,
   phone_number varchar(25),
   name_company varchar(25)
@@ -107,17 +107,18 @@ CREATE TABLE IF NOT EXISTS models (
   service_class varchar(30) not null,
   foreign key (plug_id) references charging_plugs (plug_id) ON UPDATE cascade
 );
-CREATE TABLE IF NOT EXISTS part_order (
+
+CREATE TABLE IF NOT EXISTS part_order_history (
+  order_id   integer PRIMARY KEY,
   date       date,
   amount     integer,
   cost       double,
-  order_id   integer PRIMARY KEY,
   part_id    integer,
   WID        integer,
-  company_id integer,
+  CID integer,
   FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade ,
   FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade ,
-  FOREIGN KEY (company_id) references provider (company_id) ON UPDATE cascade ON DELETE cascade
+  FOREIGN KEY (CID) references provider (CID) ON UPDATE cascade ON DELETE cascade
 );
 
 CREATE TABLE IF NOT EXISTS parts (
@@ -146,8 +147,8 @@ CREATE TABLE IF NOT EXISTS fit (
 
 CREATE TABLE IF NOT EXISTS providers_have_parts (
   providers_have_parts_id integer PRIMARY KEY,
-  company_id              integer,
+  CID                     integer,
   part_id                 integer,
-  FOREIGN KEY (company_id) references provider (company_id) ON UPDATE cascade ON DELETE cascade,
+  FOREIGN KEY (CID) references provider (CID) ON UPDATE cascade ON DELETE cascade,
   FOREIGN KEY (part_id) references parts (part_id) ON UPDATE cascade ON DELETE cascade
 );

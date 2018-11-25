@@ -145,13 +145,13 @@ def fill_workshops_table(conn):
 
 def fill_workshops_have_part(conn):
     for i in range(25):
-        amount = random.randint(3, 10)
-        amount_week_ago = random.randint(1, 5)
+        amount = random.randint(3, 25)
+        amount_week_ago = random.randint(3, 25)
         task = (parts[random.randint(0, len(parts) - 1)],
                 workshops[random.randint(0, len(workshops) - 1)],
                 amount,
                 amount_week_ago)
-        param = "workshop_have_parts(availability_of_timing, location)"
+        param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
@@ -259,6 +259,16 @@ def fill_parts(conn):
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
+
+
+def fill_part_order_history():
+    for i in range(0, 30):
+        task = (date,
+                amount,
+                cost,
+                part_id,
+                WID,
+                CID)
 
 
 def fill_db_with_data(conn):
