@@ -52,7 +52,7 @@ def fill_customer_table(conn):
                 address
                 )
         users.append(task)
-        # print(task)
+        print(task)
         param = "customers(username, email, cardnumber, fullname, phone_number, zip, address)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -76,7 +76,7 @@ def fill_orders_table(conn):
                     car_loc[0] + " " + car_loc[1],
                     users[random.randint(0, len(users) - 1)][0],
                     cars[random.randint(0, len(cars) - 1)])
-            # print(task)
+            print(task)
             param = "orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
             number = "(?,?,?,?,?,?,?,?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
@@ -91,7 +91,7 @@ def fill_plugs_table(conn):
         size_of_plug = random.randint(100, 999)
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i + 1)
-        #  print(task)
+        print(task)
         param = "charging_plugs(shape_plug, size_plug)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -152,7 +152,7 @@ def fill_charging_stations(conn):
         task = (random.randint(5, 15),
                 GPS[0] + " " + GPS[1])
         stations.append(i + 1)
-        # print(task)
+        print(task)
         param = "charging_station(time_of_charging, GPS_location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -166,7 +166,7 @@ def fill_stations_have_plugs(conn):
         task = (stations[random.randint(0, len(stations) - 1)],
                 plugs[random.randint(0, len(plugs) - 1)],
                 amount_of_available_slots)
-        # print(task)
+        print(task)
         param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
         number = "(?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -207,7 +207,7 @@ def fill_models_table(conn):
                 type,
                 service_of_class)
         models.append(i + 1)
-        # print(task)
+        print(task)
         param = "models(plug_id, name, type, service_class) "
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -237,6 +237,18 @@ def fill_cars_table(conn):
     return 0
 
 
+def fill_parts(conn):
+    for i in range(10):
+        task = ()
+        parts.append(i + 1)
+        print(task)
+        param = ""
+        number = ""
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
+
+
 def fill_db_with_data(conn):
     fill_plugs_table(conn)
     fill_charging_stations(conn)
@@ -248,4 +260,5 @@ def fill_db_with_data(conn):
     fill_orders_table(conn)
     fill_parts_table(conn)
     fill_providers_table(conn)
+    fill_workshops_table(conn)
     pass
