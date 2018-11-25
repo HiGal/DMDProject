@@ -102,6 +102,7 @@ CREATE TABLE IF NOT EXISTS repair_car (
   WID             integer,
   car_id          integer,
   date            date,
+  cost            integer,
   progress_status varchar(10),
   FOREIGN KEY (WID) references workshop (WID) ON UPDATE cascade ON DELETE cascade ,
   FOREIGN KEY (car_id) references cars (car_id) ON UPDATE cascade ON DELETE cascade

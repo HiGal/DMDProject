@@ -64,13 +64,13 @@ def stat_of_busy_cars(data):
 
 def popular_locations(data):
     conn = create_connection(DB_FILE)
-    cursor = conn.cursor
+    cursor = conn.cursor()
     try:
         pass
-
     except Exception:
         logging.info("Error")
     return "There is no orders for such period"
+
 def efficiency_ch_stations(data):
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()

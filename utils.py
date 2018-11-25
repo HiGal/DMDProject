@@ -70,11 +70,11 @@ def fill_orders_table(conn):
             date = datetime.date(2018, k, j)
             for i in range(10):
                 status = "closed"
-                timestart,time = generate_time()
+                timestart, time = generate_time()
                 start = fake.local_latlng(country_code="US", coords_only=True)
                 finish = fake.local_latlng(country_code="US", coords_only=True)
                 task = (date, timestart,
-                        random.randint(5,75),
+                        random.randint(5, 75),
                         random.randint(5, 69),
                         status,
                         random.randint(1000, 9999),
@@ -83,7 +83,7 @@ def fill_orders_table(conn):
                         random.randint(1, 16),
                         users[random.randint(0, len(users) - 1)][0],
                         cars[random.randint(0, len(cars) - 1)])
-                #print(task)
+                # print(task)
                 orders.append((num + 1, date))
                 num = num + 1
                 param = "orders(date, time, duration, order_distance, status, cost, starting_point, destination, car_distance, username,car_id )"
@@ -301,10 +301,11 @@ def fill_repair_car_table(conn):
             for i in range(10):
                 WID = workshops[random.randint(0, len(workshops) - 1)]
                 car_id = cars[random.randint(0, len(cars) - 1)]
-                task = (WID, car_id, date, "closed")
+                cost = random.randint(150, 450)
+                task = (WID, car_id, date, cost, "closed")
                 # print(task)
-                param = "repair_car(WID, car_id, date, progress_status)"
-                number = "(?,?,?,?)"
+                param = "repair_car(WID, car_id, date, cost, progress_status)"
+                number = "(?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
                     return -1
     return 0
