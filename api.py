@@ -54,7 +54,7 @@ trip_statistics_model = rest_api.model('Statistics of average car distance and t
     'date': fields.String("Enter date to get statistics")
 })
 
-chst_utilization_model = rest_api.model('Statistic of charging station utilization by user',{
+chst_utilization_model = rest_api.model('Statistic of charging station utilization by user', {
     'start_date': fields.String("Enter a date in given format YYYY-MM-DD")
 })
 
@@ -134,6 +134,7 @@ class SearchDuplicates(Resource):
                       'duration': response2}
         return jsonify(search_res)
 
+
 @rest_api.route('/stats_of_chst_utilization')
 class ChStUtilization(Resource):
 
@@ -143,6 +144,14 @@ class ChStUtilization(Resource):
         data = request.get_json()
         response = times_using_ch_station(data)
         return jsonify(response)
+
+
+@rest_api.route('/most_relevant_part')
+class MostRelevantPart(Resource):
+
+    @rest_api.doc('9th scenario. returns Workshop ID and type of most relevant detail')
+    def get(self):
+        return jsonify(most_relevant_part_by_workshop())
 
 
 if __name__ == '__main__':

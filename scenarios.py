@@ -130,10 +130,10 @@ def search_duplicates(data):
 
     import datetime
 
-    date_month_ago ='2018-09-29'
+    date_month_ago = '2018-09-29'
 
-    #It's also work but for well-looked (big table) result we defined month by our hands
-    #date_month_ago = (datetime.datetime.now() - datetime.timedelta(30)).date()
+    # It's also work but for well-looked (big table) result we defined month by our hands
+    # date_month_ago = (datetime.datetime.now() - datetime.timedelta(30)).date()
 
     try:
         sql = '''SELECT b.date, b.cost
@@ -149,6 +149,7 @@ def search_duplicates(data):
     except Exception:
         logging.info("Error")
     return "No such username"
+
 
 def trip_duration(data):
     date = data['date']
@@ -191,6 +192,23 @@ def times_using_ch_station(data):
              where orders.car_id = charge_car_history.car_id and charge_car_history.date = orders.date
              and start_time between orders.time and time(orders.time,'+'|| cast(orders.duration as text)||' minutes'))
              group by username;'''.format(data['start_date'])
+    cursor.execute(sql)
+    response = {}
+    for info in cursor.fetchall():
+        response[info[1]] = info[0]
+    close_connection(conn)
+    return response
+
+
+def most_relevant_part_by_workshop():
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+    sql = '''select type_of_detail, WID
+            from(select part_id, WID , MAX(amount_week_ago - amount) as diff
+            from workshop_have_parts
+            group by  WID) as s, parts
+            where s.part_id = parts.part_id
+          '''
     cursor.execute(sql)
     response = {}
     for info in cursor.fetchall():
