@@ -54,7 +54,7 @@ def fill_customer_table(conn):
                 address
                 )
         users.append(task)
-        print(task)
+        #print(task)
         param = "customers(username, email, cardnumber, fullname, phone_number, zip, address)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -79,13 +79,52 @@ def fill_orders_table(conn):
                         car_loc[0] + " " + car_loc[1],
                         users[random.randint(0, len(users) - 1)][0],
                         cars[random.randint(0, len(cars) - 1)])
-                print(task)
+                #print(task)
                 param = "orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
                 number = "(?,?,?,?,?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
                     return -1
     return 0
 
+def fill_fake_orders_table(conn):
+    for j in range(1, 30):
+        date = datetime.date(2018, 10, j)
+        for i in range(3):
+            status = "closed"
+            timestart, timefinish = generate_time()
+            start = fake.local_latlng(country_code="US", coords_only=True)
+            finish = fake.local_latlng(country_code="US", coords_only=True)
+            car_loc = fake.local_latlng(country_code="US", coords_only=True)
+            task = (date, timestart, timefinish, status,
+                    random.randint(1000, 9999),
+                    start[0] + " " + start[1],
+                    finish[0] + " " + finish[1],
+                    car_loc[0] + " " + car_loc[1],
+                    users[random.randint(0, len(users) - 1)][0],
+                    cars[random.randint(0, len(cars) - 1)])
+            timestart, timefinish = generate_time()
+            start = fake.local_latlng(country_code="US", coords_only=True)
+            finish = fake.local_latlng(country_code="US", coords_only=True)
+            car_loc = fake.local_latlng(country_code="US", coords_only=True)
+
+            task2 = (date, timestart, timefinish, status,
+                    random.randint(1000, 9999),
+                    start[0] + " " + start[1],
+                    finish[0] + " " + finish[1],
+                    car_loc[0] + " " + car_loc[1],
+                    users[random.randint(0, len(users) - 1)][0],
+                    cars[random.randint(0, len(cars) - 1)])
+            #print(task)
+            #print(task2)
+            param = "fake_orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
+            number = "(?,?,?,?,?,?,?,?,?,?)"
+            if insert_into_table(conn, task, param, number) == -1:
+                return -1
+            if insert_into_table(conn, task, param, number) == -1:
+                return -1
+            if insert_into_table(conn, task2, param, number) == -1:
+                return -1
+    return 0
 
 def fill_plugs_table(conn):
     # create parameters for plugs
@@ -94,7 +133,7 @@ def fill_plugs_table(conn):
         size_of_plug = random.randint(100, 999)
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i + 1)
-        print(task)
+        #print(task)
         param = "charging_plugs(shape_plug, size_plug)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -108,7 +147,7 @@ def fill_providers_table(conn):
         phone_number = random.randint(1000000000000000, 9999999999999999)
         name_company = fake.company()
         task = (address, phone_number, name_company)
-        print(task)
+        #print(task)
         param = "provider(address, phone_number, name_company)"
         number = "(?,?,?)"
         company.append(i + 1)
@@ -137,7 +176,7 @@ def fill_workshops_table(conn):
         location = fake.local_latlng(country_code="US", coords_only=True)
         task = (availability_of_timing,
                 location[0] + " " + location[1])
-        print(task)
+        #print(task)
         workshops.append(i + 1)
         param = "workshop(availability_of_timing, location)"
         number = "(?,?)"
@@ -155,7 +194,7 @@ def fill_workshops_have_part(conn):
                     wshop,
                     amount,
                     amount_week_ago)
-            print(task)
+            #print(task)
             param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
             number = "(?,?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
@@ -169,7 +208,7 @@ def fill_charging_stations(conn):
         task = (random.randint(5, 15),
                 GPS[0] + " " + GPS[1])
         stations.append(i + 1)
-        print(task)
+        #print(task)
         param = "charging_station(time_of_charging, GPS_location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -182,7 +221,7 @@ def fill_stations_have_plugs(conn):
         for i in plugs:
             amount_of_available_slots = random.randint(3, 10)
             task = (j, i, amount_of_available_slots)
-            print(task)
+            #print(task)
             param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
             number = "(?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
@@ -205,7 +244,7 @@ def fill_charge_car_history(conn):
                         timefinish,
                         car_charging,
                         station)
-                print(task)
+                #print(task)
                 param = "charge_car_history(cost, date, start_time, finish_time, car_id, UID)"
                 number = "(?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
@@ -224,7 +263,7 @@ def fill_models_table(conn):
                 type,
                 service_of_class)
         models.append(i + 1)
-        print(task)
+        #print(task)
         param = "models(plug_id, name, type, service_class) "
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -246,7 +285,7 @@ def fill_cars_table(conn):
                 "available",
                 models[random.randint(0, len(models) - 1)])
         cars.append(i + 1)
-        print(task)
+        #print(task)
         param = "cars(gps_location, year, colour, reg_num, charge, available, model_id)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -267,7 +306,7 @@ def fill_part_order_history(conn):
                         parts[random.randint(0, len(parts) - 1)],
                         workshops[random.randint(0, len(workshops) - 1)],
                         company[random.randint(0, len(company) - 1)])
-                print(task)
+                #print(task)
                 param = "part_order_history(date,amount,cost,part_id, WID, CID)"
                 number = "(?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
@@ -283,7 +322,7 @@ def fill_repair_car_table(conn):
                 WID = workshops[random.randint(0, len(workshops) - 1)]
                 car_id = cars[random.randint(0, len(cars) - 1)]
                 task = (WID, car_id, date, "closed")
-                print(task)
+                # print(task)
                 param = "repair_car(WID, car_id, date, progress_status)"
                 number = "(?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
@@ -323,6 +362,7 @@ def fill_db_with_data(conn):
     fill_charge_car_history(conn)
     fill_customer_table(conn)
     fill_orders_table(conn)
+    fill_fake_orders_table(conn)
     fill_parts_table(conn)
     fill_providers_table(conn)
     fill_workshops_table(conn)
@@ -331,4 +371,3 @@ def fill_db_with_data(conn):
     fill_repair_car_table(conn)
     fill_fit_table(conn)
     fill_providers_have_parts(conn)
-    pass
