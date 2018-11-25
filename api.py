@@ -4,12 +4,10 @@ from scenarios import *
 from utils import *
 import certifi
 import ssl
-import geopy.geocoders
 
 DB_FILE = 'carsharing.sqlite'
 
 ctx = ssl.create_default_context(cafile=certifi.where())
-geopy.geocoders.options.default_ssl_context = ctx
 
 fake = Faker()
 api = Flask(__name__)

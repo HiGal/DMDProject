@@ -1,16 +1,9 @@
-from faker import Faker
+import faker
 import random
-import certifi
-import ssl
-from geopy.geocoders import Nominatim
-import geopy.geocoders
 import datetime
 from db_management import *
 
-ctx = ssl.create_default_context(cafile=certifi.where())
-geopy.geocoders.options.default_ssl_context = ctx
-fake = Faker()
-geolocator = fake.providers.geo
+fake = faker.Faker("en_US")
 
 users = []
 plugs = []
@@ -23,6 +16,25 @@ reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
 service_class_car = ["comfort", "economy", "business "]
 name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia Rio"]
+
+
+def generate_time():
+    a = random.randint(0, 22)
+    a1 = a + 1
+    if a < 10:
+        a = "0" + str(a)
+    else:
+        a = str(a)
+    if a1 < 10:
+        a1 = "0" + str(a1)
+    else:
+        a1 = str(a1)
+    b = random.randint(10, 30)
+    b1 = str(b + random.randint(0, 25))
+    timestart = a + ":" + str(b)
+    timefinish = a1 + ":" + b1
+    return timestart, timefinish
+
 
 def fill_customer_table(conn):
     # fill customer table
@@ -40,7 +52,7 @@ def fill_customer_table(conn):
                 address
                 )
         users.append(task)
-        #print(task)
+        # print(task)
         param = "customers(username, email, cardnumber, fullname, phone_number, zip, address)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -53,28 +65,18 @@ def fill_orders_table(conn):
         date = datetime.date(2018, 10, j)
         for i in range(3):
             status = "closed"
-            a = random.randint(0, 22)
-            a1 = a + 1
-            if a < 10:
-                a = "0" + str(a)
-            else:
-                a = str(a)
-            if a1 < 10:
-                a1 = "0" + str(a1)
-            else:
-                a1 = str(a1)
-            b = random.randint(10, 52)
-            b1 = str(b + 5)
-            timestart = a + ":" + str(b)
-            timefinish = a1 + ":" + b1
-            start = geolocator.local_latlng(country_code="US", coords_only=True)
-            finish = geolocator.local_latlng(country_code="US", coords_only=True)
-            car_loc = geolocator.local_latlng(country_code="US", coords_only=True)
+            timestart, timefinish = generate_time()
+            start = fake.local_latlng(country_code="US", coords_only=True)
+            finish = fake.local_latlng(country_code="US", coords_only=True)
+            car_loc = fake.local_latlng(country_code="US", coords_only=True)
             task = (date, timestart, timefinish, status,
                     random.randint(1000, 9999),
-                    start, finish, car_loc, users[random.randint(0, len(users) - 1)][0],
+                    start[0] + " " + start[1],
+                    finish[0] + " " + finish[1],
+                    car_loc[0] + " " + car_loc[1],
+                    users[random.randint(0, len(users) - 1)][0],
                     cars[random.randint(0, len(cars) - 1)])
-            #print(task)
+            # print(task)
             param = "orders(date, time, date_closed, status, cost, st_point, destination, car_location, username,car_id )"
             number = "(?,?,?,?,?,?,?,?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
@@ -89,18 +91,19 @@ def fill_plugs_table(conn):
         size_of_plug = random.randint(100, 999)
         task = (shape_of_plugs, size_of_plug)
         plugs.append(i + 1)
-      #  print(task)
+        #  print(task)
         param = "charging_plugs(shape_plug, size_plug)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
 
+
 def fill_providers_table(conn):
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         phone_number = random.randint(1000000000000000, 9999999999999999)
-        name_company = fake.providers.company.company()
+        name_company = fake.company()
         task = (address, phone_number, name_company)
         print(task)
         param = "provider(address, phone_number, name_company)"
@@ -108,6 +111,7 @@ def fill_providers_table(conn):
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
+
 
 def fill_parts_table(conn):
     for i in range(5):
@@ -122,6 +126,7 @@ def fill_parts_table(conn):
         if insert_into_table(conn, task, param, number) == -1:
             return -1
         return 0
+
 
 def fill_workshops_table(conn):
     for i in range(5):
@@ -143,11 +148,11 @@ def fill_workshops_table(conn):
 
 def fill_charging_stations(conn):
     for i in range(5):
-        GPS = geolocator.local_latlng(country_code="US", coords_only=True)
+        GPS = fake.local_latlng(country_code="US", coords_only=True)
         task = (random.randint(5, 15),
-                GPS)
+                GPS[0] + " " + GPS[1])
         stations.append(i + 1)
-        #print(task)
+        # print(task)
         param = "charging_station(time_of_charging, GPS_location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -161,7 +166,7 @@ def fill_stations_have_plugs(conn):
         task = (stations[random.randint(0, len(stations) - 1)],
                 plugs[random.randint(0, len(plugs) - 1)],
                 amount_of_available_slots)
-       # print(task)
+        # print(task)
         param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
         number = "(?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -170,40 +175,13 @@ def fill_stations_have_plugs(conn):
 
 
 def fill_charge_car_history(conn):
-    cost_charging = []
-    time_start_charging = []
-    time_finish_charging = []
-    date_charging = []
-    cars_charging = []
-    stations_id = []
     for j in range(1, 30):
         date = datetime.date(2018, 10, j)
-        date_charging.append(date)
         for i in range(5):
             cost = random.randint(100, 1200)
-            cost_charging.append(cost)
-            a = random.randint(0, 22)
-            a1 = a + 1
-            if a <10:
-                a = "0" + str(a)
-            else:
-                a = str(a)
-            if a1 < 10:
-                a1 = "0" + str(a1)
-            else:
-                a1 = str(a1)
-            b = random.randint(10, 52)
-            b1 = str(b + 5)
-            timestart = a + ":" + str(b)
-            time_start_charging.append(timestart)
-            timefinish = a1 + ":" + b1
-            time_finish_charging.append(timefinish)
-            ##Local variables
+            timestart, timefinish = generate_time()
             car_charging = cars[random.randint(0, len(cars) - 1)]
-            cars_charging.append(cars_charging)
             station = stations[random.randint(0, len(stations) - 1)]
-            stations_id.append(station)
-            ##
             task = (cost,
                     date,
                     timestart,
@@ -215,20 +193,6 @@ def fill_charge_car_history(conn):
             number = "(?,?,?,?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
                 return -1
-    # double_cost = cost_charging[2]
-    # print (cost_charging)
-    # double_timestart = time_start_charging[2]
-    # double_timefinish = time_finish_charging[2]
-    # print(double_timefinish)
-    # double_date = date_charging[2]
-    # print(double_date)
-    # double_car = cars_charging[2]
-    # print()
-    # double_station = stations_id[2]
-    #
-    # double_task = (double_cost, double_date, double_timestart, double_timefinish, double_car, double_station)
-    # print("________________________________________")
-    # print(double_task)
     return 0
 
 
@@ -243,7 +207,7 @@ def fill_models_table(conn):
                 type,
                 service_of_class)
         models.append(i + 1)
-        #print(task)
+        # print(task)
         param = "models(plug_id, name, type, service_class) "
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -254,31 +218,20 @@ def fill_models_table(conn):
 def fill_cars_table(conn):
     # fill car table
     for i in range(10):
-        gps_location = geolocator.local_latlng(country_code="US", coords_only=True)
+        gps_location = fake.local_latlng(country_code="US", coords_only=True)
         year = random.randint(1990, 2012)
         regnum = reg_name[i // len(reg_name)] + str(random.randint(1000, 9999))
-        task = (gps_location,
+        task = (gps_location[0] + " " + gps_location[1],
                 year,
+                colors[random.randint(0, len(colors) - 1)],
                 regnum,
                 random.randint(10, 99),
                 "available",
                 models[random.randint(0, len(models) - 1)])
         cars.append(i + 1)
-        #print(task)
+        print(task)
         param = "cars(gps_location, year, colour, reg_num, charge, available, model_id)"
         number = "(?,?,?,?,?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            return -1
-    return 0
-
-
-def fill_parts(conn):
-    for i in range(10):
-        task = ()
-        parts.append(i + 1)
-        print(task)
-        param = ""
-        number = ""
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
