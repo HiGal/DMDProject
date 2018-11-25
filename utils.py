@@ -152,6 +152,7 @@ def fill_workshops_have_part(conn):
                 workshops[random.randint(0, len(workshops) - 1)],
                 amount,
                 amount_week_ago)
+        print(task)
         param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
