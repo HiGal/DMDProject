@@ -1,6 +1,7 @@
 from db_management import create_connection, close_connection
 from collections import defaultdict
 import logging
+import datetime
 
 DB_FILE = 'carsharing.sqlite'
 
@@ -115,5 +116,64 @@ def efficiency_ch_stations(data):
             if (st_time + "-" + end_time) not in response[residual].keys():
                 response[residual][st_time + "-" + end_time] = 0
     for residual in response.keys():
-                s[residual] = sorted(response[residual].items())
+        s[residual] = sorted(response[residual].items())
     return s
+
+
+def search_duplicates(data):
+    username = data['username']
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+
+    import datetime
+
+    date_month_ago ='2018-09-29'
+
+    #It's also work but for well-looked (big table) result we defined month by our hands
+    #date_month_ago = (datetime.datetime.now() - datetime.timedelta(30)).date()
+
+    try:
+        sql = '''SELECT b.date, b.cost
+                  FROM (select order_id from 
+                  (SELECT order_id, COUNT(*) FROM transactions GROUP BY order_id HAVING COUNT(*) > 1))as a
+                  inner join
+                   (select order_id, date, cost from orders where username = '{}' and date > '{}') as b 
+                   on a.order_id = b.order_id;'''.format(username, date_month_ago)
+        cursor.execute(sql)
+        response = cursor.fetchall()
+        close_connection(conn)
+        return response
+    except Exception:
+        logging.info("Error")
+    return "No such username"
+
+def trip_duration(data):
+    date = data['date']
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+
+    try:
+        sql = "select avg(duration) from orders where date = '{}'".format(date)
+        cursor.execute(sql)
+        response = cursor.fetchall()[0]
+        close_connection(conn)
+        return response
+    except Exception:
+        logging.info("Error")
+    return "There is no orders for such period"
+
+
+def average_distance(data):
+    date = data['date']
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+
+    try:
+        sql = "select avg(car_distance) from orders where date = '{}'".format(date)
+        cursor.execute(sql)
+        response = cursor.fetchall()[0]
+        close_connection(conn)
+        return response
+    except Exception:
+        logging.info("Error")
+    return "There is no orders for such period"
