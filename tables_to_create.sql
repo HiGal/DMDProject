@@ -84,7 +84,7 @@ CREATE TABLE IF NOT EXISTS charge_car_history (
 /*TODO Availability of timing( What the type?)*/
 CREATE TABLE IF NOT EXISTS workshop (
   WID                    integer PRIMARY KEY,
-  availability_of_timing time        NOT NULL,
+  availability_of_timing integer     NOT NULL,
   location               varchar(25) NOT NULL
 );
 

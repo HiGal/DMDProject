@@ -117,12 +117,10 @@ def fill_parts_table(conn):
     for i in range(5):
         type_of_detail = random.randint(100, 999)
         cost = random.randint(100, 1200)
-        amount_of_parts = random.randint(3, 10)
-        amount_week_ago = random.randint(1, 5)
-        task = (type_of_detail, cost, amount_of_parts, amount_week_ago)
+        task = (type_of_detail, cost)
         print(task)
-        param = "parts(type_of_detail,cost, amount, amount_week_ago)"
-        number = "(?,?,?,?)"
+        param = "parts(type_of_detail,cost)"
+        number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
         return 0
@@ -130,20 +128,21 @@ def fill_parts_table(conn):
 
 def fill_workshops_table(conn):
     for i in range(5):
-        ## TODO: What is it?
-        availability_of_timing = datetime.timedelta
-
-        ##TODO: Working with Faker
-        location = 1
-
-        task = (availability_of_timing, location)
+        availability_of_timing = random.randint(0,8)
+        location = fake.local_latlng(country_code="US", coords_only=True)
+        task = (availability_of_timing,
+                location[0] + " " + location[1])
         print(task)
         param = "workshop(availability_of_timing, location)"
         number = "(?,?)"
-
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
+
+def fill_workshops_have_part():
+
+    amount_of_parts = random.randint(3, 10)
+    amount_week_ago = random.randint(1, 5)
 
 
 def fill_charging_stations(conn):
@@ -249,7 +248,8 @@ def fill_parts(conn):
     return 0
 
 def fill_repair_car_table(conn):
-    pass
+    for i in range(5):
+
 
 def fill_db_with_data(conn):
     fill_plugs_table(conn)
@@ -263,4 +263,5 @@ def fill_db_with_data(conn):
     fill_parts_table(conn)
     fill_providers_table(conn)
     fill_workshops_table(conn)
+    fill_repair_car_table(conn)
     pass
