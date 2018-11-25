@@ -123,15 +123,15 @@ CREATE TABLE IF NOT EXISTS part_order (
 CREATE TABLE IF NOT EXISTS parts (
   part_id         integer PRIMARY KEY,
   type_of_detail  varchar(25),
-  cost            double,
-  amount          integer,
-  amount_week_ago integer
+  cost            double
 );
 
 CREATE TABLE IF NOT EXISTS workshop_have_parts(
   workshop_have_parts_id integer PRIMARY KEY,
   part_id integer,
   WID integer,
+  amount          integer,
+  amount_week_ago integer,
   FOREIGN KEY (part_id) references parts(part_id) ON UPDATE cascade ON DELETE cascade,
   FOREIGN KEY (WID) references workshop(WID) ON UPDATE cascade ON DELETE cascade
 );
