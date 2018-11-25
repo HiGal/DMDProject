@@ -126,7 +126,7 @@ def fill_parts_table(conn):
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
-        return 0
+    return 0
 
 
 def fill_workshops_table(conn):
@@ -250,21 +250,10 @@ def fill_cars_table(conn):
     return 0
 
 
-def fill_parts(conn):
-    for i in range(10):
-        task = ()
-        parts.append(i + 1)
-        print(task)
-        param = ""
-        number = ""
-        if insert_into_table(conn, task, param, number) == -1:
-            return -1
-    return 0
-
 def fill_repair_car_table(conn):
     for j in range(1, 30):
         date = datetime.date(2018, 10, j)
-        for i in range(5):
+        for i in range(10):
             WID = workshops[random.randint(0, len(workshops) - 1)]
             car_id = cars[random.randint(0, len(cars) - 1)]
             progress_status_car = progress_status[random.randint(0, len(progress_status) - 1)]
@@ -276,15 +265,26 @@ def fill_repair_car_table(conn):
                 return -1
     return 0
 
+def fill_fit_table(conn):
+    for i in range(5):
+        model_id = models[random.randint(0, len(models) - 1)]
+        part_id = parts[random.randint(0, len(parts) - 1)]
+        task = (part_id, model_id)
+        print(task)
+        param = "fit(part_id, model_id)"
+        number = "(?, ?)"
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
 
-def fill_part_order_history():
-    for i in range(0, 30):
-        task = (date,
-                amount,
-                cost,
-                part_id,
-                WID,
-                CID)
+# def fill_part_order_history():
+#     for i in range(0, 30):
+#         task = (date,
+#                 amount,
+#                 cost,
+#                 part_id,
+#                 WID,
+#                 CID)
 
 
 def fill_db_with_data(conn):
@@ -300,4 +300,5 @@ def fill_db_with_data(conn):
     fill_providers_table(conn)
     fill_workshops_table(conn)
     fill_repair_car_table(conn)
+    fill_fit_table(conn)
     pass
