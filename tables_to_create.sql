@@ -57,6 +57,23 @@ CREATE TABLE IF NOT EXISTS orders (
   foreign key (username) references customers (username) ON UPDATE cascade ON DELETE cascade ,
   foreign key (car_id) references cars (car_id) ON UPDATE cascade ON DELETE cascade
 );
+
+CREATE TABLE IF NOT EXISTS fake_orders (
+  order_id     integer PRIMARY KEY,
+  date         date        not null,
+  time         time        not null,
+  date_closed  time        not null,
+  status       varchar(10) not null,
+  cost         integer,
+  st_point     varchar(50) not null,
+  destination  varchar(50) not null,
+  car_location varchar(50) not null,
+  username     varchar(50) not null,
+  car_id       integer     not null,
+  foreign key (username) references customers (username) ON UPDATE cascade ON DELETE cascade ,
+  foreign key (car_id) references cars (car_id) ON UPDATE cascade ON DELETE cascade
+);
+
 /*TODO car_id is model_id???*/
 CREATE TABLE IF NOT EXISTS cars (
   car_id       integer primary key,
