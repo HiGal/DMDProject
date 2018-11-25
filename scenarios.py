@@ -15,7 +15,7 @@ def find_car(data):
         from cars,orders 
         where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
         AND username = '{}' AND reg_num LIKE '%{}%';''' \
-            .format(data['date'],data['colour'], data['username'], data['reg_num'])
+            .format(data['date'], data['colour'], data['username'], data['reg_num'])
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
@@ -49,7 +49,7 @@ def stat_of_busy_cars(data):
                           AND date='{}' AND date <= date_end
                        '''.format(date, date)
         cursor.execute(sql_cnt_cars)
-
+        close_connection(conn)
         cnt = cursor.fetchall()[0][0] * 7
         morning_load = len(cursor.execute(morning_load).fetchall()) / cnt * 100
         afternoon_load = len(cursor.execute(afternoon_load).fetchall()) / cnt * 100
@@ -109,6 +109,7 @@ def efficiency_ch_stations(data):
         for value in data:
             response[value[0]][st_time + "-" + end_time] = value[1]
 
+    close_connection(conn)
     for i in range(0, 24):
         st_time = ''
         end_time = ''
@@ -189,3 +190,18 @@ def average_distance(data):
     return "There is no orders for such period"
 
 
+def times_using_ch_station(data):
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+    sql = '''select count(car_id) as charging_times,username
+             from(select charge_car_history.date, date('{}','+1 month') as end_period,orders.car_id,username
+             from charge_car_history,orders
+             where orders.car_id = charge_car_history.car_id and charge_car_history.date = orders.date
+             and start_time between orders.time and time(orders.time,'+'|| cast(orders.duration as text)||' minutes'))
+             group by username;'''.format(data['start_date'])
+    cursor.execute(sql)
+    response = {}
+    for info in cursor.fetchall():
+        response[info[1]] = info[0]
+    close_connection(conn)
+    return response

@@ -19,7 +19,8 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-@api.before_first_request
+# @api.before_first_request
+
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -31,6 +32,7 @@ def init_db():
 
 
 find_car_model = rest_api.model('Find a Car', {
+    'date': fields.String('enter date in format YYYY-MM-DD'),
     'colour': fields.String('enter colour'),
     'username': fields.String('enter username'),
     'reg_num': fields.String('enter registration number or it part')
@@ -51,6 +53,11 @@ searach_duplicates_model = rest_api.model('Searching duplicates of orders for us
 trip_statistics_model = rest_api.model('Statistics of average car distance and trip duration', {
     'date': fields.String("Enter date to get statistics")
 })
+
+chst_utilization_model = rest_api.model('Statistic of charging station utilization by user',{
+    'start_date': fields.String("Enter a date in given format YYYY-MM-DD")
+})
+
 
 @rest_api.route('/stat_util')
 class EfficiencyUtilization(Resource):
@@ -90,11 +97,12 @@ class FindCar(Resource):
 class CarsLoad(Resource):
 
     @rest_api.expect(cars_load_model)
-    @rest_api.doc("2nd scenario for getting statistic of load of car")
+    @rest_api.doc("3rd scenario for getting statistic of load of car")
     def post(self):
         data = request.get_json(silent=True)
         response = stat_of_busy_cars(data)
         return jsonify(response)
+
 
 @rest_api.route('/search_duplicates')
 class SearchDuplicates(Resource):
@@ -123,8 +131,19 @@ class SearchDuplicates(Resource):
         response1 = average_distance(data)
         response2 = trip_duration(data)
         search_res = {'distance': response1,
-                        'duration': response2}
+                      'duration': response2}
         return jsonify(search_res)
+
+@rest_api.route('/stats_of_chst_utilization')
+class ChStUtilization(Resource):
+
+    @rest_api.expect(chst_utilization_model)
+    @rest_api.doc('8th scenario for charging station utilization by user')
+    def post(self):
+        data = request.get_json()
+        response = times_using_ch_station(data)
+        return jsonify(response)
+
 
 if __name__ == '__main__':
     api.run()
