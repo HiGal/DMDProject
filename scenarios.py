@@ -62,7 +62,15 @@ def stat_of_busy_cars(data):
         logging.info("Error")
     return "There is no orders for such period"
 
+def popular_locations(data):
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor
+    try:
+        pass
 
+    except Exception:
+        logging.info("Error")
+    return "There is no orders for such period"
 def efficiency_ch_stations(data):
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
@@ -179,3 +187,5 @@ def average_distance(data):
     except Exception:
         logging.info("Error")
     return "There is no orders for such period"
+
+

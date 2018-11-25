@@ -169,7 +169,7 @@ def fill_workshops_have_part(conn):
     for wshop in workshops:
         for par in parts:
             amount = random.randint(3, 25)
-            amount_week_ago = random.randint(3, 25)
+            amount_week_ago = random.randint(23, 50)
             task = (par,
                     wshop,
                     amount,
@@ -326,7 +326,7 @@ def fill_providers_have_parts(conn):
     for pro in company:
         for par in parts:
             task = (pro, par)
-            param = "providers_have_parts(part_id, model_id)"
+            param = "providers_have_parts(CID, part_id)"
             number = "(?, ?)"
             if insert_into_table(conn, task, param, number) == -1:
                 return -1
