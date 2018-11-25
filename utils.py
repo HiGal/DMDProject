@@ -303,7 +303,7 @@ def fill_repair_car_table(conn):
                 car_id = cars[random.randint(0, len(cars) - 1)]
                 cost = random.randint(150, 450)
                 task = (WID, car_id, date, cost, "closed")
-                # print(task)
+                print(task)
                 param = "repair_car(WID, car_id, date, cost, progress_status)"
                 number = "(?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:

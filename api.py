@@ -18,14 +18,13 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
-
-# @api.before_first_request
-
+@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
     create_table(conn, "tables_to_create.sql")
+    print("UPAL")
     fill_db_with_data(conn)
     logging.info("Try to close connection to database")
     close_connection(conn)
