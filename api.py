@@ -18,13 +18,13 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
-@api.before_first_request
+
+# @api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
     create_table(conn, "tables_to_create.sql")
-    print("UPAL")
     fill_db_with_data(conn)
     logging.info("Try to close connection to database")
     close_connection(conn)
@@ -148,9 +148,17 @@ class ChStUtilization(Resource):
 @rest_api.route('/most_relevant_part')
 class MostRelevantPart(Resource):
 
-    @rest_api.doc('9th scenario. returns Workshop ID and type of most relevant detail')
+    @rest_api.doc('9th scenario / returns Workshop ID and type of most relevant detail')
     def get(self):
         return jsonify(most_relevant_part_by_workshop())
+
+
+@rest_api.route("/most_expensive_car_type")
+class ExpensiveCar(Resource):
+
+    @rest_api.doc("10th scenario / returns most expensive car type and it's average cost per day")
+    def get(self):
+        return jsonify(most_expensive_car())
 
 
 if __name__ == '__main__':

@@ -62,6 +62,7 @@ def stat_of_busy_cars(data):
         logging.info("Error")
     return "There is no orders for such period"
 
+
 def popular_locations(data):
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
@@ -70,6 +71,7 @@ def popular_locations(data):
     except Exception:
         logging.info("Error")
     return "There is no orders for such period"
+
 
 def efficiency_ch_stations(data):
     conn = create_connection(DB_FILE)
@@ -221,5 +223,30 @@ def most_relevant_part_by_workshop():
     response = {}
     for info in cursor.fetchall():
         response[info[1]] = info[0]
+    close_connection(conn)
+    return response
+
+
+def most_expensive_car():
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+    sql = '''select AVG(average_per_day) as average,type
+            from (select AVG(repair_avg) + AVG(charge_avg) as average_per_day, charge.car_id from
+              (select AVG(repair_car.cost) as repair_avg, date, car_id
+              from repair_car
+              group by date,car_id )as repair
+            join
+              (select AVG(charge_car_history.cost) as charge_avg,date, car_id
+              from charge_car_history
+              group by date,car_id ) as charge
+            on repair.car_id = charge.car_id
+            group by charge.car_id) as s,cars, models
+            where cars.car_id = s.car_id and cars.model_id = models.model_id
+            group by type
+            order by average desc
+    '''
+    cursor.execute(sql)
+    s = cursor.fetchall()
+    response = {s[0][1]: s[0][0]}
     close_connection(conn)
     return response
