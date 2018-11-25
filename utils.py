@@ -11,6 +11,7 @@ cars = []
 models = []
 stations = []
 parts = []
+workshops = []
 colors = ["red", "yellow", "green", "blue", "black", "white"]
 reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
@@ -119,6 +120,7 @@ def fill_parts_table(conn):
         cost = random.randint(100, 1200)
         task = (type_of_detail, cost)
         print(task)
+        parts.append(i + 1)
         param = "parts(type_of_detail,cost)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
@@ -128,21 +130,32 @@ def fill_parts_table(conn):
 
 def fill_workshops_table(conn):
     for i in range(5):
-        availability_of_timing = random.randint(0,8)
+        availability_of_timing = random.randint(0, 8)
         location = fake.local_latlng(country_code="US", coords_only=True)
         task = (availability_of_timing,
                 location[0] + " " + location[1])
         print(task)
+        workshops.append(i + 1)
         param = "workshop(availability_of_timing, location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
     return 0
 
-def fill_workshops_have_part():
 
-    amount_of_parts = random.randint(3, 10)
-    amount_week_ago = random.randint(1, 5)
+def fill_workshops_have_part(conn):
+    for i in range(25):
+        amount = random.randint(3, 10)
+        amount_week_ago = random.randint(1, 5)
+        task = (parts[random.randint(0, len(parts) - 1)],
+                workshops[random.randint(0, len(workshops) - 1)],
+                amount,
+                amount_week_ago)
+        param = "workshop_have_parts(availability_of_timing, location)"
+        number = "(?,?,?,?)"
+        if insert_into_table(conn, task, param, number) == -1:
+            return -1
+    return 0
 
 
 def fill_charging_stations(conn):
