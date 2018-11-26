@@ -20,7 +20,7 @@ def find_car(data):
         from cars,orders 
         where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
         AND username = '{}' AND reg_num LIKE '%{}%';''' \
-        .format(data['date'], data['colour'], data['username'], data['reg_num'])
+            .format(data['date'], data['colour'], data['username'], data['reg_num'])
 
         cursor.execute(sql)
         response = cursor.fetchall()
@@ -30,6 +30,7 @@ def find_car(data):
         logging.info("Error")
     return "Error while searching was occured"
 
+
 def stat_least_amount_cars():
     """
     Method that search for least frequently used cars (10 % of cars in company)
@@ -38,7 +39,7 @@ def stat_least_amount_cars():
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     try:
-        cars_id =[]
+        cars_id = []
         least_car_id = '''SELECT car_id FROM orders GROUP BY (car_id) 
         ORDER BY count(*) LIMIT (SELECT DISTINCT count(car_id)/10 FROM cars)'''
         cursor.execute(least_car_id)
@@ -51,6 +52,7 @@ def stat_least_amount_cars():
     except Exception:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def stat_of_busy_cars(data):
     """
@@ -80,7 +82,6 @@ def stat_of_busy_cars(data):
                           AND date='{}' AND date <= date_end
                        '''.format(date, date)
         cursor.execute(sql_cnt_cars)
-        close_connection(conn)
         cnt = cursor.fetchall()[0][0] * 7
         morning_load = len(cursor.execute(morning_load).fetchall()) / cnt * 100
         afternoon_load = len(cursor.execute(afternoon_load).fetchall()) / cnt * 100
@@ -88,10 +89,13 @@ def stat_of_busy_cars(data):
         response = {'Morning': morning_load,
                     'Afternoon': afternoon_load,
                     'Evening': evening_load}
+        close_connection(conn)
         return response
     except Exception:
         logging.info("Error")
-    return "Error while searching was occured"
+
+    return "Error while searching was occured or doesn't found in database"
+
 
 def top_locations_search():
     """
@@ -140,13 +144,14 @@ def top_locations_search():
         close_connection(conn)
 
         return (
-            (top_morning_start_point,top_morning_finish_point),
+            (top_morning_start_point, top_morning_finish_point),
             (top_afternoon_start_point, top_afternoon_finish_point),
             (top_evening_start_point, top_evening_finish_point),
         )
     except Exception:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def efficiency_ch_stations(data):
     """

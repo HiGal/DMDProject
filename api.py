@@ -19,7 +19,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-@api.before_first_request
+#@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -62,7 +62,7 @@ chst_utilization_model = rest_api.model('Statistic of charging station utilizati
 class EfficiencyUtilization(Resource):
 
     @rest_api.expect(efficiency_ch_stations_model)
-    @rest_api.doc("Second scenario")
+    @rest_api.doc("2nd scenario for calculating efficiency of charging station utilization for given date ")
     def post(self):
         data = request.get_json()
         response = efficiency_ch_stations(data)
@@ -78,7 +78,7 @@ class EfficiencyUtilization(Resource):
 class FindCar(Resource):
 
     @rest_api.expect(find_car_model)
-    @rest_api.doc("first scenario for finding a car")
+    @rest_api.doc("1st scenario for finding a car")
     def post(self):
         data = request.get_json()
         response = find_car(data)
@@ -109,7 +109,7 @@ class CarsLoad(Resource):
 class SearchDuplicates(Resource):
 
     @rest_api.expect(searach_duplicates_model)
-    @rest_api.doc("4nd scenario for searching duplicates of user's orders")
+    @rest_api.doc("4th scenario for searching duplicates of user's orders")
     def post(self):
         data = request.get_json()
         response = search_duplicates(data)
@@ -135,6 +135,7 @@ class SearchDuplicates(Resource):
                       'duration': response2}
         return jsonify(search_res)
 
+
 @rest_api.route("/top_locations_search")
 class ExpensiveCar(Resource):
 
@@ -157,6 +158,7 @@ class ExpensiveCar(Resource):
         }
         return jsonify(response)
 
+
 @rest_api.route("/stat_least_amount_cars")
 class ExpensiveCar(Resource):
 
@@ -165,6 +167,7 @@ class ExpensiveCar(Resource):
         cars = stat_least_amount_cars()
         response = {"car_id": cars}
         return jsonify(response)
+
 
 @rest_api.route('/stats_of_chst_utilization')
 class ChStUtilization(Resource):
@@ -192,7 +195,6 @@ class ExpensiveCar(Resource):
     @rest_api.doc("10th scenario / returns most expensive car type and it's average cost per day")
     def get(self):
         return jsonify(most_expensive_car())
-
 
 
 if __name__ == '__main__':
