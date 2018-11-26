@@ -1,0 +1,157 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>a9faa4b6-86bf-4a99-9953-79f4e70c8662.SCHEMA:main</OriginalElement>
+  <nodes>
+    <node x="290.0" y="612.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.orders</node>
+    <node x="833.984375" y="0.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_plugs</node>
+    <node x="413.97291666666655" y="391.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_station</node>
+    <node x="0.0" y="1119.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.sqlite_master</node>
+    <node x="1511.9874999999997" y="391.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.parts</node>
+    <node x="799.740625" y="678.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.repair_car</node>
+    <node x="1049.740625" y="667.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.part_order_history</node>
+    <node x="0.0" y="700.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.stations_have_plugs</node>
+    <node x="558.5" y="667.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charge_car_history</node>
+    <node x="1225.4312499999999" y="380.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.provider</node>
+    <node x="648.9729166666666" y="336.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.cars</node>
+    <node x="1501.740625" y="711.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.providers_have_parts</node>
+    <node x="171.9729166666665" y="347.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.customers</node>
+    <node x="1227.109375" y="146.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.models</node>
+    <node x="966.746875" y="391.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop</node>
+    <node x="1779.740625" y="711.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.fit</node>
+    <node x="1222.740625" y="689.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop_have_parts</node>
+    <node x="316.0" y="956.0">a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.transactions</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.cars" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.models">
+      <point x="0.0" y="-103.0" />
+      <point x="753.9729166666666" y="311.0" />
+      <point x="1281.359375" y="311.0" />
+      <point x="-54.25" y="70.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.fit" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.models">
+      <point x="39.25" y="-48.0" />
+      <point x="1897.490625" y="311.0" />
+      <point x="1389.859375" y="311.0" />
+      <point x="54.25" y="70.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charge_car_history" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_station">
+      <point x="-47.75" y="-92.0" />
+      <point x="606.25" y="582.0" />
+      <point x="575.2229166666666" y="582.0" />
+      <point x="53.75" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.providers_have_parts" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.provider">
+      <point x="-64.5" y="-48.0" />
+      <point x="1566.240625" y="572.0" />
+      <point x="1397.9312499999999" y="572.0" />
+      <point x="57.5" y="59.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop_have_parts" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.parts">
+      <point x="64.75" y="-70.0" />
+      <point x="1416.990625" y="592.0" />
+      <point x="1594.1124999999997" y="592.0" />
+      <point x="-27.375" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.orders" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.cars">
+      <point x="54.5" y="-147.0" />
+      <point x="453.5" y="592.0" />
+      <point x="683.9729166666666" y="592.0" />
+      <point x="-70.0" y="103.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.orders" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.customers">
+      <point x="-54.5" y="-147.0" />
+      <point x="344.5" y="572.0" />
+      <point x="282.9729166666665" y="572.0" />
+      <point x="0.0" y="92.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.part_order_history" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.parts">
+      <point x="51.0" y="-92.0" />
+      <point x="1177.240625" y="582.0" />
+      <point x="1539.3624999999997" y="582.0" />
+      <point x="-82.125" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.stations_have_plugs" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_plugs">
+      <point x="-67.5" y="-59.0" />
+      <point x="67.5" y="592.0" />
+      <point x="5.972916666666492" y="592.0" />
+      <point x="5.972916666666492" y="121.0" />
+      <point x="884.234375" y="121.0" />
+      <point x="-50.25" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.transactions" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.orders">
+      <point x="0.0" y="-59.0" />
+      <point x="0.0" y="147.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.fit" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.parts">
+      <point x="-39.25" y="-48.0" />
+      <point x="1818.990625" y="592.0" />
+      <point x="1703.6124999999997" y="592.0" />
+      <point x="82.125" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.stations_have_plugs" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_station">
+      <point x="67.5" y="-59.0" />
+      <point x="202.5" y="582.0" />
+      <point x="467.72291666666655" y="582.0" />
+      <point x="-53.75" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.repair_car" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.cars">
+      <point x="-57.5" y="-81.0" />
+      <point x="857.240625" y="592.0" />
+      <point x="823.9729166666666" y="592.0" />
+      <point x="70.0" y="103.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.repair_car" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop">
+      <point x="57.5" y="-81.0" />
+      <point x="972.240625" y="592.0" />
+      <point x="1006.4135416666668" y="592.0" />
+      <point x="-79.33333333333326" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.part_order_history" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop">
+      <point x="-51.0" y="-92.0" />
+      <point x="1075.240625" y="592.0" />
+      <point x="1085.746875" y="592.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.providers_have_parts" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.parts">
+      <point x="64.5" y="-48.0" />
+      <point x="1695.240625" y="592.0" />
+      <point x="1648.8624999999997" y="592.0" />
+      <point x="27.375" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop_have_parts" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.workshop">
+      <point x="-64.75" y="-70.0" />
+      <point x="1287.490625" y="562.0" />
+      <point x="1165.0802083333333" y="562.0" />
+      <point x="79.33333333333326" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.models" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charging_plugs">
+      <point x="0.0" y="-70.0" />
+      <point x="1335.609375" y="121.0" />
+      <point x="984.734375" y="121.0" />
+      <point x="50.25" y="48.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.charge_car_history" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.cars">
+      <point x="47.75" y="-92.0" />
+      <point x="701.75" y="592.0" />
+      <point x="753.9729166666666" y="592.0" />
+      <point x="0.0" y="103.0" />
+    </edge>
+    <edge source="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.part_order_history" target="a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.provider">
+      <point x="0.0" y="-92.0" />
+      <point x="1126.240625" y="572.0" />
+      <point x="1282.9312499999999" y="572.0" />
+      <point x="-57.5" y="59.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.3571793561573838" x="968.4999999999999" y="629.0" />
+  <SelectedNodes>
+    <node>a9faa4b6-86bf-4a99-9953-79f4e70c8662.TABLE:main.transactions</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+
