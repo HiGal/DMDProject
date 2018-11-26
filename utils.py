@@ -4,7 +4,7 @@ import datetime
 from db_management import *
 
 fake = faker.Faker("en_US")
-
+# Lists for storing data
 users = []
 plugs = []
 cars = []
@@ -14,6 +14,7 @@ parts = []
 workshops = []
 company = []
 orders = []
+# Lists for generation data
 colors = ["red", "yellow", "green", "blue", "black", "white"]
 reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
