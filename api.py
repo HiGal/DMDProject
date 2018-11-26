@@ -2,7 +2,6 @@ from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
 from scenarios import *
 from utils import *
-import certifi
 import ssl
 
 DB_FILE = 'carsharing.sqlite'
