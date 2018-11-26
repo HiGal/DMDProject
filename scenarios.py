@@ -269,7 +269,7 @@ def trip_duration(data):
     cursor = conn.cursor()
 
     try:
-        task = (date)
+        task = [date]
         sql = "select avg(duration) from orders where date = ?"
         cursor.execute(sql, task)
         response = cursor.fetchall()[0]
@@ -291,7 +291,7 @@ def average_distance(data):
     cursor = conn.cursor()
 
     try:
-        task = (date)
+        task = [date]
         sql = "select avg(car_distance) from orders where date = ?"
         cursor.execute(sql, task)
         response = cursor.fetchall()[0]
