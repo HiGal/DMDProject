@@ -41,9 +41,9 @@ def generate_time():
         a1 = str(a1)
     b = random.randint(10, 30)
     b1 = str(b + random.randint(0, 25))
-    timestart = a + ":" + str(b)
-    timefinish = a1 + ":" + b1
-    return timestart, timefinish
+    time_start = a + ":" + str(b)
+    time_finish = a1 + ":" + b1
+    return time_start, time_finish
 
 
 def fill_customer_table(conn):
@@ -70,8 +70,7 @@ def fill_customer_table(conn):
         # print(task)
         param = "customers(username, email, cardnumber, fullname, phone_number, zip, address)"
         number = "(?,?,?,?,?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -105,8 +104,7 @@ def fill_orders_table(conn):
                 num = num + 1
                 param = "orders(date, time, duration, order_distance, status, cost, starting_point, destination, car_distance, username,car_id )"
                 number = "(?,?,?,?,?,?,?,?,?,?,?)"
-                if insert_into_table(conn, task, param, number) == -1:
-                    raise RuntimeError('Error while filling table raised')
+                insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -123,8 +121,7 @@ def fill_transactions_table(conn):
         if insert_into_table(conn, task, param, number) == -1:
             return -1
         if random.randint(0, 4) == 1:
-            if insert_into_table(conn, task, param, number) == -1:
-                raise RuntimeError('Error while filling table raised')
+            insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -143,8 +140,7 @@ def fill_plugs_table(conn):
         # print(task)
         param = "charging_plugs(shape_plug, size_plug)"
         number = "(?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -163,8 +159,7 @@ def fill_providers_table(conn):
         param = "provider(address, phone_number, name_company)"
         number = "(?,?,?)"
         company.append(i + 1)
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -182,8 +177,7 @@ def fill_parts_table(conn):
         parts.append(i + 1)
         param = "parts(type_of_detail,cost)"
         number = "(?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -202,8 +196,7 @@ def fill_workshops_table(conn):
         workshops.append(i + 1)
         param = "workshop(availability_of_timing, location)"
         number = "(?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -224,8 +217,7 @@ def fill_workshops_have_part(conn):
             # print(task)
             param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
             number = "(?,?,?,?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                raise RuntimeError('Error while filling table raised')
+            insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -236,15 +228,14 @@ def fill_charging_stations(conn):
     :return: 0: table has filled, otherwise -1
     """
     for i in range(5):
-        GPS = fake.local_latlng(country_code="US", coords_only=True)
+        gps = fake.local_latlng(country_code="US", coords_only=True)
         task = (random.randint(5, 15),
-                GPS[0] + " " + GPS[1])
+                gps[0] + " " + gps[1])
         stations.append(i + 1)
         # print(task)
         param = "charging_station(time_of_charging, GPS_location)"
         number = "(?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -261,8 +252,7 @@ def fill_stations_have_plugs(conn):
             # print(task)
             param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
             number = "(?,?,?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                raise RuntimeError('Error while filling table raised')
+            insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -289,8 +279,7 @@ def fill_charge_car_history(conn):
                 # print(task)
                 param = "charge_car_history(cost, date, start_time, finish_time, car_id, UID)"
                 number = "(?,?,?,?,?,?)"
-                if insert_into_table(conn, task, param, number) == -1:
-                    raise RuntimeError('Error while filling table raised')
+                insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -313,8 +302,7 @@ def fill_models_table(conn):
         # print(task)
         param = "models(plug_id, name, type, service_class) "
         number = "(?,?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -324,7 +312,7 @@ def fill_cars_table(conn):
     :param conn: Database connection
     :return: 0: table has filled, otherwise -1
     """
-    #create parameters of cars
+    # create parameters of cars
     for i in range(10):
         gps_location = fake.local_latlng(country_code="US", coords_only=True)
         year = random.randint(1990, 2012)
@@ -340,8 +328,7 @@ def fill_cars_table(conn):
         # print(task)
         param = "cars(gps_location, year, colour, reg_num, charge, available, model_id)"
         number = "(?,?,?,?,?,?,?)"
-        if insert_into_table(conn, task, param, number) == -1:
-            raise RuntimeError('Error while filling table raised')
+        insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -366,8 +353,7 @@ def fill_part_order_history(conn):
                 # print(task)
                 param = "part_order_history(date,amount,cost,part_id, WID, CID)"
                 number = "(?,?,?,?,?,?)"
-                if insert_into_table(conn, task, param, number) == -1:
-                    raise RuntimeError('Error while filling table raised')
+                insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -381,15 +367,14 @@ def fill_repair_car_table(conn):
         for j in range(1, 30):
             date = datetime.date(2018, k, j)
             for i in range(10):
-                WID = workshops[random.randint(0, len(workshops) - 1)]
+                wid = workshops[random.randint(0, len(workshops) - 1)]
                 car_id = cars[random.randint(0, len(cars) - 1)]
                 cost = random.randint(150, 450)
-                task = (WID, car_id, date, cost, "closed")
+                task = (wid, car_id, date, cost, "closed")
                 print(task)
                 param = "repair_car(WID, car_id, date, cost, progress_status)"
                 number = "(?,?,?,?,?)"
-                if insert_into_table(conn, task, param, number) == -1:
-                    raise RuntimeError('Error while filling table raised')
+                insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -405,8 +390,7 @@ def fill_fit_table(conn):
             # print(task)
             param = "fit(part_id, model_id)"
             number = "(?, ?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                raise RuntimeError('Error while filling table raised')
+            insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -421,8 +405,7 @@ def fill_providers_have_parts(conn):
             task = (pro, par)
             param = "providers_have_parts(CID, part_id)"
             number = "(?, ?)"
-            if insert_into_table(conn, task, param, number) == -1:
-                raise RuntimeError('Error while filling table raised')
+            insert_into_table(conn, task, param, number)
     return 0
 
 
@@ -450,7 +433,7 @@ def fill_db_with_data(conn):
         fill_fit_table(conn)
         fill_providers_have_parts(conn)
         return 0
-    except RuntimeError:
+    except sqlite3.Error:
         logging.info("Filling database failed")
         drop_table(conn, "to_drop.sql")
         logging.info("Drop all tables")

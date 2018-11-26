@@ -73,6 +73,6 @@ def insert_into_table(conn, task, param, number):
         cursor.execute(sql, task)
         conn.commit()
         return 0
-    except Exception:
+    except sqlite3.DatabaseError:
         logging.info("Error while inserting into customers occurs")
     return -1
