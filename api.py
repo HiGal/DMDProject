@@ -140,7 +140,21 @@ class ExpensiveCar(Resource):
 
     @rest_api.doc("6th scenario")
     def get(self):
-        response = top_locations_search()
+        top_locations = top_locations_search()
+        response = {
+            "Morning": {
+                "Start": top_locations[0][0],
+                "Finish": top_locations[0][1],
+            },
+            "Afternoon": {
+                "Start": top_locations[1][0],
+                "Finish": top_locations[1][1],
+            },
+            "Evening": {
+                "Start": top_locations[2][0],
+                "Finish": top_locations[2][1],
+            },
+        }
         return jsonify(response)
 
 @rest_api.route("/stat_least_amount_cars")
@@ -148,7 +162,8 @@ class ExpensiveCar(Resource):
 
     @rest_api.doc("7th scenario for deleting least frequently used cars")
     def get(self):
-        response = stat_least_amount_cars()
+        cars = stat_least_amount_cars()
+        response = {"car_id": cars}
         return jsonify(response)
 
 @rest_api.route('/stats_of_chst_utilization')
@@ -158,7 +173,8 @@ class ChStUtilization(Resource):
     @rest_api.doc('8th scenario for charging station utilization by user')
     def post(self):
         data = request.get_json()
-        response = times_using_ch_station(data)
+        cars_id = times_using_ch_station(data)
+        response = {"cars_id": cars_id}
         return jsonify(response)
 
 

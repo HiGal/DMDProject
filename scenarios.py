@@ -31,6 +31,10 @@ def find_car(data):
     return "Error while searching was occured"
 
 def stat_least_amount_cars():
+    """
+    Method that search for least frequently used cars (10 % of cars in company)
+    :return: list of cars id
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     try:
@@ -43,8 +47,7 @@ def stat_least_amount_cars():
 
         for car in cars:
             cars_id.append(car[0])
-        response = {"cars_id": cars_id}
-        return response
+        return cars_id
     except Exception:
         logging.info("Error")
     return "Error while searching was occured"
@@ -91,6 +94,10 @@ def stat_of_busy_cars(data):
     return "Error while searching was occured"
 
 def top_locations_search():
+    """
+    Method that search top 3 pick-up and destination locations
+    :return: list of tuples: morning start and finish point, afternoon start and finish point, evening start and finish point
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
 
@@ -132,21 +139,11 @@ def top_locations_search():
 
         close_connection(conn)
 
-        response = {
-            "Morning": {
-                "Start": top_morning_start_point,
-                "Finish": top_morning_finish_point,
-            },
-            "Afternoon": {
-                "Start": top_afternoon_start_point,
-                "Finish": top_afternoon_finish_point,
-            },
-            "Evening": {
-                "Start": top_evening_start_point,
-                "Finish": top_evening_finish_point,
-            },
-        }
-        return response
+        return (
+            (top_morning_start_point,top_morning_finish_point),
+            (top_afternoon_start_point, top_afternoon_finish_point),
+            (top_evening_start_point, top_evening_finish_point),
+        )
     except Exception:
         logging.info("Error")
     return "Error while searching was occured"
