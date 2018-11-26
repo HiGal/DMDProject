@@ -170,27 +170,27 @@ def efficiency_ch_stations(data):
         st_time = ''
         end_time = ''
         if i < 9:
-            task = (st_time, end_time, date)
             st_time = '0{}:00'.format(i)
             end_time = '0{}:00'.format(i + 1)
+            task = (st_time, end_time, date)
             sql = '''SELECT UID,count(charge_car_id)
                      FROM charge_car_history where start_time >= ?  and start_time< ?
                      and date=?
                      group by UID;
                   '''
         elif i == 9:
-            task = (date)
             st_time = '0{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
+            task = (st_time,end_time,date)
             sql = '''SELECT UID,count(charge_car_id)
-                     FROM charge_car_history where start_time>='09:00' and start_time<'10:00'
+                     FROM charge_car_history where start_time>=? and start_time<?
                      and date=?
                      group by UID;
                   '''
         else:
-            task = (st_time, end_time, date)
             st_time = '{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
+            task = (st_time, end_time, date)
             sql = '''SELECT UID,count(charge_car_id)
                      FROM charge_car_history where start_time >= ? and start_time<?
                      and date=?
@@ -310,7 +310,7 @@ def times_using_ch_station(data):
     """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
-    task = (data['start_date'])
+    task = (data['start_date'],)
     sql = '''select count(car_id) as charging_times,username
              from(select charge_car_history.date, date(?,'+1 month') as end_period,orders.car_id,username
              from charge_car_history,orders
