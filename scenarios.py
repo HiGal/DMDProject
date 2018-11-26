@@ -1,3 +1,5 @@
+import sqlite3
+
 from db_management import create_connection, close_connection
 from collections import defaultdict
 import logging
@@ -16,18 +18,19 @@ def find_car(data):
     cursor = conn.cursor()
 
     try:
+        task = (data['date'], data['colour'], data['username'], '%' + data['reg_num'] + '%')
         sql = '''SELECT cars.car_id,colour,reg_num 
         from cars,orders 
-        where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
-        AND username = '{}' AND reg_num LIKE '%{}%';''' \
-        .format(data['date'], data['colour'], data['username'], data['reg_num'])
-        cursor.execute(sql)
+        where cars.car_id=orders.car_id and  date = ? AND colour = ? 
+        AND username = ? AND reg_num LIKE ?;'''
+        cursor.execute(sql, task)
         response = cursor.fetchall()
         close_connection(conn)
         return response
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def stat_least_amount_cars():
     """
@@ -37,7 +40,7 @@ def stat_least_amount_cars():
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     try:
-        cars_id =[]
+        cars_id = []
         least_car_id = '''SELECT car_id FROM orders GROUP BY (car_id) 
         ORDER BY count(*) LIMIT (SELECT DISTINCT count(car_id)/10 FROM cars)'''
         cursor.execute(least_car_id)
@@ -47,9 +50,10 @@ def stat_least_amount_cars():
         for car in cars:
             cars_id.append(car[0])
         return cars_id
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def stat_of_busy_cars(data):
     """
@@ -61,36 +65,38 @@ def stat_of_busy_cars(data):
     date = data['date']
 
     try:
+        task = (date, date)
         sql_cnt_cars = '''SELECT count(DISTINCT cars.car_id)
                  from cars
               '''
-        morning_load = '''SELECT DISTINCT car_id,date, date('{}','+7 day') as date_end
+        morning_load = '''SELECT DISTINCT car_id,date, date(?,'+7 day') as date_end
                           FROM orders where time >='07:00' and time <= '10:00' 
-                          AND date>='{}' AND date <= date_end
-                       '''.format(date, date)
+                          AND date>=? AND date <= date_end
+                       '''
         afternoon_load = '''
-                          SELECT DISTINCT car_id, date, date('{}','+7 day') as date_end
+                          SELECT DISTINCT car_id, date, date(?,'+7 day') as date_end
                           FROM orders where time >='12:00' and time <= '14:00' 
-                          AND date>='{}' AND date <= date_end
-                         '''.format(date, date)
+                          AND date>=? AND date <= date_end
+                         '''
         evening_load = '''
-                          SELECT DISTINCT car_id, date, date('{}','+7 day') as date_end
+                          SELECT DISTINCT car_id, date, date(?,'+7 day') as date_end
                           FROM orders where time >='17:00' and time <= '19:00' 
-                          AND date='{}' AND date <= date_end
-                       '''.format(date, date)
+                          AND date=? AND date <= date_end
+                       '''
         cursor.execute(sql_cnt_cars)
         close_connection(conn)
         cnt = cursor.fetchall()[0][0] * 7
-        morning_load = len(cursor.execute(morning_load).fetchall()) / cnt * 100
-        afternoon_load = len(cursor.execute(afternoon_load).fetchall()) / cnt * 100
-        evening_load = len(cursor.execute(evening_load).fetchall()) / cnt * 100
+        morning_load = len(cursor.execute(morning_load, task).fetchall()) / cnt * 100
+        afternoon_load = len(cursor.execute(afternoon_load, task).fetchall()) / cnt * 100
+        evening_load = len(cursor.execute(evening_load, task).fetchall()) / cnt * 100
         response = {'Morning': morning_load,
                     'Afternoon': afternoon_load,
                     'Evening': evening_load}
         return response
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def top_locations_search():
     """
@@ -139,13 +145,14 @@ def top_locations_search():
         close_connection(conn)
 
         return (
-            (top_morning_start_point,top_morning_finish_point),
+            (top_morning_start_point, top_morning_finish_point),
             (top_afternoon_start_point, top_afternoon_finish_point),
             (top_evening_start_point, top_evening_finish_point),
         )
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "Error while searching was occured"
+
 
 def efficiency_ch_stations(data):
     """
@@ -161,30 +168,33 @@ def efficiency_ch_stations(data):
         st_time = ''
         end_time = ''
         if i < 9:
+            task = (st_time, end_time, date)
             st_time = '0{}:00'.format(i)
             end_time = '0{}:00'.format(i + 1)
             sql = '''SELECT UID,count(charge_car_id)
-                     FROM charge_car_history where start_time >= '{}'  and start_time< '{}'
-                     and date='{}'
+                     FROM charge_car_history where start_time >= ?  and start_time< ?
+                     and date=?
                      group by UID;
-                  '''.format(st_time, end_time, date)
+                  '''
         elif i == 9:
+            task = (date)
             st_time = '0{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
             sql = '''SELECT UID,count(charge_car_id)
                      FROM charge_car_history where start_time>='09:00' and start_time<'10:00'
-                     and date='{}'
+                     and date=?
                      group by UID;
-                  '''.format(date)
+                  '''
         else:
+            task = (st_time, end_time, date)
             st_time = '{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
             sql = '''SELECT UID,count(charge_car_id)
-                     FROM charge_car_history where start_time >= '{}' and start_time<'{}' 
-                     and date='{}'
+                     FROM charge_car_history where start_time >= ? and start_time<?
+                     and date=?
                      group by UID;
-                  '''.format(st_time, end_time, date)
-        cursor.execute(sql)
+                  '''
+        cursor.execute(sql, task)
         data = cursor.fetchall()
 
         for value in data:
@@ -229,17 +239,18 @@ def search_duplicates(data):
     # date_month_ago = (datetime.datetime.now() - datetime.timedelta(30)).date()
 
     try:
+        task = (username, date_month_ago)
         sql = '''SELECT b.date, b.cost
                   FROM (select order_id from 
                   (SELECT order_id, COUNT(*) FROM transactions GROUP BY order_id HAVING COUNT(*) > 1))as a
                   inner join
-                   (select order_id, date, cost from orders where username = '{}' and date > '{}') as b 
-                   on a.order_id = b.order_id;'''.format(username, date_month_ago)
-        cursor.execute(sql)
+                   (select order_id, date, cost from orders where username = ? and date > ?) as b 
+                   on a.order_id = b.order_id;'''
+        cursor.execute(sql, task)
         response = cursor.fetchall()
         close_connection(conn)
         return response
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "No such username"
 
@@ -255,12 +266,13 @@ def trip_duration(data):
     cursor = conn.cursor()
 
     try:
-        sql = "select avg(duration) from orders where date = '{}'".format(date)
-        cursor.execute(sql)
+        task = (date)
+        sql = "select avg(duration) from orders where date = ?"
+        cursor.execute(sql, task)
         response = cursor.fetchall()[0]
         close_connection(conn)
         return response
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "There is no orders for such period"
 
@@ -276,12 +288,13 @@ def average_distance(data):
     cursor = conn.cursor()
 
     try:
-        sql = "select avg(car_distance) from orders where date = '{}'".format(date)
-        cursor.execute(sql)
+        task = (date)
+        sql = "select avg(car_distance) from orders where date = ?"
+        cursor.execute(sql, task)
         response = cursor.fetchall()[0]
         close_connection(conn)
         return response
-    except Exception:
+    except sqlite3.Error:
         logging.info("Error")
     return "There is no orders for such period"
 
@@ -294,13 +307,14 @@ def times_using_ch_station(data):
     """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
+    task = (data['start_date'])
     sql = '''select count(car_id) as charging_times,username
-             from(select charge_car_history.date, date('{}','+1 month') as end_period,orders.car_id,username
+             from(select charge_car_history.date, date(?,'+1 month') as end_period,orders.car_id,username
              from charge_car_history,orders
              where orders.car_id = charge_car_history.car_id and charge_car_history.date = orders.date
              and start_time between orders.time and time(orders.time,'+'|| cast(orders.duration as text)||' minutes'))
-             group by username;'''.format(data['start_date'])
-    cursor.execute(sql)
+             group by username;'''
+    cursor.execute(sql, task)
     response = {}
     for info in cursor.fetchall():
         response[info[1]] = info[0]
