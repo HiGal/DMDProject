@@ -6,6 +6,7 @@ from db_management import *
 fake = faker.Faker("en_US")
 logging.getLogger().setLevel(logging.INFO)
 
+# Lists for storing data
 users = []
 plugs = []
 cars = []
@@ -15,6 +16,7 @@ parts = []
 workshops = []
 company = []
 orders = []
+# Lists for generation data
 colors = ["red", "yellow", "green", "blue", "black", "white"]
 reg_name = ["AN", "ER", "TC", "NZ", "FG", "AZ", "MG"]
 type_car = ["Hatchback", "Sedan", "Crossover", "Coupe", "Convertible"]
@@ -23,6 +25,10 @@ name_car = ["Chevy Sonic", "Ford Fiesta", "Honda Fit", "Mitsubishi Mirage", "Kia
 
 
 def generate_time():
+    """
+    Method to generate random time
+    :return: Two variables of type date: star rime of order and time of destination
+    """
     a = random.randint(0, 22)
     a1 = a + 1
     if a < 10:
@@ -41,6 +47,11 @@ def generate_time():
 
 
 def fill_customer_table(conn):
+    """
+    Method for filling the customer table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     # fill customer table
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
@@ -65,6 +76,11 @@ def fill_customer_table(conn):
 
 
 def fill_orders_table(conn):
+    """
+    Method for filling orders table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     num = 0
     for k in range(8, 11):
         for j in range(1, 30):
@@ -95,6 +111,11 @@ def fill_orders_table(conn):
 
 
 def fill_transactions_table(conn):
+    """
+    Method for filling the table of payments
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for ord in orders:
         task = (ord[0], ord[1], "closed")
         param = "transactions(order_id, date, status)"
@@ -108,6 +129,11 @@ def fill_transactions_table(conn):
 
 
 def fill_plugs_table(conn):
+    """
+    Method for filling plugs table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     # create parameters for plugs
     for i in range(5):
         shape_of_plugs = random.randint(100, 999)
@@ -123,6 +149,11 @@ def fill_plugs_table(conn):
 
 
 def fill_providers_table(conn):
+    """
+    Method for filling providers table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for i in range(5):
         address = str(fake.address()).replace('\n', '')
         phone_number = random.randint(1000000000000000, 9999999999999999)
@@ -138,6 +169,11 @@ def fill_providers_table(conn):
 
 
 def fill_parts_table(conn):
+    """
+    Method for filling parts table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for i in range(5):
         type_of_detail = random.randint(100, 999)
         cost = random.randint(100, 1200)
@@ -152,6 +188,11 @@ def fill_parts_table(conn):
 
 
 def fill_workshops_table(conn):
+    """
+    Method for filling workshop table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for i in range(5):
         availability_of_timing = random.randint(0, 8)
         location = fake.local_latlng(country_code="US", coords_only=True)
@@ -167,6 +208,11 @@ def fill_workshops_table(conn):
 
 
 def fill_workshops_have_part(conn):
+    """
+    Method for filling table of relation: workshops have parts
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for wshop in workshops:
         for par in parts:
             amount = random.randint(3, 25)
@@ -184,6 +230,11 @@ def fill_workshops_have_part(conn):
 
 
 def fill_charging_stations(conn):
+    """
+    Method for filling the charging stations table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for i in range(5):
         GPS = fake.local_latlng(country_code="US", coords_only=True)
         task = (random.randint(5, 15),
@@ -198,6 +249,11 @@ def fill_charging_stations(conn):
 
 
 def fill_stations_have_plugs(conn):
+    """
+    Method for filling the table of relation: charging stations have plugs
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for j in stations:
         for i in plugs:
             amount_of_available_slots = random.randint(3, 10)
@@ -211,6 +267,11 @@ def fill_stations_have_plugs(conn):
 
 
 def fill_charge_car_history(conn):
+    """
+    Method for filling the charge car history table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for k in range(8, 11):
         for j in range(1, 30):
             date = datetime.date(2018, k, j)
@@ -234,6 +295,11 @@ def fill_charge_car_history(conn):
 
 
 def fill_models_table(conn):
+    """
+    Method for filling the models table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     # create parameters of models
     for i in range(5):
         type = type_car[random.randint(0, len(type_car) - 1)]
@@ -253,7 +319,12 @@ def fill_models_table(conn):
 
 
 def fill_cars_table(conn):
-    # fill car table
+    """
+    Method for filling the cars table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
+    #create parameters of cars
     for i in range(10):
         gps_location = fake.local_latlng(country_code="US", coords_only=True)
         year = random.randint(1990, 2012)
@@ -275,6 +346,11 @@ def fill_cars_table(conn):
 
 
 def fill_part_order_history(conn):
+    """
+    Method for filling part order history
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for i in range(8, 11):
         for j in range(1, 30):
             date = datetime.date(2018, i, j)
@@ -296,6 +372,11 @@ def fill_part_order_history(conn):
 
 
 def fill_repair_car_table(conn):
+    """
+    Method for filling the reparation car table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for k in range(8, 11):
         for j in range(1, 30):
             date = datetime.date(2018, k, j)
@@ -313,6 +394,11 @@ def fill_repair_car_table(conn):
 
 
 def fill_fit_table(conn):
+    """
+    Method for filling the fit parts to models table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for mod in models:
         for par in parts:
             task = (par, mod)
@@ -325,6 +411,11 @@ def fill_fit_table(conn):
 
 
 def fill_providers_have_parts(conn):
+    """
+    Method for filling relation: providers have parts table
+    :param conn: Database connection
+    :return: 0: table has filled, otherwise -1
+    """
     for pro in company:
         for par in parts:
             task = (pro, par)
@@ -336,6 +427,10 @@ def fill_providers_have_parts(conn):
 
 
 def fill_db_with_data(conn):
+    """
+        Method for filling database of the system
+        :param conn: Database connection
+        """
     try:
         fill_plugs_table(conn)
         fill_charging_stations(conn)
