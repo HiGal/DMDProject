@@ -24,8 +24,8 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
-    #create_table(conn, "tables_to_create.sql")
-    #fill_db_with_data(conn)
+    create_table(conn, "tables_to_create.sql")
+    fill_db_with_data(conn)
     logging.info("Try to close connection to database")
     close_connection(conn)
 

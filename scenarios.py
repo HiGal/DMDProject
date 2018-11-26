@@ -310,7 +310,7 @@ def times_using_ch_station(data):
     """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
-    task = (data['start_date'],)
+    task = (data['start_date'])
     sql = '''select count(car_id) as charging_times,username
              from(select charge_car_history.date, date(?,'+1 month') as end_period,orders.car_id,username
              from charge_car_history,orders
