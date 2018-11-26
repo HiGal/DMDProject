@@ -21,7 +21,6 @@ def find_car(data):
         where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
         AND username = '{}' AND reg_num LIKE '%{}%';''' \
         .format(data['date'], data['colour'], data['username'], data['reg_num'])
-
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
