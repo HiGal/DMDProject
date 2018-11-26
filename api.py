@@ -19,7 +19,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-# @api.before_first_request
+@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -162,6 +162,13 @@ class ExpensiveCar(Resource):
     def get(self):
         return jsonify(most_expensive_car())
 
+@rest_api.route("/top_locations_search")
+class ExpensiveCar(Resource):
+
+    @rest_api.doc("6th scenario")
+    def get(self):
+        response = top_locations_search()
+        return jsonify(response)
 
 if __name__ == '__main__':
     api.run()

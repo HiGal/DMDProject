@@ -72,16 +72,69 @@ def stat_of_busy_cars(data):
         logging.info("Error")
     return "Error while searching was occured"
 
-
-def popular_locations(data):
+def top_locations_search():
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
+
     try:
-        pass
+        # The number of locations
+        start = '''SELECT count(orders.starting_point) FROM orders'''
+        finish = '''SELECT count(orders.destination) FROM orders '''
+
+        morning_start_load = '''SELECT starting_point FROM orders WHERE time >= '07:00' and time <= '10:00' 
+        GROUP BY starting_point ORDER BY count(starting_point) DESC LIMIT 3 '''
+
+        morning_finish_load = '''SELECT destination FROM orders WHERE time >= '07:00' and time <= '10:00'
+         GROUP BY destination ORDER BY count(destination) DESC LIMIT 3'''
+
+        afternoon_start_load = '''SELECT starting_point FROM orders WHERE time >= '12:00' and time <= '14:00' 
+                GROUP BY starting_point ORDER BY count(starting_point) DESC LIMIT 3 '''
+
+        afternoon_finish_load = '''SELECT destination FROM orders WHERE time >= '12:00' and time <= '14:00' 
+                        GROUP BY destination ORDER BY count(destination) DESC LIMIT 3 '''
+
+        evening_start_load = '''SELECT starting_point FROM orders WHERE time >= '17:00' and time <= '19:00' 
+                        GROUP BY starting_point ORDER BY count(starting_point) DESC LIMIT 3 '''
+
+        evening_finish_load = '''SELECT destination FROM orders WHERE time >= '17:00' and time <= '19:00' 
+                                GROUP BY destination ORDER BY count(destination) DESC LIMIT 3 '''
+
+        def fetch_load(query):
+            cursor.execute(query)
+            return [x[0] for x in cursor.fetchall()]
+
+        top_morning_start_point = fetch_load(morning_start_load)
+
+        top_morning_finish_point = fetch_load(morning_finish_load)
+
+        top_afternoon_start_point = fetch_load(afternoon_start_load)
+
+        top_afternoon_finish_point = fetch_load(afternoon_finish_load)
+
+        top_evening_start_point = fetch_load(evening_start_load)
+
+        top_evening_finish_point = fetch_load(evening_finish_load)
+
+        close_connection(conn)
+
+        response = {
+            "Morning": {
+                "Start": top_morning_start_point,
+                "Finish": top_morning_finish_point,
+            },
+            "Afternoon": {
+                "Start": top_afternoon_start_point,
+                "Finish": top_afternoon_finish_point,
+            },
+            "Evening": {
+                "Start": top_evening_start_point,
+                "Finish": top_evening_finish_point,
+            },
+        }
+        return response
     except Exception:
         logging.info("Error")
     return "Error while searching was occured"
-
 
 def efficiency_ch_stations(data):
     """
