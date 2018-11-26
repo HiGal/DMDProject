@@ -4,6 +4,8 @@ import datetime
 from db_management import *
 
 fake = faker.Faker("en_US")
+logging.getLogger().setLevel(logging.INFO)
+
 # Lists for storing data
 users = []
 plugs = []
@@ -69,7 +71,7 @@ def fill_customer_table(conn):
         param = "customers(username, email, cardnumber, fullname, phone_number, zip, address)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -104,7 +106,7 @@ def fill_orders_table(conn):
                 param = "orders(date, time, duration, order_distance, status, cost, starting_point, destination, car_distance, username,car_id )"
                 number = "(?,?,?,?,?,?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
-                    return -1
+                    raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -120,9 +122,9 @@ def fill_transactions_table(conn):
         number = "(?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
             return -1
-        if (random.randint(0, 4) == 1):
+        if random.randint(0, 4) == 1:
             if insert_into_table(conn, task, param, number) == -1:
-                return -1
+                raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -142,7 +144,7 @@ def fill_plugs_table(conn):
         param = "charging_plugs(shape_plug, size_plug)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -162,7 +164,7 @@ def fill_providers_table(conn):
         number = "(?,?,?)"
         company.append(i + 1)
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -181,7 +183,7 @@ def fill_parts_table(conn):
         param = "parts(type_of_detail,cost)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -201,7 +203,7 @@ def fill_workshops_table(conn):
         param = "workshop(availability_of_timing, location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -223,7 +225,7 @@ def fill_workshops_have_part(conn):
             param = "workshop_have_parts(part_id, WID, amount, amount_week_ago)"
             number = "(?,?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
-                return -1
+                raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -242,7 +244,7 @@ def fill_charging_stations(conn):
         param = "charging_station(time_of_charging, GPS_location)"
         number = "(?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -260,7 +262,7 @@ def fill_stations_have_plugs(conn):
             param = "stations_have_plugs(UID, plug_id,amount_of_available_slots)"
             number = "(?,?,?)"
             if insert_into_table(conn, task, param, number) == -1:
-                return -1
+                raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -288,7 +290,7 @@ def fill_charge_car_history(conn):
                 param = "charge_car_history(cost, date, start_time, finish_time, car_id, UID)"
                 number = "(?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
-                    return -1
+                    raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -312,7 +314,7 @@ def fill_models_table(conn):
         param = "models(plug_id, name, type, service_class) "
         number = "(?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -339,7 +341,7 @@ def fill_cars_table(conn):
         param = "cars(gps_location, year, colour, reg_num, charge, available, model_id)"
         number = "(?,?,?,?,?,?,?)"
         if insert_into_table(conn, task, param, number) == -1:
-            return -1
+            raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -365,7 +367,7 @@ def fill_part_order_history(conn):
                 param = "part_order_history(date,amount,cost,part_id, WID, CID)"
                 number = "(?,?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
-                    return -1
+                    raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -387,7 +389,7 @@ def fill_repair_car_table(conn):
                 param = "repair_car(WID, car_id, date, cost, progress_status)"
                 number = "(?,?,?,?,?)"
                 if insert_into_table(conn, task, param, number) == -1:
-                    return -1
+                    raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -404,7 +406,7 @@ def fill_fit_table(conn):
             param = "fit(part_id, model_id)"
             number = "(?, ?)"
             if insert_into_table(conn, task, param, number) == -1:
-                return -1
+                raise RuntimeError('Error while filling table raised')
     return 0
 
 
@@ -420,29 +422,36 @@ def fill_providers_have_parts(conn):
             param = "providers_have_parts(CID, part_id)"
             number = "(?, ?)"
             if insert_into_table(conn, task, param, number) == -1:
-                return -1
+                raise RuntimeError('Error while filling table raised')
     return 0
 
 
 def fill_db_with_data(conn):
     """
-    Method for filling database of the system
-    :param conn: Database connection
-    """
-    fill_plugs_table(conn)
-    fill_charging_stations(conn)
-    fill_stations_have_plugs(conn)
-    fill_models_table(conn)
-    fill_cars_table(conn)
-    fill_charge_car_history(conn)
-    fill_customer_table(conn)
-    fill_orders_table(conn)
-    fill_transactions_table(conn)
-    fill_parts_table(conn)
-    fill_providers_table(conn)
-    fill_workshops_table(conn)
-    fill_workshops_have_part(conn)
-    fill_part_order_history(conn)
-    fill_repair_car_table(conn)
-    fill_fit_table(conn)
-    fill_providers_have_parts(conn)
+        Method for filling database of the system
+        :param conn: Database connection
+        """
+    try:
+        fill_plugs_table(conn)
+        fill_charging_stations(conn)
+        fill_stations_have_plugs(conn)
+        fill_models_table(conn)
+        fill_cars_table(conn)
+        fill_charge_car_history(conn)
+        fill_customer_table(conn)
+        fill_orders_table(conn)
+        fill_transactions_table(conn)
+        fill_parts_table(conn)
+        fill_providers_table(conn)
+        fill_workshops_table(conn)
+        fill_workshops_have_part(conn)
+        fill_part_order_history(conn)
+        fill_repair_car_table(conn)
+        fill_fit_table(conn)
+        fill_providers_have_parts(conn)
+        return 0
+    except RuntimeError:
+        logging.info("Filling database failed")
+        drop_table(conn, "to_drop.sql")
+        logging.info("Drop all tables")
+    return -1
