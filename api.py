@@ -8,7 +8,6 @@ import ssl
 DB_FILE = 'carsharing.sqlite'
 
 ctx = ssl.create_default_context(cafile=certifi.where())
-
 fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
@@ -58,27 +57,11 @@ chst_utilization_model = rest_api.model('Statistic of charging station utilizati
 })
 
 
-@rest_api.route('/stat_util')
-class EfficiencyUtilization(Resource):
-
-    @rest_api.expect(efficiency_ch_stations_model)
-    @rest_api.doc("Second scenario")
-    def post(self):
-        data = request.get_json()
-        response = efficiency_ch_stations(data)
-        answer = defaultdict(dict)
-        for data in response.keys():
-            for list_e in response[data]:
-                answer[data][list_e[0]] = list_e[1]
-
-        return jsonify(answer)
-
-
 @rest_api.route('/find_car')
 class FindCar(Resource):
 
     @rest_api.expect(find_car_model)
-    @rest_api.doc("first scenario for finding a car")
+    @rest_api.doc("1st scenario for finding a car")
     def post(self):
         data = request.get_json()
         response = find_car(data)
@@ -92,6 +75,22 @@ class FindCar(Resource):
                              'registration_number': answer[2]}
             i += 1
         return jsonify(search_res)
+
+
+@rest_api.route('/stat_util')
+class EfficiencyUtilization(Resource):
+
+    @rest_api.expect(efficiency_ch_stations_model)
+    @rest_api.doc("2nd scenario to calculate efficiency of charging station utilization")
+    def post(self):
+        data = request.get_json()
+        response = efficiency_ch_stations(data)
+        answer = defaultdict(dict)
+        for data in response.keys():
+            for list_e in response[data]:
+                answer[data][list_e[0]] = list_e[1]
+
+        return jsonify(answer)
 
 
 @rest_api.route('/cars_load')
@@ -135,10 +134,11 @@ class SearchDuplicates(Resource):
                       'duration': response2}
         return jsonify(search_res)
 
+
 @rest_api.route("/top_locations_search")
 class ExpensiveCar(Resource):
 
-    @rest_api.doc("6th scenario")
+    @rest_api.doc("6th scenario search top 3 pick-up and destination locations")
     def get(self):
         top_locations = top_locations_search()
         response = {
@@ -157,6 +157,7 @@ class ExpensiveCar(Resource):
         }
         return jsonify(response)
 
+
 @rest_api.route("/stat_least_amount_cars")
 class ExpensiveCar(Resource):
 
@@ -165,6 +166,7 @@ class ExpensiveCar(Resource):
         cars = stat_least_amount_cars()
         response = {"car_id": cars}
         return jsonify(response)
+
 
 @rest_api.route('/stats_of_chst_utilization')
 class ChStUtilization(Resource):
@@ -192,7 +194,6 @@ class ExpensiveCar(Resource):
     @rest_api.doc("10th scenario / returns most expensive car type and it's average cost per day")
     def get(self):
         return jsonify(most_expensive_car())
-
 
 
 if __name__ == '__main__':
