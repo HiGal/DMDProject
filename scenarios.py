@@ -170,27 +170,27 @@ def efficiency_ch_stations(data):
         st_time = ''
         end_time = ''
         if i < 9:
-            task = (st_time, end_time, date)
             st_time = '0{}:00'.format(i)
             end_time = '0{}:00'.format(i + 1)
+            task = (st_time, end_time, date)
             sql = '''SELECT UID,count(charge_car_id)
                      FROM charge_car_history where start_time >= ?  and start_time< ?
                      and date=?
                      group by UID;
                   '''
         elif i == 9:
-            task = (date)
             st_time = '0{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
+            task = (st_time,end_time,date)
             sql = '''SELECT UID,count(charge_car_id)
-                     FROM charge_car_history where start_time>='09:00' and start_time<'10:00'
+                     FROM charge_car_history where start_time>=? and start_time<?
                      and date=?
                      group by UID;
                   '''
         else:
-            task = (st_time, end_time, date)
             st_time = '{}:00'.format(i)
             end_time = '{}:00'.format(i + 1)
+            task = (st_time, end_time, date)
             sql = '''SELECT UID,count(charge_car_id)
                      FROM charge_car_history where start_time >= ? and start_time<?
                      and date=?
@@ -269,7 +269,7 @@ def trip_duration(data):
     cursor = conn.cursor()
 
     try:
-        task = (date)
+        task = [date]
         sql = "select avg(duration) from orders where date = ?"
         cursor.execute(sql, task)
         response = cursor.fetchall()[0]
@@ -291,7 +291,7 @@ def average_distance(data):
     cursor = conn.cursor()
 
     try:
-        task = (date)
+        task = [date]
         sql = "select avg(car_distance) from orders where date = ?"
         cursor.execute(sql, task)
         response = cursor.fetchall()[0]

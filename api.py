@@ -1,3 +1,4 @@
+import certifi
 from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
 from scenarios import *
@@ -18,7 +19,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-@api.before_first_request
+#@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
