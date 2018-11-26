@@ -23,8 +23,8 @@ def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
     logging.info("Try to initialise tables in database")
-    create_table(conn, "tables_to_create.sql")
-    fill_db_with_data(conn)
+    # create_table(conn, "tables_to_create.sql")
+    # fill_db_with_data(conn)
     logging.info("Try to close connection to database")
     close_connection(conn)
 
@@ -59,7 +59,7 @@ chst_utilization_model = rest_api.model('Statistic of charging station utilizati
 
 
 
-@rest_api.route('/find_car')
+@rest_api.route('/a_find_car')
 class FindCar(Resource):
 
     @rest_api.expect(find_car_model)
@@ -79,7 +79,7 @@ class FindCar(Resource):
         return jsonify(search_res)
 
 
-@rest_api.route('/stat_util')
+@rest_api.route('/b_stat_util')
 class EfficiencyUtilization(Resource):
 
     @rest_api.expect(efficiency_ch_stations_model)
@@ -95,7 +95,7 @@ class EfficiencyUtilization(Resource):
         return jsonify(answer)
 
 
-@rest_api.route('/cars_load')
+@rest_api.route('/c_cars_load')
 class CarsLoad(Resource):
 
     @rest_api.expect(cars_load_model)
@@ -106,7 +106,7 @@ class CarsLoad(Resource):
         return jsonify(response)
 
 
-@rest_api.route('/search_duplicates')
+@rest_api.route('/d_search_duplicates')
 class SearchDuplicates(Resource):
 
     @rest_api.expect(searach_duplicates_model)
@@ -123,7 +123,7 @@ class SearchDuplicates(Resource):
         return jsonify(search_res)
 
 
-@rest_api.route('/trip_statistics')
+@rest_api.route('/e_trip_statistics')
 class SearchDuplicates(Resource):
 
     @rest_api.expect(trip_statistics_model)
@@ -137,7 +137,7 @@ class SearchDuplicates(Resource):
         return jsonify(search_res)
 
 
-@rest_api.route("/top_locations_search")
+@rest_api.route("/f_top_locations_search")
 class ExpensiveCar(Resource):
 
     @rest_api.doc("6th scenario search top 3 pick-up and destination locations")
@@ -160,7 +160,7 @@ class ExpensiveCar(Resource):
         return jsonify(response)
 
 
-@rest_api.route("/stat_least_amount_cars")
+@rest_api.route("/g_stat_least_amount_cars")
 class ExpensiveCar(Resource):
 
     @rest_api.doc("7th scenario for deleting least frequently used cars")
@@ -170,7 +170,7 @@ class ExpensiveCar(Resource):
         return jsonify(response)
 
 
-@rest_api.route('/stats_of_chst_utilization')
+@rest_api.route('/h_stats_of_chst_utilization')
 class ChStUtilization(Resource):
 
     @rest_api.expect(chst_utilization_model)
@@ -182,7 +182,7 @@ class ChStUtilization(Resource):
         return jsonify(response)
 
 
-@rest_api.route('/most_relevant_part')
+@rest_api.route('/i_most_relevant_part')
 class MostRelevantPart(Resource):
 
     @rest_api.doc('9th scenario / returns Workshop ID and type of most relevant detail')
@@ -190,7 +190,7 @@ class MostRelevantPart(Resource):
         return jsonify(most_relevant_part_by_workshop())
 
 
-@rest_api.route("/most_expensive_car_type")
+@rest_api.route("/k_most_expensive_car_type")
 class ExpensiveCar(Resource):
 
     @rest_api.doc("10th scenario / returns most expensive car type and it's average cost per day")
