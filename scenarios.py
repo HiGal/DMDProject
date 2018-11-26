@@ -77,9 +77,6 @@ def top_locations_search():
     cursor = conn.cursor()
 
     try:
-        # The number of locations
-        start = '''SELECT count(orders.starting_point) FROM orders'''
-        finish = '''SELECT count(orders.destination) FROM orders '''
 
         morning_start_load = '''SELECT starting_point FROM orders WHERE time >= '07:00' and time <= '10:00' 
         GROUP BY starting_point ORDER BY count(starting_point) DESC LIMIT 3 '''
