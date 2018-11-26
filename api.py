@@ -82,6 +82,8 @@ class FindCar(Resource):
     def post(self):
         data = request.get_json()
         response = find_car(data)
+        if response is None:
+            return "Not such a car"
         search_res = {}
         i = 0
         for answer in response:

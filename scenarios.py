@@ -1,12 +1,17 @@
 from db_management import create_connection, close_connection
 from collections import defaultdict
 import logging
-import datetime
 
 DB_FILE = 'carsharing.sqlite'
 
 
 def find_car(data):
+    """
+    Method that search a car for given parameters
+    :param data: json file which contains date of the order, colour and registration
+                 number  of the car and username
+    :return: list of tuples of the car id, colour, registration number
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
 
@@ -15,17 +20,22 @@ def find_car(data):
         from cars,orders 
         where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
         AND username = '{}' AND reg_num LIKE '%{}%';''' \
-            .format(data['date'], data['colour'], data['username'], data['reg_num'])
+        .format(data['date'], data['colour'], data['username'], data['reg_num'])
+
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
         return response
     except Exception:
         logging.info("Error")
-    return "Not such car"
+    return "Error while searching was occured"
 
 
 def stat_of_busy_cars(data):
+    """
+    :param data: json file which contains start date to calculate statistic
+    :return: load of cars in percentage by 1 week in different daytime periods
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     date = data['date']
@@ -60,7 +70,7 @@ def stat_of_busy_cars(data):
         return response
     except Exception:
         logging.info("Error")
-    return "There is no orders for such period"
+    return "Error while searching was occured"
 
 
 def popular_locations(data):
@@ -70,10 +80,15 @@ def popular_locations(data):
         pass
     except Exception:
         logging.info("Error")
-    return "There is no orders for such period"
+    return "Error while searching was occured"
 
 
 def efficiency_ch_stations(data):
+    """
+    Method that calculate efficiency of charging station utilization for given date
+    :param data: json file which contains date
+    :return: returns list of charging stations and how many times they were used hourly
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     date = data['date']
@@ -194,6 +209,11 @@ def average_distance(data):
 
 
 def times_using_ch_station(data):
+    """
+    Method that calculate how many times charging station was used by user
+    :param data: json file which contain start date
+    :return: how many times user used charging station in his orders
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     sql = '''select count(car_id) as charging_times,username
@@ -211,6 +231,10 @@ def times_using_ch_station(data):
 
 
 def most_relevant_part_by_workshop():
+    """
+    Method that returns the most relevant part that workshop needs
+    :return: type of detail that separate workshop needs mostly.
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     sql = '''select type_of_detail, WID
@@ -228,6 +252,10 @@ def most_relevant_part_by_workshop():
 
 
 def most_expensive_car():
+    """
+    Method that can help to decide which type of car is the most expensive
+    :return: the most expensive type of car in usage
+    """
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
     sql = '''select AVG(average_per_day) as average,type
