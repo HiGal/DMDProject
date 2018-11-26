@@ -30,6 +30,24 @@ def find_car(data):
         logging.info("Error")
     return "Error while searching was occured"
 
+def stat_least_amount_cars():
+    conn = create_connection(DB_FILE)
+    cursor = conn.cursor()
+    try:
+        cars_id =[]
+        least_car_id = '''SELECT car_id FROM orders GROUP BY (car_id) 
+        ORDER BY count(*) LIMIT (SELECT DISTINCT count(car_id)/10 FROM cars)'''
+        cursor.execute(least_car_id)
+        cars = cursor.fetchall()
+        close_connection(conn)
+
+        for car in cars:
+            cars_id.append(car[0])
+        response = {"cars_id": cars_id}
+        return response
+    except Exception:
+        logging.info("Error")
+    return "Error while searching was occured"
 
 def stat_of_busy_cars(data):
     """

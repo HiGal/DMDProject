@@ -135,6 +135,21 @@ class SearchDuplicates(Resource):
                       'duration': response2}
         return jsonify(search_res)
 
+@rest_api.route("/top_locations_search")
+class ExpensiveCar(Resource):
+
+    @rest_api.doc("6th scenario")
+    def get(self):
+        response = top_locations_search()
+        return jsonify(response)
+
+@rest_api.route("/stat_least_amount_cars")
+class ExpensiveCar(Resource):
+
+    @rest_api.doc("7th scenario for deleting least frequently used cars")
+    def get(self):
+        response = stat_least_amount_cars()
+        return jsonify(response)
 
 @rest_api.route('/stats_of_chst_utilization')
 class ChStUtilization(Resource):
@@ -162,13 +177,7 @@ class ExpensiveCar(Resource):
     def get(self):
         return jsonify(most_expensive_car())
 
-@rest_api.route("/top_locations_search")
-class ExpensiveCar(Resource):
 
-    @rest_api.doc("6th scenario")
-    def get(self):
-        response = top_locations_search()
-        return jsonify(response)
 
 if __name__ == '__main__':
     api.run()
