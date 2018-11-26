@@ -415,6 +415,7 @@ def fill_db_with_data(conn):
         :param conn: Database connection
         """
     try:
+        logging.info("Started filling the database")
         fill_plugs_table(conn)
         fill_charging_stations(conn)
         fill_stations_have_plugs(conn)
@@ -432,6 +433,7 @@ def fill_db_with_data(conn):
         fill_repair_car_table(conn)
         fill_fit_table(conn)
         fill_providers_have_parts(conn)
+        logging.info("Finished filling the database")
         return 0
     except sqlite3.Error:
         logging.info("Filling database failed")

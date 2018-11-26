@@ -248,6 +248,7 @@ def search_duplicates(data):
                   inner join
                    (select order_id, date, cost from orders where username = ? and date > ?) as b 
                    on a.order_id = b.order_id;'''
+        print("THERE")
         cursor.execute(sql, task)
         response = cursor.fetchall()
         close_connection(conn)
