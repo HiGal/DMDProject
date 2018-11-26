@@ -56,6 +56,8 @@ chst_utilization_model = rest_api.model('Statistic of charging station utilizati
 })
 
 
+
+
 @rest_api.route('/find_car')
 class FindCar(Resource):
 
@@ -107,7 +109,7 @@ class CarsLoad(Resource):
 class SearchDuplicates(Resource):
 
     @rest_api.expect(searach_duplicates_model)
-    @rest_api.doc("4nd scenario for searching duplicates of user's orders")
+    @rest_api.doc("4th scenario for searching duplicates of user's orders")
     def post(self):
         data = request.get_json()
         response = search_duplicates(data)

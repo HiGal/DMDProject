@@ -84,7 +84,6 @@ def stat_of_busy_cars(data):
                           AND date=? AND date <= date_end
                        '''
         cursor.execute(sql_cnt_cars)
-        close_connection(conn)
         cnt = cursor.fetchall()[0][0] * 7
         morning_load = len(cursor.execute(morning_load, task).fetchall()) / cnt * 100
         afternoon_load = len(cursor.execute(afternoon_load, task).fetchall()) / cnt * 100
@@ -92,10 +91,13 @@ def stat_of_busy_cars(data):
         response = {'Morning': morning_load,
                     'Afternoon': afternoon_load,
                     'Evening': evening_load}
+        close_connection(conn)
         return response
     except sqlite3.Error:
         logging.info("Error")
-    return "Error while searching was occured"
+
+    return "Error while searching was occured or doesn't found in database"
+
 
 
 def top_locations_search():
