@@ -1,3 +1,4 @@
+certifi
 Faker==1.0.0
 Flask==0.12.2
 flask-restplus==0.12.1
