@@ -1,11 +1,15 @@
 # Assignment 3
 
 ### Group BS17-02
-### Team:
+### Team
 * Madina Gafarova
 * Alexey Zhuchkov
 * Farit Galeev
-
+### Requirements 
+Run this command
+```
+pip install -r requirements.txt
+```
 ## What programming language and DBMS have we used to implement this assignment
 1. Python 3
 2. SQLite 3
