@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>DATABASE</ID>
+  <OriginalElement>2c02d0e9-2a8c-4a09-924f-882d9018b4c4</OriginalElement>
+  <nodes>
+    <node x="159.375" y="391.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.parts</node>
+    <node x="1695.975" y="690.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.stations_have_plugs</node>
+    <node x="946.375" y="668.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.repair_car</node>
+    <node x="398.375" y="380.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.provider</node>
+    <node x="0.0" y="701.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.fit</node>
+    <node x="476.5374999999999" y="146.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.models</node>
+    <node x="1484.975" y="657.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charge_car_history</node>
+    <node x="1299.475" y="347.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.customers</node>
+    <node x="494.375" y="657.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.part_order_history</node>
+    <node x="1211.0" y="602.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.orders</node>
+    <node x="177.0" y="701.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.providers_have_parts</node>
+    <node x="1574.475" y="391.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_station</node>
+    <node x="873.6624999999999" y="0.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_plugs</node>
+    <node x="45.46514047866805" y="1009.8033298647242">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.sqlite_master</node>
+    <node x="667.375" y="679.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop_have_parts</node>
+    <node x="1237.0" y="946.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.transactions</node>
+    <node x="742.625" y="391.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop</node>
+    <node x="1069.475" y="336.0">2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.cars</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.fit" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.models">
+      <point x="-39.25" y="-48.0" />
+      <point x="39.25" y="311.0" />
+      <point x="530.7874999999999" y="311.0" />
+      <point x="-54.25" y="70.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.models" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_plugs">
+      <point x="0.0" y="-70.0" />
+      <point x="585.0374999999999" y="121.0" />
+      <point x="923.9124999999999" y="121.0" />
+      <point x="-50.25" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.providers_have_parts" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.provider">
+      <point x="64.5" y="-48.0" />
+      <point x="370.5" y="582.0" />
+      <point x="455.875" y="582.0" />
+      <point x="-57.5" y="59.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.part_order_history" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.parts">
+      <point x="-51.0" y="-92.0" />
+      <point x="519.875" y="572.0" />
+      <point x="296.25" y="572.0" />
+      <point x="27.375" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.stations_have_plugs" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_station">
+      <point x="-67.5" y="-59.0" />
+      <point x="1763.475" y="582.0" />
+      <point x="1735.725" y="582.0" />
+      <point x="53.75" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.cars" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.models">
+      <point x="0.0" y="-103.0" />
+      <point x="1174.475" y="311.0" />
+      <point x="639.2874999999999" y="311.0" />
+      <point x="54.25" y="70.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.orders" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.cars">
+      <point x="-54.5" y="-147.0" />
+      <point x="1265.5" y="582.0" />
+      <point x="1174.475" y="582.0" />
+      <point x="0.0" y="103.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop_have_parts" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.parts">
+      <point x="-64.75" y="-70.0" />
+      <point x="732.125" y="562.0" />
+      <point x="351.0" y="562.0" />
+      <point x="82.125" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.part_order_history" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop">
+      <point x="51.0" y="-92.0" />
+      <point x="621.875" y="582.0" />
+      <point x="782.2916666666665" y="582.0" />
+      <point x="-79.33333333333337" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.repair_car" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop">
+      <point x="-57.5" y="-81.0" />
+      <point x="1003.875" y="582.0" />
+      <point x="940.9583333333333" y="582.0" />
+      <point x="79.33333333333326" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charge_car_history" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.cars">
+      <point x="-47.75" y="-92.0" />
+      <point x="1532.725" y="572.0" />
+      <point x="1244.475" y="572.0" />
+      <point x="70.0" y="103.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charge_car_history" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_station">
+      <point x="47.75" y="-92.0" />
+      <point x="-53.75" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.repair_car" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.cars">
+      <point x="57.5" y="-81.0" />
+      <point x="1118.875" y="582.0" />
+      <point x="1104.475" y="582.0" />
+      <point x="-70.0" y="103.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.transactions" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.orders">
+      <point x="0.0" y="-59.0" />
+      <point x="0.0" y="147.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.orders" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.customers">
+      <point x="54.5" y="-147.0" />
+      <point x="1374.5" y="582.0" />
+      <point x="1410.475" y="582.0" />
+      <point x="0.0" y="92.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop_have_parts" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.workshop">
+      <point x="64.75" y="-70.0" />
+      <point x="0.0" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.part_order_history" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.provider">
+      <point x="0.0" y="-92.0" />
+      <point x="57.5" y="59.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.fit" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.parts">
+      <point x="39.25" y="-48.0" />
+      <point x="117.75" y="582.0" />
+      <point x="186.75" y="582.0" />
+      <point x="-82.125" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.providers_have_parts" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.parts">
+      <point x="-64.5" y="-48.0" />
+      <point x="-27.375" y="48.0" />
+    </edge>
+    <edge source="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.stations_have_plugs" target="2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.charging_plugs">
+      <point x="67.5" y="-59.0" />
+      <point x="1898.475" y="121.0" />
+      <point x="1024.4125" y="121.0" />
+      <point x="50.25" y="48.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.4838872104733132" x="973.0" y="656.0" />
+  <SelectedNodes>
+    <node>2c02d0e9-2a8c-4a09-924f-882d9018b4c4.TABLE:main.sqlite_master</node>
+  </SelectedNodes>
+  <Categories>
+    <Category>Key columns</Category>
+    <Category>Columns</Category>
+  </Categories>
+</Diagram>
+
