@@ -5,6 +5,7 @@ import logging
 fake = Faker()
 
 DB_FILE = 'carsharing.sqlite'
+logging.getLogger().setLevel(logging.INFO)
 
 
 def create_connection(db_file):
@@ -15,7 +16,7 @@ def create_connection(db_file):
     """
     try:
         conn = sqlite3.connect(db_file)
-        logging.info("Successfully connected to database")
+        logging.error("Successfully connected to database")
         return conn
     except sqlite3.DatabaseError as e:
         print(e)
@@ -47,10 +48,28 @@ def create_table(conn, create_table_sql):
         print(e)
 
 
+def drop_table(conn, to_drop_file):
+    """ drop a table from the to_drop_sql statement
+    :param conn: Connection object
+    :param to_drop_file: a DROP TABLE statement
+    :return:
+    """
+    try:
+        with open(to_drop_file) as f:
+            script = f.read()
+        c = conn.cursor()
+        c.executescript(script)
+        conn.commit()
+        logging.info("Successfully flushed tables in database")
+
+    except sqlite3.DatabaseError as e:
+        print(e)
+
+
 def insert_into_table(conn, task, param, number):
     cursor = conn.cursor()
     try:
-        sql = "INSERT INTO " + param + " VALUES"+number
+        sql = "INSERT INTO " + param + " VALUES" + number
         cursor.execute(sql, task)
         conn.commit()
         return 0

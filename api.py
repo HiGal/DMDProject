@@ -2,13 +2,11 @@ from flask import Flask, jsonify, request
 from flask_restplus import Api, Resource, fields
 from scenarios import *
 from utils import *
-import certifi
 import ssl
 
 DB_FILE = 'carsharing.sqlite'
 
 ctx = ssl.create_default_context(cafile=certifi.where())
-
 fake = Faker()
 api = Flask(__name__)
 rest_api = Api(api)
@@ -19,7 +17,7 @@ api.config.SWAGGER_UI_REQUEST_DURATION = True
 test = rest_api.model('Test', {'condition': fields.String("Condition...")})
 
 
-#@api.before_first_request
+@api.before_first_request
 def init_db():
     logging.info("Try to connect to database")
     conn = create_connection(DB_FILE)
@@ -58,20 +56,6 @@ chst_utilization_model = rest_api.model('Statistic of charging station utilizati
 })
 
 
-@rest_api.route('/stat_util')
-class EfficiencyUtilization(Resource):
-
-    @rest_api.expect(efficiency_ch_stations_model)
-    @rest_api.doc("2nd scenario for calculating efficiency of charging station utilization for given date ")
-    def post(self):
-        data = request.get_json()
-        response = efficiency_ch_stations(data)
-        answer = defaultdict(dict)
-        for data in response.keys():
-            for list_e in response[data]:
-                answer[data][list_e[0]] = list_e[1]
-
-        return jsonify(answer)
 
 
 @rest_api.route('/find_car')
@@ -92,6 +76,22 @@ class FindCar(Resource):
                              'registration_number': answer[2]}
             i += 1
         return jsonify(search_res)
+
+
+@rest_api.route('/stat_util')
+class EfficiencyUtilization(Resource):
+
+    @rest_api.expect(efficiency_ch_stations_model)
+    @rest_api.doc("2nd scenario to calculate efficiency of charging station utilization")
+    def post(self):
+        data = request.get_json()
+        response = efficiency_ch_stations(data)
+        answer = defaultdict(dict)
+        for data in response.keys():
+            for list_e in response[data]:
+                answer[data][list_e[0]] = list_e[1]
+
+        return jsonify(answer)
 
 
 @rest_api.route('/cars_load')
@@ -139,7 +139,7 @@ class SearchDuplicates(Resource):
 @rest_api.route("/top_locations_search")
 class ExpensiveCar(Resource):
 
-    @rest_api.doc("6th scenario")
+    @rest_api.doc("6th scenario search top 3 pick-up and destination locations")
     def get(self):
         top_locations = top_locations_search()
         response = {
@@ -199,41 +199,3 @@ class ExpensiveCar(Resource):
 
 if __name__ == '__main__':
     api.run()
-
-# Example
-# ____________________________________________________________#
-# @rest_api.route("/select_fake_data")
-# class TestSelectFake(Resource):
-#
-#     @rest_api.doc(id="put something")
-#     @rest_api.doc()
-#     @rest_api.expect(test)
-#     def post(self):
-#         cond = request.get_json(silent=True)
-#         conn = create_connection(DB_FILE)
-#         response = select_fake_data(conn, cond['condition'])
-#         close_connection(conn)
-#         return jsonify(response)
-#
-#
-# @rest_api.route("/modify")
-# class ModifyFake(Resource):
-#
-#     def get(self):
-#         conn = create_connection(DB_FILE)
-#         response = modify_fake_data(conn)
-#         close_connection(conn)
-#         return jsonify(response)
-#
-#
-# @rest_api.route("/insert")
-# class InsertFakeData(Resource):
-#
-#     def get(self):
-#         conn = create_connection(DB_FILE)
-#         response = insert_fake_data(conn)
-#         close_connection(conn)
-#         return jsonify(response)
-
-
-# ______________________________________________________________#

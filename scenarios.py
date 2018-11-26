@@ -20,8 +20,7 @@ def find_car(data):
         from cars,orders 
         where cars.car_id=orders.car_id and  date = '{}' AND colour = '{}' 
         AND username = '{}' AND reg_num LIKE '%{}%';''' \
-            .format(data['date'], data['colour'], data['username'], data['reg_num'])
-
+        .format(data['date'], data['colour'], data['username'], data['reg_num'])
         cursor.execute(sql)
         response = cursor.fetchall()
         close_connection(conn)
@@ -144,7 +143,7 @@ def top_locations_search():
         close_connection(conn)
 
         return (
-            (top_morning_start_point, top_morning_finish_point),
+            (top_morning_start_point,top_morning_finish_point),
             (top_afternoon_start_point, top_afternoon_finish_point),
             (top_evening_start_point, top_evening_finish_point),
         )
@@ -219,11 +218,15 @@ def efficiency_ch_stations(data):
 
 
 def search_duplicates(data):
+    '''
+    Method for searching duplicate order_ids which should be unique in transaction table
+    Search are done for a last month
+    :param data: username to search duplicate payment
+    :return: date when duplicate occurred and cost of that order
+    '''
     username = data['username']
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
-
-    import datetime
 
     date_month_ago = '2018-09-29'
 
@@ -247,6 +250,11 @@ def search_duplicates(data):
 
 
 def trip_duration(data):
+    '''
+    Calculating average trip durations for orders in one particular day
+    :param data: date to calculate
+    :return: average trip duration for a particular date
+    '''
     date = data['date']
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
@@ -263,6 +271,11 @@ def trip_duration(data):
 
 
 def average_distance(data):
+    '''
+    Calculating average distance of car to a pickup point for orders in one particular day
+    :param data: date to calculate
+    :return: average distance to a pickup point for a particular date
+    '''
     date = data['date']
     conn = create_connection(DB_FILE)
     cursor = conn.cursor()
